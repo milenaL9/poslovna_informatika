@@ -1,0 +1,134 @@
+#{extends 'standardForm.html' /} #{set title:'Države' /}
+
+<script>
+	function sync(item){
+		if ("${session.mode}" == "edit"){
+			oznaka = item.find(".oznaka").html()
+	    	naziv = item.find(".naziv").html()
+	    	id = item.find(".id").html()
+	    	$("#drzava_oznaka").val(oznaka);
+	    	$("#drzava_naziv").val(naziv);
+	    	$("#drzava_id").val(id);
+	    }
+	}
+	
+	function remove(id){  <!-- ne znam koji je uanpred selektovani red , ovde se vrsi redirekcija -->
+		if(id==null){
+			alert("Označite red u tabeli!");
+		}else{
+			var r  = confirm("Da li želite da obrišete slog?");
+			if(r == true) {
+		    	$(location).attr('href', '/Drzave/delete?id='+id);
+			}
+			else{
+				txt = "You pressed Cancel"
+			}
+		}
+	}
+
+	function refresh_page(){
+		$(location).attr('href', '/Drzave/refresh');
+	}
+	
+	function nextform_func(id){
+		if(id==null){
+			alert("Označite red u tabeli!");
+		}else{
+			$(location).attr('href', '/Drzave/nextForm?id='+id);
+		}	
+	}
+</script>
+
+<div class="container-fluid">
+	<div class="row">
+
+		<div class="dropdown">
+			<button class="dropbtn">
+				<img width="23px" height="23px"
+					src="@{'/public/images/menu_icon.png'}" />
+			</button>
+			<div class="dropdown-content">
+				<a href="@{Drzave.show("edit")}">Države</a> <a
+					href="@{NaseljenaMesta.show()}">Naseljena mesta</a>
+			</div>
+		</div>
+
+		<div class="icon-bar">
+			<a href="@{Drzave.show(" search")}" id="search"> <img
+				src="@{'/public/images/search.gif'}" />
+			</a> <a href="#" id="refresh" onclick="refresh_page()"> <img
+				src="@{'/public/images/refresh.gif'}" />
+			</a> <a href="#" id="pickup"> <img
+				src="@{'/public/images/zoom-pickup.gif'}" />
+			</a> <a href="#" id="help"> <img src="@{'/public/images/help.gif'}" />
+			</a> <a href="#" id="first"> <img src="@{'/public/images/first.gif'}" />
+			</a> <a href="#" id="prev"> <img src="@{'/public/images/prev.gif'}" /></a>
+			<a href="#" id="next"> <img src="@{'/public/images/next.gif'}" />
+			</a> <a href="#" id="last"> <img src="@{'/public/images/last.gif'}" />
+			</a> <a href="@{Drzave.show(" add")}" id="add"> <img
+				src="@{'/public/images/add.gif'}" />
+			</a> <a href="#" id="remove"> <img
+				src="@{'/public/images/remove.gif'}" />
+			</a> <a href="#" id="nextform"> <img
+				src="@{'/public/images/nextform.gif'}" />
+			</a>
+		</div>
+
+		<div class="container-fluid">
+			<h1>Države</h1>
+
+			<table>
+				<tr class="header">
+					<th>Oznaka</th>
+					<th>Naziv</th>
+				</tr>
+				#{list items:drzave, as:'drzava'}
+				<tr #{if drzava.id== idd} class="highlighted"#{/if}>
+					<td class="oznaka">${drzava.oznaka}</td>
+					<td class="naziv">${drzava.naziv}</td>
+					<td style="visibility: hidden; max-width: 0px" class="id">${drzava.id}</td>
+				</tr>
+				#{/list}
+			</table>
+
+			#{set 'action'} #{if session.mode == 'add'} @{Drzave.create()} #{/if}
+			#{elseif session.mode == 'edit'} @{Drzave.edit()} #{/elseif} #{elseif
+			session.mode == 'search'} @{Drzave.filter()} #{/elseif} #{/set}
+
+			<div class="panel">
+				<form action=${action} method="post">
+					<p>
+						#{field 'drzava.id'} <input type="hidden" name="${field.name}"
+							id="${field.id}" value="${session.idDrz}" /> #{/}
+					</p>
+
+					<p>
+						#{field 'drzava.oznaka'} <label for="${field.id}">Oznaka</label> <input
+							type="text" name="${field.name}" id="${field.id}"
+							value="${session.editOznaka}" /> <span>#{error
+							field.name/}</span> #{/}
+					</p>
+
+					<p>
+						#{field 'drzava.naziv'} <label for="${field.id}">Naziv</label> <input
+							type="text" name="${field.name}" id="${field.id}"
+							value="${session.editNaziv}" /> <span>#{error field.name
+							/}</span> #{/}
+					</p>
+
+					<div id="formActions">
+						<input type="submit" value="Potvrda" style="margin-left: 6em" />
+						<a href="@{Drzave.show(" edit")}" style="margin-left: 1em">Rollback</a>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+<button onclick="topFunction()" id="myBtn" title="Idi na vrh">
+	<img src="@{'/public/images/back_top.png'}" alt=""
+		class="rounded-circle" width="40" height="40">
+</button>
+
+<p class="status_line">Trenutni režim: ${session.mode}</p>
