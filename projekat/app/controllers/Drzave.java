@@ -11,7 +11,10 @@ import play.cache.Cache;
 import play.data.validation.Valid;
 
 import play.mvc.Controller;
+import play.mvc.With;
 
+//@With(Secure.class)
+//@Check("administrator")
 public class Drzave extends Controller {
 
 	public static void show(String mode) {

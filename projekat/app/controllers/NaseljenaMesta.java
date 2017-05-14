@@ -4,14 +4,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.sun.org.apache.xml.internal.utils.NSInfo;
+//import com.sun.org.apache.xml.internal.utils.NSInfo;
 
 import jj.play.ns.com.jhlabs.image.CellularFilter;
 import models.Drzava;
 import models.NaseljenoMesto;
 import play.cache.Cache;
 import play.mvc.Controller;
+import play.mvc.With;
 
+@With(Secure.class)
+@Check("administrator")
 public class NaseljenaMesta extends Controller {
 
 	public static void changeMode(String mode) {
