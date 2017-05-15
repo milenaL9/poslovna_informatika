@@ -44,7 +44,7 @@
 		
 	function remove(id){  <!-- ne znam koji je uanpred selektovani red , ovde se vrsi redirekcija -->
 		if(id == null){
-			alert("Označite red u tabeli!");
+			alert("OznaÄ�ite red u tabeli!");
 		}else{
 			var r  = confirm("Da li želite da obrišete slog?");
 			if(r == true) {
@@ -63,39 +63,55 @@
 
 <div class="container-fluid">
 	<div class="row">
-
-		<div class="dropdown">
-			<button class="dropbtn">
-				<img width="23px" height="23px"
-					src="@{'/public/images/menu_icon.png'}" />
-			</button>
-			<div class="dropdown-content">
-				<a href="@{Drzave.show("edit")}">Države</a> <a
-					href="@{NaseljenaMesta.show()}">Naseljena mesta</a>
-			</div>
-		</div>
-
 		<div class="icon-bar">
-			<a href="@{NaseljenaMesta.changeMode(" search")}" id="search"> <img
-				src="@{'/public/images/search.gif'}" />
-			</a> <a href="#" onclick="refresh_page()"> <img
-				src="@{'/public/images/refresh.gif'}" />
-			</a> <a href="#" id="pickup"> <img
-				src="@{'/public/images/zoom-pickup.gif'}" />
-			</a> <a href="#" id="help"> <img src="@{'/public/images/help.gif'}" />
-			</a> <a id="first"> <img src="@{'/public/images/first.gif'}" />
-			</a> <a id="prev"> <img src="@{'/public/images/prev.gif'}" />
-			</a> <a id="next"> <img src="@{'/public/images/next.gif'}" />
-			</a> <a id="last"> <img src="@{'/public/images/last.gif'}" />
-			</a> <a href="@{NaseljenaMesta.changeMode(" add")}" id="add"> <img
-				src="@{'/public/images/add.gif'}" />
-			</a> <a href="#" id="remove"> <img
-				src="@{'/public/images/remove.gif'}" />
-			</a> <a href="#" id="nextform"> <img
-				src="@{'/public/images/nextform.gif'}" />
+			<a href="#" onclick="openSideNav()">
+				<img width="16px" height="16px" src="@{'/public/images/menu_icon.png'}" />
+			</a>
+
+			<a href="@{NaseljenaMesta.changeMode("search")}" id="search">
+				<img src="@{'/public/images/search.gif'}" />
+			</a> 
+			
+			<a href="#" onclick="refresh_page()"> 
+				<img src="@{'/public/images/refresh.gif'}" />
+			</a> 
+			
+			<a href="#" id="pickup"> 
+				<img src="@{'/public/images/zoom-pickup.gif'}" />
+			</a> 
+			
+			<a href="#" id="help"> 
+				<img src="@{'/public/images/help.gif'}" />
+			</a> 
+			
+			<a id="first"> 
+				<img src="@{'/public/images/first.gif'}" />
+			</a> 
+			
+			<a id="prev"> 
+				<img src="@{'/public/images/prev.gif'}" />
+			</a> 
+			
+			<a id="next"> 
+				<img src="@{'/public/images/next.gif'}" />
+			</a> 
+			
+			<a id="last"> 
+				<img src="@{'/public/images/last.gif'}" />
+			</a> 
+			
+			<a href="@{NaseljenaMesta.changeMode("add")}" id="add"> 
+				<img src="@{'/public/images/add.gif'}" />
+			</a>
+			
+			<a href="#" id="remove"> 
+				<img src="@{'/public/images/remove.gif'}" />
+			</a> 
+			
+			<a href="#" id="nextform"> 
+				<img src="@{'/public/images/nextform.gif'}" />
 			</a>
 		</div>
-
 
 		<div class="container-fluid">
 			<h1>Naseljena mesta</h1>
@@ -120,56 +136,66 @@
 			</table>
 
 
-			#{set 'action'} #{if session.mode == 'add'}
-			@{NaseljenaMesta.create()} #{/if} #{elseif session.mode == 'edit'}
-			@{NaseljenaMesta.edit()} #{/elseif} #{elseif session.mode ==
-			'search'} @{NaseljenaMesta.filter()} #{/elseif} #{/set}
+			#{set 'action'} 
+				#{if session.mode == 'add'}
+					@{NaseljenaMesta.create()} 
+				#{/if} 
+				#{elseif session.mode == 'edit'}
+					@{NaseljenaMesta.edit()} 
+				#{/elseif} 
+				#{elseif session.mode =='search'} 
+					@{NaseljenaMesta.filter()} 
+				#{/elseif} 
+			#{/set}
 
 			<div class="panel">
 
 				<form action="${action}">
 					<p>
-						#{field 'naseljenoMesto.id'} <input type="hidden"
-							name="${field.name}" id="${field.id}" value="${session.idNM}" />
+						#{field 'naseljenoMesto.id'} 
+							<input type="hidden" name="${field.name}" id="${field.id}" value="${session.idNM}" />
 						#{/}
 					</p>
 
 					<p>
-						#{field 'naseljenoMesto.oznaka'} <label for="${field.id}">Oznaka</label>
-						<input type="text" name="${field.name}" id="${field.id}"
-							value="${session.oznaka}" /> <span>#{error field.name /}</span>
+						#{field 'naseljenoMesto.oznaka'} 
+							<label for="${field.id}">Oznaka</label>
+							<input type="text" name="${field.name}" id="${field.id}" value="${session.oznaka}" /> 
+							<span>#{error field.name /}</span>
 						#{/}
 					</p>
 
 					<p>
-						#{field 'naseljenoMesto.naziv'} <label for="${field.id}">Naziv</label>
-						<input type="text" name="${field.name}" id="${field.id}"
-							value="${session.naziv}" /> <span>#{error field.name /}</span>
+						#{field 'naseljenoMesto.naziv'} 
+							<label for="${field.id}">Naziv</label>
+							<input type="text" name="${field.name}" id="${field.id}" value="${session.naziv}" />
+							<span>#{error field.name /}</span>
 						#{/}
 					</p>
 
 					<p>
-						#{field 'naseljenoMesto.postanskiBroj'} <label for="${field.id}">Poštanski
-							broj</label> <input type="text" name="${field.name}" id="${field.id}"
-							value="${session.postanskiBroj}" /> <span>#{error
-							field.name /}</span> #{/}
+						#{field 'naseljenoMesto.postanskiBroj'} 
+							<label for="${field.id}">Poštanski broj</label>
+							<input type="text" name="${field.name}" id="${field.id}" value="${session.postanskiBroj}" />
+							<span>#{error field.name /}</span>
+						#{/}
 					</p>
 
 					<p>
+						#{field 'drzava.id'} 
+							<label for="${field.id}">Država</label> 
+							<select name="${field.name}" id="${field.id}"> 
+								#{list items:drzave, as:'drzavaa'}
+									<option value="${drzavaa.id}">${drzavaa.naziv}</option>
+								#{/list}
+							</select>
 
-						#{field 'drzava.id'} <label for="${field.id}">Država</label> <select
-							name="${field.name}" id="${field.id}"> #{list
-							items:drzave, as:'drzavaa'}
-							<option value="${drzavaa.id}">${drzavaa.naziv}</option> #{/list}
-						</select>
-
-						<button id="zoomBtn" type="button" class="btn btn-info btn-sm"
+							<button id="zoomBtn" type="button" class="btn btn-info btn-sm"
 							data-toggle="modal" data-target="#drzaveModal">...</button>
 
-						<script>
-           				 SelectElement(${session.idDrzave});
-        			</script>
-
+							<script>
+           						SelectElement(${session.idDrzave});
+        					</script>
 						#{/}
 					</p>
 
@@ -184,6 +210,17 @@
 </div>
 
 <p class="status_line">Trenutni režim: ${session.mode}</p>
+
+<div id="sidenav" class="sidenav">
+  <a href="javascript:void(0)" class="closebtn" onclick="closeSideNav()">&times;</a>
+  <a href="@{Drzave.show("edit")}">Države</a>
+  <a href="@{NaseljenaMesta.show()}">Naseljena mesta</a>
+</div>
+
+<button onclick="topFunction()" id="myBtn" title="Idi na vrh">
+	<img src="@{'/public/images/back_top.png'}" alt=""
+		class="rounded-circle" width="40" height="40">
+</button>
 
 <!-- Modal Drzave -->
 <div class="modal fade" id="drzaveModal" role="dialog">
@@ -216,8 +253,3 @@
 	</div>
 </div>
 </div>
-
-<button onclick="topFunction()" id="myBtn" title="Idi na vrh">
-	<img src="@{'/public/images/back_top.png'}" alt=""
-		class="rounded-circle" width="40" height="40">
-</button>
