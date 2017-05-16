@@ -51,7 +51,7 @@
 
 /*Nav bar*/
 .icon-bar {
-	width: 95%; /* Full-width */
+	width: 100%; /* Full-width */
 	background-color: #c0c0c0; /* Dark-grey background */
 	overflow: auto; /* Overflow due to float */
 	margin-right: 10px;

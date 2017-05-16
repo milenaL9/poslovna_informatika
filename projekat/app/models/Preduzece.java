@@ -21,7 +21,7 @@ public class Preduzece extends Model {
 	public String naziv;
 
 	@Required
-	@MinSize(8)
+	// @MinSize(8)
 	@MaxSize(8)
 	@Column(columnDefinition = "numeric(8)")
 	public int pib;
@@ -41,10 +41,10 @@ public class Preduzece extends Model {
 	public int telefon;
 
 	@Required
-	@MinSize(13)
+	// @MinSize(13)
 	@MaxSize(13)
 	@Column(columnDefinition = "numeric(13)")
-	public int matciniBroj;
+	public int maticniBroj;
 
 	@Required
 	@MinSize(3)
@@ -54,11 +54,11 @@ public class Preduzece extends Model {
 
 	@OneToMany(mappedBy = "preduzece")
 	public List<PoslovnaGodina> poslovneGodine;
-	
+
 	@OneToMany(mappedBy = "preduzece")
 	public List<Grupa> grupe;
 
-	public Preduzece(String naziv, int pib, String mesto, String adresa, int telefon, int matciniBroj,
+	public Preduzece(String naziv, int pib, String mesto, String adresa, int telefon, int maticniBroj,
 			String tekuciRacun) {
 		super();
 		this.naziv = naziv;
@@ -66,7 +66,7 @@ public class Preduzece extends Model {
 		this.mesto = mesto;
 		this.adresa = adresa;
 		this.telefon = telefon;
-		this.matciniBroj = matciniBroj;
+		this.maticniBroj = maticniBroj;
 		this.tekuciRacun = tekuciRacun;
 	}
 

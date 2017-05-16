@@ -1,15 +1,25 @@
 #{extends 'standardForm.html' /}
-#{set title:'Države' /}
+#{set title:'Preduzeća' /}
 
 <script>
 	function sync(item){
 		if ("${session.mode}" == "edit"){
-			oznaka = item.find(".oznaka").html()
 	    	naziv = item.find(".naziv").html()
+	    	pib = item.find(".pib").html()
+	    	mesto = item.find(".mesto").html()
+	    	adresa = item.find(".adresa").html()
+	    	telefon = item.find(".telefon").html()
+	    	maticniBroj = item.find(".maticniBroj").html()
+	    	tekuciRacun = item.find(".tekuciRacun").html()
 	    	id = item.find(".id").html()
-	    	$("#drzava_oznaka").val(oznaka);
-	    	$("#drzava_naziv").val(naziv);
-	    	$("#drzava_id").val(id);
+	    	$("#preduzece_naziv").val(naziv);
+	    	$("#preduzece_pib").val(pib);
+	    	$("#preduzece_mesto").val(mesto);
+	    	$("#preduzece_adresa").val(adresa);
+	    	$("#preduzece_telefon").val(telefon);
+	    	$("#preduzece_maticniBroj").val(maticniBroj);
+	    	$("#preduzece_tekuciRacun").val(tekuciRacun);
+	    	$("#preduzece_id").val(id);
     	}
 	}
 
@@ -19,7 +29,7 @@
 		}else{
 			var r  = confirm("Da li želite da obrišete slog?");
 			if(r==true) {
-	    		$(location).attr('href', '/Drzave/delete?id='+id);
+	    		$(location).attr('href', '/Preduzeca/delete?id='+id);
 			}else{
 				txt = "You pressed Cancel"
 			}
@@ -30,12 +40,12 @@
 		if(id==null){
 			alert("Označite red u tabeli!");
 		}else{
-			$(location).attr('href', '/Drzave/nextForm?id='+id);
+			$(location).attr('href', '/Preduzeca/nextForm?id='+id);
 		}	
 	}
 
 	function refresh_page(){
-		$(location).attr('href', '/Drzava/refresh');
+		$(location).attr('href', '/Preduzeca/refresh');
 	}
 	
 </script>
@@ -47,11 +57,11 @@
 				<img width="16px" height="16px" src="@{'/public/images/menu_icon.png'}" />
 			</a>
 			
-			<a href="@{Drzave.show("search")}" id = "search">
+			<a href="@{Preduzeca.show("search")}" id = "search">
 				<img src="@{'/public/images/search.gif'}"/>
 			</a>
 			
-			<a href="@{Drzave.show("edit")}" id = "refresh">
+			<a href="@{Preduzeca.show("edit")}" id = "refresh">
 				<img src="@{'/public/images/refresh.gif'}"/>
 			</a>
 			
@@ -79,7 +89,7 @@
 				<img src="@{'/public/images/last.gif'}"/>
 			</a>
 			
-			<a href="@{Drzave.show("add")}" id = "add">
+			<a href="@{Preduzeca.show("add")}" id = "add">
 				<img src="@{'/public/images/add.gif'}"/>
 			</a>
 			
@@ -93,60 +103,105 @@
 		</div>
 
 		<div class="container-fluid">
-			<h1>Države</h1>
+			<h1>Preduzeća</h1>
 
 			<table>
 				<tr class = "header">
-	   				<th>Oznaka</th> 
 	   				<th>Naziv</th>
+	   				<th>PIB</th>
+	   				<th>Mesto</th>
+	   				<th>Adresa</th>
+	   				<th>Telefon</th>
+	   				<th>Matični broj</th>
+	   				<th>Tekući račun</th>
 				</tr>
 				
-				#{list items:drzave, as:'drzava'}
-				<tr #{if drzava.id == idd} class = "highlighted" #{/if}>
-					<td class = "oznaka">${drzava.oznaka}</td>
-					<td class = "naziv">${drzava.naziv}</td>
-					<td style = "visibility: hidden; max-width: 0px" class = "id">${drzava.id}</td>
+				#{list items:preduzeca, as:'preduzece'}
+				<tr #{if preduzece.id == idd} class = "highlighted" #{/if}>
+					<td class = "naziv">${preduzece.naziv}</td>
+					<td class = "pib">${preduzece.pib}</td>
+					<td class = "mesto">${preduzece.mesto}</td>
+					<td class = "adresa">${preduzece.adresa}</td>
+					<td class = "telefon">${preduzece.telefon}</td>
+					<td class = "maticniBroj">${preduzece.maticniBroj}</td>
+					<td class = "tekuciRacun">${preduzece.tekuciRacun}</td>
+					<td style = "visibility: hidden; max-width: 0px" class = "id">${preduzece.id}</td>
 				</tr>
 				#{/list}
 			</table>
 
 			#{set 'action'}
     			#{if mode == 'add'}
-        			@{Drzave.create()}
+        			@{Preduzeca.create()}
    				#{/if}
    				#{elseif mode == 'edit'}
-       				@{Drzave.edit()}
+       				@{Preduzeca.edit()}
    				#{/elseif}
   	   	    	#{else}
-     	        	@{Drzave.filter()}
+     	        	@{Preduzeca.filter()}
   	        	#{/else}
  	    	#{/set}
  	
 			<div class="panel">
-				<form action=${action} method="post">  <!-- umesto Drzave.show --> 
+				<form action=${action} method="post"> 
 					<p>
-						#{field 'drzava.id'}
+						#{field 'preduzece.id'}
 							<input type = "hidden" name = "${field.name}" id = "${field.id}"/>
 						#{/}
 					</p>
 				
 					<p>
-						#{field 'drzava.oznaka'} 
-							<label for = "${field.id}">Oznaka</label>
+						#{field 'preduzece.naziv'} 
+							<label for = "${field.id}">Naziv</label>
 							<input type = "text" name = "${field.name}" id = "${field.id}"/>
 						#{/}
 					</p>
 				
 					<p>
-						#{field 'drzava.naziv'}
-							<label for = "${field.id}">Naziv</label>
+						#{field 'preduzece.pib'}
+							<label for = "${field.id}">PIB</label>
+							<input type = "text" name = "${field.name}" id = "${field.id}"/>
+						#{/}
+					</p>
+					
+					<p>
+						#{field 'preduzece.mesto'}
+							<label for = "${field.id}">Mesto</label>
+							<input type = "text" name = "${field.name}" id = "${field.id}"/>
+						#{/}
+					</p>
+					
+					<p>
+						#{field 'preduzece.adresa'}
+							<label for = "${field.id}">Adresa</label>
+							<input type = "text" name = "${field.name}" id = "${field.id}"/>
+						#{/}
+					</p>
+					
+					<p>
+						#{field 'preduzece.telefon'}
+							<label for = "${field.id}">Telefon</label>
+							<input type = "text" name = "${field.name}" id = "${field.id}"/>
+						#{/}
+					</p>
+					
+					<p>
+						#{field 'preduzece.maticniBroj'}
+							<label for = "${field.id}">Matični broj</label>
+							<input type = "text" name = "${field.name}" id = "${field.id}"/>
+						#{/}
+					</p>
+					
+					<p>
+						#{field 'preduzece.tekuciRacun'}
+							<label for = "${field.id}">Tekući račun</label>
 							<input type = "text" name = "${field.name}" id = "${field.id}"/>
 						#{/}
 					</p>
 					
 					<div id = "formActions">
 						<input type = "submit" value = "Potvrda" style="margin-left:6em"/>
-						<a href = "@{Drzave.show("edit")}" style="margin-left:1em">Rollback</a>
+						<a href = "@{Preduzeca.show("edit")}" style="margin-left:1em">Rollback</a>
 					</div>				
 				</form>
 			</div>
