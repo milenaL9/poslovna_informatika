@@ -16,8 +16,7 @@ public class VrstaPDVa extends Model {
 	@Column(columnDefinition="varchar(40)")
 	public String nazivVrstePDva;
 
-	
-	// mappedBy - da ne bi kreirao medjutabelu 
+
 	@OneToMany(mappedBy = "vrstaPDVa")
 	public List<StopaPDVa> stopePDVa;
 	

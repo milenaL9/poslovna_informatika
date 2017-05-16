@@ -1,0 +1,157 @@
+#{extends 'standardForm.html' /}
+#{set title:'VrstePDVa' /}
+
+<script>
+	function sync(item){
+		if ("${mode}" == "edit"){
+			nazivVrstePDva = item.find(".nazivVrstePDva").html()
+	    	id = item.find(".id").html()
+	    	$("#vrstaPDVa_nazivVrstePDva").val(nazivVrstePDVa);
+	    	$("#vrstaPDVa_id").val(id);
+    	}
+	}
+
+	function remove(id){  <!-- ne znam koji je uanpred selektovani red , ovde se vrsi redirekcija -->
+		if(id == null){
+			alert("OznaÄ�ite red u tabeli!");
+		}else{
+			var r  = confirm("Da li Å¾elite da obriÅ¡ete slog?");
+			if(r==true) {
+	    		$(location).attr('href', '/VrstePDVa/delete?id='+id);
+			}else{
+				txt = "You pressed Cancel"
+			}
+		}
+	}
+
+	function nextform_func(id){
+		if(id==null){
+			alert("OznaÄ�ite red u tabeli!");
+		}else{
+			$(location).attr('href', '/VrstePDVa/nextForm?id='+id);
+		}	
+	}
+
+	function refresh_page(){
+		$(location).attr('href', '/VrstaPDVa/refresh');
+	}
+	
+</script>
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="icon-bar">
+			<a href="#" onclick="openSideNav()">
+				<img width="16px" height="16px" src="@{'/public/images/menu_icon.png'}" />
+			</a>
+			
+			<a href="@{VrstePDVa.show("search")}" id = "search">
+				<img src="@{'/public/images/search.gif'}"/>
+			</a>
+			
+			<a href="@{VrstePDVa.show("edit")}" id = "refresh">
+				<img src="@{'/public/images/refresh.gif'}"/>
+			</a>
+			
+			<a href="#" id = "pickup">
+				<img src="@{'/public/images/zoom-pickup.gif'}"/>
+			</a>
+			
+			<a href="#" id = "help">
+				<img src="@{'/public/images/help.gif'}"/>
+			</a>
+			
+			<a id = "first">
+				<img src="@{'/public/images/first.gif'}"/>
+			</a>
+
+			<a id = "prev">
+				<img src="@{'/public/images/prev.gif'}"/>
+			</a>
+
+			<a id = "next">
+				<img src="@{'/public/images/next.gif'}"/>
+			</a>
+
+			<a id = "last">
+				<img src="@{'/public/images/last.gif'}"/>
+			</a>
+			
+			<a href="@{VrstePDVa.show("add")}" id = "add">
+				<img src="@{'/public/images/add.gif'}"/>
+			</a>
+			
+			<a href="#" id = "remove">
+				<img src="@{'/public/images/remove.gif'}"/>
+			</a>
+			
+			<a href="#" id = "nextform">
+				<img src="@{'/public/images/nextform.gif'}"/>
+			</a>
+		</div>
+
+		<div class="container-fluid">
+			<h1>Vrste PDVa</h1>
+
+			<table>
+				<tr class = "header">
+	   				<th>Naziv</th>
+				</tr>
+				
+				#{list items:vrstePDVa, as:'vrstaPDVa'}
+				<tr #{if vrstaPDVa.id == idd} class = "highlighted" #{/if}>
+					<td class = "nazivVrstePDVa">${vrstaPDVa.nazivVrstePDva}</td>
+					<td style = "visibility: hidden; max-width: 0px" class = "id">${vrstaPDVa.id}</td>
+				</tr>
+				#{/list}
+			</table>
+
+			#{set 'action'}
+    			#{if mode == 'add'}
+        			@{VrstePDVa.create()}
+   				#{/if}
+   				#{elseif mode == 'edit'}
+       				@{VrstePDVa.edit()}
+   				#{/elseif}
+  	   	    	#{else}
+     	        	@{VrstePDVa.filter()}
+  	        	#{/else}
+ 	    	#{/set}
+ 	
+			<div class="panel">
+				<form action=${action} method="post">  <!-- umesto Drzave.show --> 
+					<p>
+						#{field 'vrstaPDVa.id'}
+							<input type = "hidden" name = "${field.name}" id = "${field.id}"/>
+						#{/}
+					</p>
+
+					<p>
+						#{field 'vrstaPDVa.nazivVrstePDva'}
+							<label for = "${field.id}">Naziv</label>
+							<input type = "text" name = "${field.name}" id = "${field.id}"/>
+						#{/}
+					</p>
+					
+					<div id = "formActions">
+						<input type = "submit" value = "Potvrda" style="margin-left:6em"/>
+						<a href = "@{VrstePDVa.show("edit")}" style="margin-left:1em">Rollback</a>
+					</div>				
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="sidenav" class="sidenav">
+  <a href="javascript:void(0)" class="closebtn" onclick="closeSideNav()">&times;</a>
+  <a href="@{Drzave.show("edit")}">DrÅ¾ave</a>
+  <a href="@{NaseljenaMesta.show()}">Naseljena mesta</a>
+</div>
+
+<p class="status_line">Trenutni reÅ¾im: ${session.mode}</p>
+
+<button onclick="topFunction()" id="myBtn" title="Idi na vrh">
+	<img src="@{'/public/images/back_top.png'}" alt=""
+		class="rounded-circle" width="40" height="40">
+</button>
