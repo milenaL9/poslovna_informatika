@@ -44,9 +44,9 @@
 		
 	function remove(id){  <!-- ne znam koji je uanpred selektovani red , ovde se vrsi redirekcija -->
 		if(id == null){
-			alert("OznaÄ�ite red u tabeli!");
+			alert("Označite red u tabeli!");
 		}else{
-			var r  = confirm("Da li želite da obrišete slog?");
+			var r  = confirm("Da li želite da obrište slog?");
 			if(r == true) {
 		    	$(location).attr('href', '/NaseljenaMesta/delete?id='+id);
 			}
@@ -175,7 +175,7 @@
 
 					<p>
 						#{field 'naseljenoMesto.postanskiBroj'} 
-							<label for="${field.id}">Poštanski broj</label>
+							<label for="${field.id}">PoÅ¡tanski broj</label>
 							<input type="text" name="${field.name}" id="${field.id}" value="${session.postanskiBroj}" />
 							<span>#{error field.name /}</span>
 						#{/}
@@ -183,7 +183,7 @@
 
 					<p>
 						#{field 'drzava.id'} 
-							<label for="${field.id}">Država</label> 
+							<label for="${field.id}">DrÅ¾ava</label> 
 							<select name="${field.name}" id="${field.id}"> 
 								#{list items:drzave, as:'drzavaa'}
 									<option value="${drzavaa.id}">${drzavaa.naziv}</option>
@@ -215,6 +215,20 @@
   <a href="javascript:void(0)" class="closebtn" onclick="closeSideNav()">&times;</a>
   <a href="@{Drzave.show("edit")}">Države</a>
   <a href="@{NaseljenaMesta.show()}">Naseljena mesta</a>
+  <a href="#">Preduzeća</a>
+  <a href="#">Poslovne godine</a>
+  <a href="#">Poslovni partneri</a>
+  <a href="#">Fakture</a>
+  <a href="#">Stavke fakture</a>
+  <a href="#">Narudžbe</a>
+  <a href="#">Stavke narudžbi</a>
+  <a href="#">Katalog robe i usluga</a>
+  <a href="#">Cenovnik</a>
+  <a href="#">Stavka cenovnika</a>
+  <a href="#">Stopa PDVa</a>
+  <a href="#">Vrsta PDVa</a>
+  <a href="#">Grupa</a>
+  <a href="#">Podgrupa</a>
 </div>
 
 <button onclick="topFunction()" id="myBtn" title="Idi na vrh">
