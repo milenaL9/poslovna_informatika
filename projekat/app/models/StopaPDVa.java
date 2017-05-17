@@ -19,16 +19,16 @@ public class StopaPDVa extends Model {
 	@Temporal(TemporalType.DATE)
 	// @DateTimeFormat(pattern="yyyy-MM-dd")
 	@Required
-	private Date dateCreated;
+	private Date datumKreiranja;
 
-	// ne mora u konstruktor
+	
 	@ManyToOne
 	public VrstaPDVa vrstaPDVa;
 
-	public StopaPDVa(int procenatPDVa, Date dateCreated) {
+	public StopaPDVa(int procenatPDVa, Date datumKreiranja) {
 		super();
 		this.procenatPDVa = procenatPDVa;
-		this.dateCreated = dateCreated;
+		this.datumKreiranja = datumKreiranja;
 	}
 
 }

@@ -58,6 +58,12 @@ public class Preduzece extends Model {
 	@OneToMany(mappedBy = "preduzece")
 	public List<Grupa> grupe;
 
+	@OneToMany(mappedBy = "preduzece")
+	public List<PoslovniPartner> poslovniPartneri;
+	
+	@OneToMany(mappedBy = "preduzece")
+	public List<Faktura> fakture;
+	
 	public Preduzece(String naziv, int pib, String mesto, String adresa, int telefon, int maticniBroj,
 			String tekuciRacun) {
 		super();

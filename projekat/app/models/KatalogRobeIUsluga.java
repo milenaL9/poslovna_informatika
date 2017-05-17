@@ -30,6 +30,9 @@ public class KatalogRobeIUsluga extends Model {
 	@OneToMany(mappedBy = "katalogRobeIUsluga")
 	public List<StavkaCenovnika> stavkeCenovnika;
 	
+	@OneToMany(mappedBy = "katalogRobeIUsluga")
+	public List<StavkaFakture> stavkeFakture;
+	
 	@ManyToOne
 	public Podgrupa podgrupa;
 

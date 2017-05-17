@@ -1,8 +1,11 @@
 package models;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import play.data.validation.MaxSize;
 import play.data.validation.MinSize;
@@ -23,6 +26,9 @@ public class PoslovnaGodina extends Model {
 
 	@ManyToOne
 	public Preduzece preduzece;
+	
+	@OneToMany(mappedBy="poslovnaGodina")
+	public List<Faktura> fakture;
 
 	public PoslovnaGodina(int brojGodine, boolean aktivna) {
 		super();
