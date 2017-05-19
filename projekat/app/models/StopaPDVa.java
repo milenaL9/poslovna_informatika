@@ -14,13 +14,15 @@ import play.db.jpa.Model;
 @Entity
 public class StopaPDVa extends Model {
 
-	public int procenatPDVa;
+
 
 	@Temporal(TemporalType.DATE)
 	// @DateTimeFormat(pattern="yyyy-MM-dd")
-	@Required
-	private Date datumKreiranja;
+//	@Required
+	public Date datumKreiranja;
 
+	
+	public int procenatPDVa;
 	
 	@ManyToOne
 	public VrstaPDVa vrstaPDVa;
