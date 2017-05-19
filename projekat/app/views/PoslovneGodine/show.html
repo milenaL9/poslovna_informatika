@@ -1,188 +1,188 @@
-#{extends 'standardForm.html' /}
-#{set title:'Poslovne godine' /}
+<!-- #{extends 'standardForm.html' /} -->
+<!-- #{set title:'Poslovne godine' /} -->
 
-<script>
-	function sync(item){
-		if ("${session.mode}" == "edit"){
-	    	brojGodine = item.find(".brojGodine").html()
-	    	aktivna = item.find(".aktivna").html()
+<!-- <script> -->
+// 	function sync(item){
+// 		if ("${session.mode}" == "edit"){
+// 	    	brojGodine = item.find(".brojGodine").html()
+// 	    	aktivna = item.find(".aktivna").html()
 	    	
-	    	id = item.find(".id").html()
-	    	$("#poslovnaGodina_brojGodine").val(brojGodine);
-	    	$("#poslovnaGodina_aktivna").val(aktvina);
-	    	$("#poslovnaGodina_id").val(id);
-    	}
-	}
+// 	    	id = item.find(".id").html()
+// 	    	$("#poslovnaGodina_brojGodine").val(brojGodine);
+// 	    	$("#poslovnaGodina_aktivna").val(aktivna);
+// 	    	$("#poslovnaGodina_id").val(id);
+//     	}
+// 	}
 
-	function remove(id){  <!-- ne znam koji je uanpred selektovani red , ovde se vrsi redirekcija -->
-		if(id == null){
-			alert("OznaÄ�ite red u tabeli!");
-		}else{
-			var r  = confirm("Da li Å¾elite da obriÅ¡ete slog?");
-			if(r==true) {
-	    		$(location).attr('href', '/PoslovneGodine/delete?id='+id);
-			}else{
-				txt = "You pressed Cancel"
-			}
-		}
-	}
+// 	function remove(id){  <!-- ne znam koji je uanpred selektovani red , ovde se vrsi redirekcija -->
+// 		if(id == null){
+// 			alert("OznaÄ�ite red u tabeli!");
+// 		}else{
+// 			var r  = confirm("Da li Å¾elite da obriÅ¡ete slog?");
+// 			if(r==true) {
+// 	    		$(location).attr('href', '/PoslovneGodine/delete?id='+id);
+// 			}else{
+// 				txt = "You pressed Cancel"
+// 			}
+// 		}
+// 	}
 
-	function nextform_func(id){
-		if(id==null){
-			alert("OznaÄ�ite red u tabeli!");
-		}else{
-			$(location).attr('href', '/PoslovneGodine/nextForm?id='+id);
-		}	
-	}
+// 	function nextform_func(id){
+// 		if(id==null){
+// 			alert("OznaÄ�ite red u tabeli!");
+// 		}else{
+// 			$(location).attr('href', '/PoslovneGodine/nextForm?id='+id);
+// 		}	
+// 	}
 
-	function refresh_page(){
-		$(location).attr('href', '/PoslovneGodine/refresh');
-	}
+// 	function refresh_page(){
+// 		$(location).attr('href', '/PoslovneGodine/refresh');
+// 	}
 	
-</script>
+<!-- </script> -->
 
-<div class="container-fluid">
-	<div class="row">
-		<div class="icon-bar">
-			<a href="#" onclick="openSideNav()">
-				<img width="16px" height="16px" src="@{'/public/images/menu_icon.png'}" />
-			</a>
+<!-- <div class="container-fluid"> -->
+<!-- 	<div class="row"> -->
+<!-- 		<div class="icon-bar"> -->
+<!-- 			<a href="#" onclick="openSideNav()"> -->
+<!-- 				<img width="16px" height="16px" src="@{'/public/images/menu_icon.png'}" /> -->
+<!-- 			</a> -->
 			
-			<a href="@{PoslovneGodine.show("search")}" id = "search">
-				<img src="@{'/public/images/search.gif'}"/>
-			</a>
+<!-- 			<a href="@{PoslovneGodine.show("search")}" id = "search"> -->
+<!-- 				<img src="@{'/public/images/search.gif'}"/> -->
+<!-- 			</a> -->
 			
-			<a href="@{PoslovneGodine.show("edit")}" id = "refresh">
-				<img src="@{'/public/images/refresh.gif'}"/>
-			</a>
+<!-- 			<a href="@{PoslovneGodine.show("edit")}" id = "refresh"> -->
+<!-- 				<img src="@{'/public/images/refresh.gif'}"/> -->
+<!-- 			</a> -->
 			
-			<a href="#" id = "pickup">
-				<img src="@{'/public/images/zoom-pickup.gif'}"/>
-			</a>
+<!-- 			<a href="#" id = "pickup"> -->
+<!-- 				<img src="@{'/public/images/zoom-pickup.gif'}"/> -->
+<!-- 			</a> -->
 			
-			<a href="#" id = "help">
-				<img src="@{'/public/images/help.gif'}"/>
-			</a>
+<!-- 			<a href="#" id = "help"> -->
+<!-- 				<img src="@{'/public/images/help.gif'}"/> -->
+<!-- 			</a> -->
 			
-			<a id = "first">
-				<img src="@{'/public/images/first.gif'}"/>
-			</a>
+<!-- 			<a id = "first"> -->
+<!-- 				<img src="@{'/public/images/first.gif'}"/> -->
+<!-- 			</a> -->
 
-			<a id = "prev">
-				<img src="@{'/public/images/prev.gif'}"/>
-			</a>
+<!-- 			<a id = "prev"> -->
+<!-- 				<img src="@{'/public/images/prev.gif'}"/> -->
+<!-- 			</a> -->
 
-			<a id = "next">
-				<img src="@{'/public/images/next.gif'}"/>
-			</a>
+<!-- 			<a id = "next"> -->
+<!-- 				<img src="@{'/public/images/next.gif'}"/> -->
+<!-- 			</a> -->
 
-			<a id = "last">
-				<img src="@{'/public/images/last.gif'}"/>
-			</a>
+<!-- 			<a id = "last"> -->
+<!-- 				<img src="@{'/public/images/last.gif'}"/> -->
+<!-- 			</a> -->
 			
-			<a href="@{PoslovneGodine.show("add")}" id = "add">
-				<img src="@{'/public/images/add.gif'}"/>
-			</a>
+<!-- 			<a href="@{PoslovneGodine.show("add")}" id = "add"> -->
+<!-- 				<img src="@{'/public/images/add.gif'}"/> -->
+<!-- 			</a> -->
 			
-			<a href="#" id = "remove">
-				<img src="@{'/public/images/remove.gif'}"/>
-			</a>
+<!-- 			<a href="#" id = "remove"> -->
+<!-- 				<img src="@{'/public/images/remove.gif'}"/> -->
+<!-- 			</a> -->
 			
-			<a href="#" id = "nextform">
-				<img src="@{'/public/images/nextform.gif'}"/>
-			</a>
-		</div>
+<!-- 			<a href="#" id = "nextform"> -->
+<!-- 				<img src="@{'/public/images/nextform.gif'}"/> -->
+<!-- 			</a> -->
+<!-- 		</div> -->
 
-		<div class="container-fluid">
-			<h1>Poslovne godine</h1>
+<!-- 		<div class="container-fluid"> -->
+<!-- 			<h1>Poslovne godine</h1> -->
 
-			<table>
-				<tr class = "header">
-	   				<th>Aktivna</th>
-	   				<th>Broj godine</th>
-				</tr>
+<!-- 			<table> -->
+<!-- 				<tr class = "header"> -->
+<!-- 	   				<th>Aktivna</th> -->
+<!-- 	   				<th>Broj godine</th> -->
+<!-- 				</tr> -->
 				
-				#{list items:poslovneGodine, as:'poslovnaGodina'}
-				<tr #{if poslovnaGodina == idd} class = "highlighted" #{/if}>
-					<td class = "aktivna">${poslovnaGodina.aktivna}</td>
-					<td class = "brojGodine">${poslovnaGodina.brojGodine}</td>
+<!-- 				#{list items:poslovneGodine, as:'poslovnaGodina'} -->
+<!-- 				<tr #{if poslovnaGodina == idd} class = "highlighted" #{/if}> -->
+<!-- 					<td class = "aktivna">${poslovnaGodina.aktivna}</td> -->
+<!-- 					<td class = "brojGodine">${poslovnaGodina.brojGodine}</td> -->
 					
-					<td style = "visibility: hidden; max-width: 0px" class = "id">${poslovnaGodina.id}</td>
-				</tr>
-				#{/list}
-			</table>
+<!-- 					<td style = "visibility: hidden; max-width: 0px" class = "id">${poslovnaGodina.id}</td> -->
+<!-- 				</tr> -->
+<!-- 				#{/list} -->
+<!-- 			</table> -->
 
-			#{set 'action'}
-    			#{if mode == 'add'}
-        			@{PoslovneGodine.create()}
-   				#{/if}
-   				#{elseif mode == 'edit'}
-       				@{PoslovneGodine.edit()}
-   				#{/elseif}
-  	   	    	#{else}
-     	        	@{PoslovneGodine.filter()}
-  	        	#{/else}
- 	    	#{/set}
+<!-- 			#{set 'action'} -->
+<!--     			#{if mode == 'add'} -->
+<!--         			@{PoslovneGodine.create()} -->
+<!--    				#{/if} -->
+<!--    				#{elseif mode == 'edit'} -->
+<!--        				@{PoslovneGodine.edit()} -->
+<!--    				#{/elseif} -->
+<!--   	   	    	#{else} -->
+<!--      	        	@{PoslovneGodine.filter()} -->
+<!--   	        	#{/else} -->
+<!--  	    	#{/set} -->
  	
-			<div class="panel">
-				<form action=${action} method="post"> 
-					<p>
-						#{field 'poslovnaGodina.id'}
-							<input type = "hidden" name = "${field.name}" id = "${field.id}"/>
-						#{/}
-					</p>
+<!-- 			<div class="panel"> -->
+<!-- 				<form action=${action} method="post">  -->
+<!-- 					<p> -->
+<!-- 						#{field 'poslovnaGodina.id'} -->
+<!-- 							<input type = "hidden" name = "${field.name}" id = "${field.id}"/> -->
+<!-- 						#{/} -->
+<!-- 					</p> -->
 				
-					<p>
-						#{field 'poslovnaGodina.aktivna'} 
-							<label for = "${field.id}">Aktivna</label>
-							<input type = "text" name = "${field.name}" id = "${field.id}"/>
-						#{/}
-					</p>
+<!-- 					<p> -->
+<!-- 						#{field 'poslovnaGodina.aktivna'}  -->
+<!-- 							<label for = "${field.id}">Aktivna</label> -->
+<!-- 							<input type = "text" name = "${field.name}" id = "${field.id}"/> -->
+<!-- 						#{/} -->
+<!-- 					</p> -->
 				
-					<p>
-						#{field 'poslovnaGodina.brojGodine'}
-							<label for = "${field.id}">broj godine</label>
-							<input type = "text" name = "${field.name}" id = "${field.id}"/>
-						#{/}
-					</p>
+<!-- 					<p> -->
+<!-- 						#{field 'poslovnaGodina.brojGodine'} -->
+<!-- 							<label for = "${field.id}">broj godine</label> -->
+<!-- 							<input type = "text" name = "${field.name}" id = "${field.id}"/> -->
+<!-- 						#{/} -->
+<!-- 					</p> -->
 					
 				
 					
 				
 					
-					<div id = "formActions">
-						<input type = "submit" value = "Potvrda" style="margin-left:6em"/>
-						<a href = "@{PoslovneGodine.show("edit")}" style="margin-left:1em">Rollback</a>
-					</div>				
-				</form>
-			</div>
-		</div>
-	</div>
-</div>
+<!-- 					<div id = "formActions"> -->
+<!-- 						<input type = "submit" value = "Potvrda" style="margin-left:6em"/> -->
+<!-- 						<a href = "@{PoslovneGodine.show("edit")}" style="margin-left:1em">Rollback</a> -->
+<!-- 					</div>				 -->
+<!-- 				</form> -->
+<!-- 			</div> -->
+<!-- 		</div> -->
+<!-- 	</div> -->
+<!-- </div> -->
 
-<div id="sidenav" class="sidenav">
-  <a href="javascript:void(0)" class="closebtn" onclick="closeSideNav()">&times;</a>
-  <a href="@{Drzave.show("edit")}">DrÅ¾ave</a>
-  <a href="@{NaseljenaMesta.show()}">Naseljena mesta</a>
-  <a href="@{Preduzeca.show("edit")}">PreduzeÄ‡a</a>
-  <a href="#">Poslovne godine</a>
-  <a href="#">Poslovni partneri</a>
-  <a href="#">Fakture</a>
-  <a href="#">Stavke fakture</a>
-  <a href="#">NarudÅ¾be</a>
-  <a href="#">Stavke narudÅ¾bi</a>
-  <a href="#">Katalog robe i usluga</a>
-  <a href="#">Cenovnik</a>
-  <a href="#">Stavka cenovnika</a>
-  <a href="#">Stopa PDVa</a>
-  <a href="#">Vrsta PDVa</a>
-  <a href="#">Grupa</a>
-  <a href="#">Podgrupa</a>
-</div>
+<!-- <div id="sidenav" class="sidenav"> -->
+<!--   <a href="javascript:void(0)" class="closebtn" onclick="closeSideNav()">&times;</a> -->
+<!--   <a href="@{Drzave.show("edit")}">DrÅ¾ave</a> -->
+<!--   <a href="@{NaseljenaMesta.show()}">Naseljena mesta</a> -->
+<!--   <a href="@{Preduzeca.show("edit")}">PreduzeÄ‡a</a> -->
+<!--   <a href="#">Poslovne godine</a> -->
+<!--   <a href="#">Poslovni partneri</a> -->
+<!--   <a href="#">Fakture</a> -->
+<!--   <a href="#">Stavke fakture</a> -->
+<!--   <a href="#">NarudÅ¾be</a> -->
+<!--   <a href="#">Stavke narudÅ¾bi</a> -->
+<!--   <a href="#">Katalog robe i usluga</a> -->
+<!--   <a href="#">Cenovnik</a> -->
+<!--   <a href="#">Stavka cenovnika</a> -->
+<!--   <a href="#">Stopa PDVa</a> -->
+<!--   <a href="#">Vrsta PDVa</a> -->
+<!--   <a href="#">Grupa</a> -->
+<!--   <a href="#">Podgrupa</a> -->
+<!-- </div> -->
 
-<p class="status_line">Trenutni reÅ¾im: ${session.mode}</p>
+<!-- <p class="status_line">Trenutni reÅ¾im: ${session.mode}</p> -->
 
-<button onclick="topFunction()" id="myBtn" title="Idi na vrh">
-	<img src="@{'/public/images/back_top.png'}" alt=""
-		class="rounded-circle" width="40" height="40">
-</button>
+<!-- <button onclick="topFunction()" id="myBtn" title="Idi na vrh"> -->
+<!-- 	<img src="@{'/public/images/back_top.png'}" alt="" -->
+<!-- 		class="rounded-circle" width="40" height="40"> -->
+<!-- </button> -->

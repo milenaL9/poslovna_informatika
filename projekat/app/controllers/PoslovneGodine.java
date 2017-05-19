@@ -9,6 +9,13 @@ import models.PoslovnaGodina;
 import play.cache.Cache;
 import play.mvc.Controller;
 
+/*
+ * PROVERI ZASTO NE RADI DODAVANJE IZ BROWSERA
+ * 
+ * 
+ * */
+
+
 public class PoslovneGodine extends Controller {
 
 	public static void show(String mode) {

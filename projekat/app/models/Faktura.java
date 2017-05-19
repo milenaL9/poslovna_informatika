@@ -24,14 +24,14 @@ import play.db.jpa.Model;
 @Entity
 public class Faktura extends Model {
 
-	@Required
+
 	@Temporal(TemporalType.DATE)
 	public Date datumFakture;
 	
 	@Required
 	public int brojFakture;
 	
-	@Required
+
 	@Temporal(TemporalType.DATE)
 	public Date datumValute;
 	
