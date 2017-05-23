@@ -114,6 +114,7 @@ public class NaseljenaMesta extends Controller {
 		validation.valid(naseljenoMesto);
 		clearSession();
 		session.put("mode", "add");
+		System.out.println("drzava:"+drzava.naziv);
 
 		List<NaseljenoMesto> naseljenaMesta = null;
 		List<Drzava> drzave = Drzave.checkCache();

@@ -1,5 +1,5 @@
 #{extends 'standardForm.html' /}
-#{set title:'Države' /}
+#{set title:'DrÅ¾ave' /}
 
 <script>
 	function sync(item){
@@ -15,9 +15,9 @@
 
 	function remove(id){  <!-- ne znam koji je uanpred selektovani red , ovde se vrsi redirekcija -->
 		if(id == null){
-			alert("Označite red u tabeli!");
+			alert("OznaÄ�ite red u tabeli!");
 		}else{
-			var r  = confirm("Da li želite da obrišete slog?");
+			var r  = confirm("Da li Å¾elite da obriÅ¡ete slog?");
 			if(r==true) {
 	    		$(location).attr('href', '/Drzave/delete?id='+id);
 			}else{
@@ -93,7 +93,7 @@
 		</div>
 
 		<div class="container-fluid">
-			<h1>Države</h1>
+			<h1>DrÅ¾ave</h1>
 
 			<table>
 				<tr class = "header">
@@ -156,15 +156,15 @@
 
 <div id="sidenav" class="sidenav">
   <a href="javascript:void(0)" class="closebtn" onclick="closeSideNav()">&times;</a>
-  <a href="@{Drzave.show("edit")}">Države</a>
+  <a href="@{Drzave.show("edit")}">DrÅ¾ave</a>
   <a href="@{NaseljenaMesta.show()}">Naseljena mesta</a>
-  <a href="@{Preduzeca.show("edit")}">Preduzeća</a>
+  <a href="@{Preduzeca.show("edit")}">PreduzeÄ‡a</a>
   <a href="#">Poslovne godine</a>
   <a href="#">Poslovni partneri</a>
   <a href="#">Fakture</a>
   <a href="#">Stavke fakture</a>
-  <a href="#">Narudžbe</a>
-  <a href="#">Stavke narudžbi</a>
+  <a href="#">NarudÅ¾be</a>
+  <a href="#">Stavke narudÅ¾bi</a>
   <a href="#">Katalog robe i usluga</a>
   <a href="#">Cenovnik</a>
   <a href="#">Stavka cenovnika</a>
@@ -174,7 +174,7 @@
   <a href="#">Podgrupa</a>
 </div>
 
-<p class="status_line">Trenutni režim: ${session.mode}</p>
+<p class="status_line">Trenutni reÅ¾im: ${session.mode}</p>
 
 <button onclick="topFunction()" id="myBtn" title="Idi na vrh">
 	<img src="@{'/public/images/back_top.png'}" alt=""

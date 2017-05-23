@@ -3,8 +3,14 @@ package controllers;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.OneToMany;
+
 import models.Drzava;
+import models.Faktura;
+import models.Grupa;
 import models.NaseljenoMesto;
+import models.PoslovnaGodina;
+import models.PoslovniPartner;
 import models.Preduzece;
 import play.cache.Cache;
 import play.mvc.Controller;
@@ -106,15 +112,21 @@ public class Preduzeca extends Controller {
 		}
 	}
 
+	/** TODO: Kako uraditi filter sa int atributima? */
 	public static void filter(Preduzece preduzece) {
-//		List<Preduzece> preduzeca = Preduzece
-//				.find("byNazivLikeAndPibLikeAndMestoLikeAndAdresaLikeAndTelefonLikeAndMaticniBrojLikeAndTekuciRacunLike",
-//						"%" + preduzece.naziv + "%", "%" + preduzece.pib + "%", "%" + preduzece.mesto + "%",
-//						"%" + preduzece.adresa + "%", "%" + preduzece.telefon + "%", "%" + preduzece.maticniBroj + "%",
-//						"%" + preduzece.tekuciRacun + "%")
-//				.fetch();
-//		session.put("mode", "edit");
-//		renderTemplate("preduzeca/show.html", preduzeca);
+		// String pibStr = convertIntToString(preduzece.pib);
+		// String telefonStr = convertIntToString(preduzece.telefon);
+		// String maticniBrojStr = Long.toString(preduzece.maticniBroj);
+		// List<Preduzece> preduzeca = Preduzece
+		// .find("byNazivLikeAndPibLikeAndMestoLikeAndAdresaLikeAndTelefonLikeAndMaticniBrojLikeAndTekuciRacunLike",
+		// "%" + preduzece.naziv + "%", "%" + pibStr + "%", "%" +
+		// preduzece.mesto + "%",
+		// "%" + preduzece.adresa + "%", "%" + telefonStr + "%", "%" +
+		// maticniBrojStr + "%",
+		// "%" + preduzece.tekuciRacun + "%")
+		// .fetch();
+		// session.put("mode", "edit");
+		// renderTemplate("preduzeca/show.html", preduzeca);
 	}
 
 	public static void delete(Long id) {
@@ -138,8 +150,20 @@ public class Preduzeca extends Controller {
 
 	}
 
-	public static void nextForm(Long id) {
+	/**
+	 * TODO: Kako proslediti i parametar forma? Kada prosledim oba ne prepoznaje
+	 * nijedan.
+	 */
+	public static void nextForm(Long id, String forma) {
+		List<Preduzece> preduzeca = checkCache();
 
+		System.out.println("id:" + id);
+		System.out.println("forma:" + forma);
+
+		// session.put("idPreduzeca", id);
+		clearSession();
+
+		renderTemplate("preduzeca/show.html", preduzeca);
 	}
 
 	public static void refresh() {
@@ -186,5 +210,66 @@ public class Preduzeca extends Controller {
 		}
 
 		return preduzeca;
+	}
+
+	public static String convertIntToString(int number) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("");
+		sb.append(number);
+		String strI = sb.toString();
+
+		return strI;
+	}
+
+	public static List<PoslovnaGodina> findPoslovneGodine(Long idPreduzeca) {
+		List<PoslovnaGodina> poslovneGodineAll = PoslovnaGodina.findAll();
+		List<PoslovnaGodina> poslovneGodine = new ArrayList<>();
+
+		for (PoslovnaGodina pg : poslovneGodineAll) {
+			if (pg.preduzece.id == idPreduzeca) {
+				poslovneGodine.add(pg);
+			}
+		}
+
+		return poslovneGodine;
+	}
+
+	public static List<Grupa> findGrupe(Long idPreduzeca) {
+		List<Grupa> grupeAll = Grupa.findAll();
+		List<Grupa> grupe = new ArrayList<>();
+
+		for (Grupa g : grupeAll) {
+			if (g.preduzece.id == idPreduzeca) {
+				grupe.add(g);
+			}
+		}
+
+		return grupe;
+	}
+
+	public static List<PoslovniPartner> findPoslovniPartneri(Long idPreduzeca) {
+		List<PoslovniPartner> poslovniPartneriAll = PoslovniPartner.findAll();
+		List<PoslovniPartner> poslovniPartneri = new ArrayList<>();
+
+		for (PoslovniPartner pp : poslovniPartneriAll) {
+			if (pp.preduzece.id == idPreduzeca) {
+				poslovniPartneri.add(pp);
+			}
+		}
+
+		return poslovniPartneri;
+	}
+
+	public static List<Faktura> findFakture(Long idPreduzeca) {
+		List<Faktura> faktureAll = Faktura.findAll();
+		List<Faktura> fakture = new ArrayList<>();
+
+		for (Faktura f : faktureAll) {
+			if (f.preduzece.id == idPreduzeca) {
+				fakture.add(f);
+			}
+		}
+
+		return fakture;
 	}
 }

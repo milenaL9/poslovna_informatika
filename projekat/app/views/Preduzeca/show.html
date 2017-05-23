@@ -2,6 +2,19 @@
 #{set title:'Preduzeća' /}
 
 <script>
+	$(document).ready(function(){
+		$("#nextFormPickup").click(function(){
+			nazivForme = $(".highlighted").find(".naziv_forme").html();
+			
+			var idPreduzeca = sessionStorage.getItem("selektovaniID");
+			
+			$('#nextFormModal').modal('toggle');
+			
+			// PITANJE: kako proslediti i nazivForme
+			$(location).attr('href', '/Preduzeca/nextForm?id='+idPreduzeca);
+		});
+	});
+
 	function sync(item){
 		if ("${session.mode}" == "edit"){
 	    	naziv = item.find(".naziv").html()
@@ -40,7 +53,8 @@
 		if(id==null){
 			alert("Označite red u tabeli!");
 		}else{
-			$(location).attr('href', '/Preduzeca/nextForm?id='+id);
+			sessionStorage.setItem("selektovaniID",id);
+			$('#nextFormModal').modal('show');
 		}	
 	}
 
@@ -219,7 +233,7 @@
   <a href="#">Fakture</a>
   <a href="#">Stavke fakture</a>
   <a href="#">Narudžbe</a>
-  <a href="#">Stavke narudžbi</a>
+  <a href="#">Stavke narudžbe</a>
   <a href="#">Katalog robe i usluga</a>
   <a href="#">Cenovnik</a>
   <a href="#">Stavka cenovnika</a>
@@ -235,3 +249,42 @@
 	<img src="@{'/public/images/back_top.png'}" alt=""
 		class="rounded-circle" width="40" height="40">
 </button>
+
+<!-- Modal Drzave -->
+<div class="modal fade" id="nextFormModal" role="dialog">
+	<div class="modal-dialog">
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">Izaberite sledeću formu</div>
+
+			<div class="modal-body">
+				<table style="padding: 2em">
+					<tr class="header">
+						<th>Forma</th>
+					</tr>
+
+					<tr>
+						<td class="naziv_forme">Poslovne godine</td>
+					</tr>
+					
+					<tr>
+						<td class="naziv_forme">Grupe</td>
+					</tr>
+					
+					<tr>
+						<td class="naziv_forme">Poslovni partneri</td>
+					</tr>
+					
+					<tr>
+						<td class="naziv_forme">Fakture</td>
+					</tr>
+				</table>
+
+				<div class="modal-footer">
+					<input id="nextFormPickup" type="button" value="izbor" />
+				</div>
+			</div>
+		</div>
+	</div>
+</div>						
+

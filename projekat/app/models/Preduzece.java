@@ -1,5 +1,6 @@
 package models;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -43,8 +44,8 @@ public class Preduzece extends Model {
 	@Required
 	// @MinSize(13)
 	@MaxSize(13)
-	@Column(columnDefinition = "numeric(13)")
-	public int maticniBroj;
+	@Column(columnDefinition = "bigint")
+	public long maticniBroj;
 
 	@Required
 	@MinSize(3)
@@ -64,7 +65,7 @@ public class Preduzece extends Model {
 	@OneToMany(mappedBy = "preduzece")
 	public List<Faktura> fakture;
 	
-	public Preduzece(String naziv, int pib, String mesto, String adresa, int telefon, int maticniBroj,
+	public Preduzece(String naziv, int pib, String mesto, String adresa, int telefon, long maticniBroj,
 			String tekuciRacun) {
 		super();
 		this.naziv = naziv;

@@ -1,4 +1,6 @@
 eclipse.preferences.version=1
-encoding//app/views/PoslovneGodine/show.html=UTF-8
-encoding//app/views/StopePDVa/show.html=UTF-8
+encoding//app/views/Drzave/show.html=UTF-8
+encoding//app/views/NaseljenaMesta/show.html=UTF-8
+encoding//app/views/Preduzeca/show.html=UTF-8
+encoding//app/views/standardForm.html=UTF-8
 encoding/<project>=UTF-8
