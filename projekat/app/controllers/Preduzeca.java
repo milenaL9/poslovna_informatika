@@ -1,6 +1,9 @@
 package controllers;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.OneToMany;
@@ -14,11 +17,20 @@ import models.PoslovniPartner;
 import models.Preduzece;
 import play.cache.Cache;
 import play.mvc.Controller;
+import play.mvc.With;
 
+@With(Secure.class)
+@Check("administrator")
 public class Preduzeca extends Controller {
 
+	/**
+	 * Stranica se vraca u pocetno stanje. Iz sesije se ukljanja ID, koji je bio
+	 * potreban za nextForm mehanizam. Vrsi se ponovno ucitavanje podataka.
+	 */
 	public static void show(String mode) {
 		validation.clear();
+
+		// potrebno za nextForm mehanizam
 		session.put("idPreduzeca", "null");
 
 		if (mode == null || mode.equals("")) {
@@ -27,15 +39,19 @@ public class Preduzeca extends Controller {
 		session.put("mode", mode);
 
 		List<Preduzece> preduzeca = checkCache();
+		List<String> povezaneForme = getForeignKeysFields();
 
-		render(preduzeca, mode);
+		render(preduzeca, povezaneForme, mode);
 	}
 
 	public static void edit(Preduzece preduzece) {
 		validation.clear();
 		validation.valid(preduzece);
 		clearSession();
+
 		session.put("mode", "edit");
+		String mode = session.get("mode");
+		List<String> povezaneForme = getForeignKeysFields();
 
 		List<Preduzece> preduzeca = null;
 
@@ -75,7 +91,7 @@ public class Preduzeca extends Controller {
 			session.put("tekuciRacunPred", preduzece.tekuciRacun);
 		}
 
-		renderTemplate("preduzeca/show.html", preduzeca);
+		renderTemplate("preduzeca/show.html", preduzeca, povezaneForme, mode);
 	}
 
 	public static void create(Preduzece preduzece) {
@@ -83,6 +99,8 @@ public class Preduzeca extends Controller {
 		validation.valid(preduzece);
 
 		session.put("mode", "add");
+		String mode = session.get("mode");
+		List<String> povezaneForme = getForeignKeysFields();
 
 		List<Preduzece> preduzeca = checkCache();
 
@@ -91,15 +109,17 @@ public class Preduzeca extends Controller {
 			preduzeca.add(preduzece);
 			Cache.set("preduzeca", preduzeca);
 
+			// potrebno da bi se selektovao dodati red na view delu
 			Long idd = preduzece.id;
 
 			validation.clear();
 			clearSession();
 
-			renderTemplate("preduzeca/show.html", preduzeca, idd);
+			renderTemplate("preduzeca/show.html", preduzeca, idd, mode);
 		} else {
 			validation.keep();
 
+			// potrebno da bi se ispisla greska
 			session.put("nazivPred", preduzece.naziv);
 			session.put("pibPred", preduzece.pib);
 			session.put("mestoPred", preduzece.mesto);
@@ -108,29 +128,27 @@ public class Preduzeca extends Controller {
 			session.put("maticniBrojPred", preduzece.maticniBroj);
 			session.put("tekuciRacunPred", preduzece.tekuciRacun);
 
-			renderTemplate("preduzeca/show.html", preduzeca);
+			renderTemplate("preduzeca/show.html", preduzeca, povezaneForme, mode);
 		}
 	}
 
-	/** TODO: Kako uraditi filter sa int atributima? */
 	public static void filter(Preduzece preduzece) {
-		// String pibStr = convertIntToString(preduzece.pib);
-		// String telefonStr = convertIntToString(preduzece.telefon);
-		// String maticniBrojStr = Long.toString(preduzece.maticniBroj);
-		// List<Preduzece> preduzeca = Preduzece
-		// .find("byNazivLikeAndPibLikeAndMestoLikeAndAdresaLikeAndTelefonLikeAndMaticniBrojLikeAndTekuciRacunLike",
-		// "%" + preduzece.naziv + "%", "%" + pibStr + "%", "%" +
-		// preduzece.mesto + "%",
-		// "%" + preduzece.adresa + "%", "%" + telefonStr + "%", "%" +
-		// maticniBrojStr + "%",
-		// "%" + preduzece.tekuciRacun + "%")
-		// .fetch();
-		// session.put("mode", "edit");
-		// renderTemplate("preduzeca/show.html", preduzeca);
+		List<Preduzece> preduzeca = Preduzece
+				.find("byNazivLikeAndPibLikeAndMestoLikeAndAdresaLikeAndTelefonLikeAndMaticniBrojLikeAndTekuciRacunLike",
+						"%" + preduzece.naziv + "%", "%" + preduzece.pib + "%", "%" + preduzece.mesto + "%",
+						"%" + preduzece.adresa + "%", "%" + preduzece.telefon + "%", "%" + preduzece.maticniBroj + "%",
+						"%" + preduzece.tekuciRacun + "%")
+				.fetch();
+		session.put("mode", "edit");
+		String mode = session.get("mode");
+		renderTemplate("preduzeca/show.html", preduzeca, mode);
 	}
 
 	public static void delete(Long id) {
+		String mode = session.get("mode");
+
 		List<Preduzece> preduzeca = checkCache();
+		List<String> povezaneForme = getForeignKeysFields();
 
 		Preduzece preduzece = Preduzece.findById(id);
 		Long idd = null;
@@ -146,35 +164,40 @@ public class Preduzeca extends Controller {
 		preduzeca = Preduzece.findAll();
 		Cache.set("preduzeca", preduzeca);
 
-		renderTemplate("preduzeca/show.html", preduzeca, idd);
-
+		renderTemplate("preduzeca/show.html", preduzeca, idd, povezaneForme, mode);
 	}
 
 	/**
-	 * TODO: Kako proslediti i parametar forma? Kada prosledim oba ne prepoznaje
-	 * nijedan.
+	 * Metoda koja na osnovu oznacenog preduzeca, prelazi na odabarnu formu, i
+	 * prikazuje samo podatke izabrane forme u okviru tog preduzeca.
+	 * 
+	 * @param id
+	 *            ID oznacenog Preduzeca
+	 * @param forma
+	 *            Izabrana forma na koju se prelazi
 	 */
 	public static void nextForm(Long id, String forma) {
-		List<Preduzece> preduzeca = checkCache();
 
-		System.out.println("id:" + id);
-		System.out.println("forma:" + forma);
-
-		// session.put("idPreduzeca", id);
+		session.put("idPreduzeca", id);
 		clearSession();
 
-		renderTemplate("preduzeca/show.html", preduzeca);
+		if (forma.equals("poslovneGodine")) {
+			List<Preduzece> preduzeca = checkCache();
+			List<PoslovnaGodina> poslovneGodine = findPoslovneGodine(id);
+			renderTemplate("PoslovneGodine/show.html", poslovneGodine, preduzeca);
+		}
+
 	}
 
 	public static void refresh() {
+		String mode = session.get("mode");
+
 		List<Preduzece> preduzeca = checkCache();
 
-		renderTemplate("preduzeca/show.html", preduzeca);
+		renderTemplate("preduzeca/show.html", preduzeca, mode);
 	}
 
-	/**
-	 * Pomocne metode.
-	 */
+	/** Pomocna metoda za brisanje podataka iz sesije. */
 	private static boolean clearSession() {
 		session.put("idPred", null);
 		session.put("nazivPred", null);
@@ -188,19 +211,10 @@ public class Preduzeca extends Controller {
 		return true;
 	}
 
-	public static List<NaseljenoMesto> findNaseljenaMesta(Long idDrzave) {
-		List<NaseljenoMesto> naseeljenaMestaAll = NaseljenoMesto.findAll();
-		List<NaseljenoMesto> naseljenaMesta = new ArrayList<>();
-
-		for (NaseljenoMesto nm : naseeljenaMestaAll) {
-			if (nm.drzava.id == idDrzave) {
-				naseljenaMesta.add(nm);
-			}
-		}
-
-		return naseljenaMesta;
-	}
-
+	/**
+	 * Pomocna metoda za proveru da li su zeljeni podaci (koji treba da budu
+	 * dostupni kroz vise zahteva) i dalje na Cache-u.
+	 */
 	public static List<Preduzece> checkCache() {
 		List<Preduzece> preduzeca = (List<Preduzece>) Cache.get("preduzeca");
 
@@ -212,15 +226,13 @@ public class Preduzeca extends Controller {
 		return preduzeca;
 	}
 
-	public static String convertIntToString(int number) {
-		StringBuilder sb = new StringBuilder();
-		sb.append("");
-		sb.append(number);
-		String strI = sb.toString();
-
-		return strI;
-	}
-
+	/**
+	 * Pomocna metoda za nextForm mehanizam. Nalazi sve poslovne godine u okviru
+	 * jednog izabranog preduzeca.
+	 * 
+	 * @param idPreduzeca
+	 *            ID izabranog preduzeca
+	 */
 	public static List<PoslovnaGodina> findPoslovneGodine(Long idPreduzeca) {
 		List<PoslovnaGodina> poslovneGodineAll = PoslovnaGodina.findAll();
 		List<PoslovnaGodina> poslovneGodine = new ArrayList<>();
@@ -234,42 +246,27 @@ public class Preduzeca extends Controller {
 		return poslovneGodine;
 	}
 
-	public static List<Grupa> findGrupe(Long idPreduzeca) {
-		List<Grupa> grupeAll = Grupa.findAll();
-		List<Grupa> grupe = new ArrayList<>();
+	/**
+	 * Pomocna metoda koja vraca listu povezanih formi.
+	 * 
+	 * @see <a href=
+	 *      "http://tutorials.jenkov.com/java-reflection/annotations.html"> Java
+	 *      Reflection - Annotations</a>
+	 */
+	public static List<String> getForeignKeysFields() {
+		Class preduzeceClass = Preduzece.class;
+		Field[] fields = preduzeceClass.getFields();
 
-		for (Grupa g : grupeAll) {
-			if (g.preduzece.id == idPreduzeca) {
-				grupe.add(g);
+		List<String> povezaneForme = new ArrayList<String>();
+
+		for (int i = 0; i < fields.length; i++) {
+			Annotation annotation = fields[i].getAnnotation(OneToMany.class);
+			if (annotation instanceof OneToMany) {
+				povezaneForme.add(fields[i].getName());
 			}
 		}
 
-		return grupe;
+		return povezaneForme;
 	}
 
-	public static List<PoslovniPartner> findPoslovniPartneri(Long idPreduzeca) {
-		List<PoslovniPartner> poslovniPartneriAll = PoslovniPartner.findAll();
-		List<PoslovniPartner> poslovniPartneri = new ArrayList<>();
-
-		for (PoslovniPartner pp : poslovniPartneriAll) {
-			if (pp.preduzece.id == idPreduzeca) {
-				poslovniPartneri.add(pp);
-			}
-		}
-
-		return poslovniPartneri;
-	}
-
-	public static List<Faktura> findFakture(Long idPreduzeca) {
-		List<Faktura> faktureAll = Faktura.findAll();
-		List<Faktura> fakture = new ArrayList<>();
-
-		for (Faktura f : faktureAll) {
-			if (f.preduzece.id == idPreduzeca) {
-				fakture.add(f);
-			}
-		}
-
-		return fakture;
-	}
 }

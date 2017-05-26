@@ -22,10 +22,10 @@ public class Preduzece extends Model {
 	public String naziv;
 
 	@Required
-	// @MinSize(8)
+	@MinSize(8)
 	@MaxSize(8)
-	@Column(columnDefinition = "numeric(8)")
-	public int pib;
+	@Column(columnDefinition = "varchar(8)")
+	public String pib;
 
 	@MinSize(2)
 	@MaxSize(40)
@@ -38,14 +38,15 @@ public class Preduzece extends Model {
 	@Column(columnDefinition = "varchar(40)")
 	public String adresa;
 
-	@Column(columnDefinition = "numeric")
-	public int telefon;
+	@MaxSize(15)
+	@Column(columnDefinition = "varchar(15)")
+	public String telefon;
 
 	@Required
-	// @MinSize(13)
+	@MinSize(13)
 	@MaxSize(13)
-	@Column(columnDefinition = "bigint")
-	public long maticniBroj;
+	@Column(columnDefinition = "varchar(13)")
+	public String maticniBroj;
 
 	@Required
 	@MinSize(3)
@@ -61,11 +62,11 @@ public class Preduzece extends Model {
 
 	@OneToMany(mappedBy = "preduzece")
 	public List<PoslovniPartner> poslovniPartneri;
-	
+
 	@OneToMany(mappedBy = "preduzece")
 	public List<Faktura> fakture;
-	
-	public Preduzece(String naziv, int pib, String mesto, String adresa, int telefon, long maticniBroj,
+
+	public Preduzece(String naziv, String pib, String mesto, String adresa, String telefon, String maticniBroj,
 			String tekuciRacun) {
 		super();
 		this.naziv = naziv;

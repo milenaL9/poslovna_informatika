@@ -13,9 +13,9 @@
 
 	function remove(id){  <!-- ne znam koji je uanpred selektovani red , ovde se vrsi redirekcija -->
 		if(id == null){
-			alert("Označite red u tabeli!");
+			alert("OznaÄ�ite red u tabeli!");
 		}else{
-			var r  = confirm("Da li želite da obrišete slog?");
+			var r  = confirm("Da li Å¾elite da obriÅ¡ete slog?");
 			if(r==true) {
 	    		$(location).attr('href', '/VrstePDVa/delete?id='+id);
 			}else{
@@ -26,7 +26,7 @@
 
 	function nextform_func(id){
 		if(id==null){
-			alert("OznaÃ„ï¿½ite red u tabeli!");
+			alert("OznaÃƒâ€žÃ¯Â¿Â½ite red u tabeli!");
 		}else{
 			$(location).attr('href', '/VrstePDVa/nextForm?id='+id);
 		}	
@@ -143,27 +143,7 @@
 	</div>
 </div>
 
-<div id="sidenav" class="sidenav">
-  <a href="javascript:void(0)" class="closebtn" onclick="closeSideNav()">&times;</a>
-  <a href="@{Drzave.show("edit")}">Države</a>
-  <a href="@{NaseljenaMesta.show()}">Naseljena mesta</a>
-  <a href="#">Preduzeća</a>
-  <a href="#">Poslovne godine</a>
-  <a href="#">Poslovni partneri</a>
-  <a href="#">Fakture</a>
-  <a href="#">Stavke fakture</a>
-  <a href="#">Narudžbe</a>
-  <a href="#">Stavke narudžbi</a>
-  <a href="#">Katalog robe i usluga</a>
-  <a href="#">Cenovnik</a>
-  <a href="#">Stavka cenovnika</a>
-  <a href="#">Stopa PDVa</a>
-  <a href="#">Vrsta PDVa</a>
-  <a href="#">Grupa</a>
-  <a href="#">Podgrupa</a>
-</div>
-
-<p class="status_line">Trenutni režim: ${session.mode}</p>
+<p class="status_line">Trenutni reÅ¾im: ${session.mode}</p>
 
 <button onclick="topFunction()" id="myBtn" title="Idi na vrh">
 	<img src="@{'/public/images/back_top.png'}" alt=""

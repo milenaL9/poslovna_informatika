@@ -1,4 +1,4 @@
-#{extends 'standardForm.html' /} #{set title:'Premium banka' /}
+#{extends 'standardForm.html' /} #{set title:'Plasman robe i usluga' /}
 
 <!-- Slideshow/Carousel -->
 <div id="my-pics" class="container carousel slide" data-ride="carousel"
@@ -16,11 +16,11 @@
 
 		<!-- Slide 1 -->
 		<div class="carousel-item ">
-			<img src="@{'/public/images/news-1.jpg'}" />
+			<img src="@{'/public/images/carousel3.jpg'}" />
 			<div class="container">
 				<div class="carousel-caption">
-					<h1>Povoljne usluge</h1>
-					<p>za vaš svet mogućeg</p>
+					<h1 style="color:black;">Povoljne usluge</h1>
+					<p style="color:black;font-size:30px;"><b>za Vaš svet mogućeg!</b></p>
 				</div>
 			</div>
 
@@ -28,13 +28,13 @@
 
 		<!-- Slide 2 -->
 		<div class="carousel-item active">
-			<img src="@{'/public/images/news-2.jpg'}" />
+			<img src="@{'/public/images/carousel1.jpg'}"/>
 			<div class="container">
 				<div class="carousel-caption">
-					<h1>Dobro došli!</h1>
-					<p>Savršen trenutak da pokrenete svoj novac i smanjite rizik!</p>
+					<h1 style="color:black;">Dobro došli!</h1>
+					<p style="color:black;font-size:24px;"><b>Savršen trenutak da pokrenete svoj plasman robe i usluga na sva tržišta i smanjite rizik!</b></p>
 					<p>
-						<a class="btn btn-lg btn-primary" href="@{Drzave.show()}"
+						<a class="btn btn-lg btn-primary" href="@{Preduzeca.show()}"
 							role="button">Počnite odmah!</a>
 					</p>
 				</div>
@@ -43,11 +43,13 @@
 
 		<!-- Slide 3 -->
 		<div class="carousel-item">
-			<img src="@{'/public/images/news-3.jpg'}" />
+			<img src="@{'/public/images/carousel2.jpg'}" />
 			<div class="container">
 				<div class="carousel-caption">
-					<h1>Profesionalni konsultanti</h1>
-					<p>umeju da prepoznaju Vaše potrebe</p>
+					<h1 style="color:black;">Profesionalni konsultanti</h1>
+					<p style="color:black;font-size:24px;"><b>Veoma je važno da se predstavnici privrede upoznaju sa načinima, 
+						potencijalima i mogućnostima za početak poslovanja.</b>
+					</p>
 				</div>
 			</div>
 		</div>
@@ -74,29 +76,38 @@
 			<img class="rounded-circle" src="@{'/public/images/icon-1.png'}"
 				alt="Generic placeholder image" width="100" height="100">
 			<h2>Najbolja podrška</h2>
-			<p>Evidencija država podrazumeva unos, izmenu i brisanje država.
-				Kao podatak države može se uneti međunarodna oznaka i pun naziv.
-				Izborom države omogućen je next mehanizam.</p>
+			<p>
+			Cilj nam je da kontinuirano, za minimalno utrošeno vreme utvrdimo proizvodne kapacitete, 
+			količinu, kvalitet i kontinuitet proizvodnje u svakom od posmatranih regiona.
+			Ovim dajemo svoj doprinos povećanju konkurentnosti naše privrede i uvećanju mogućnosti 
+			zajedničkog nastupa naših preduzeća u regionu. 
+			Regionu omogućavamo i samostalno povezivanje sa privrednim organizacijama 
+			u regionu, širom zemlje ali i sveta.
+			</p>
 		</div>
 
 		<div class="col-lg-4">
 			<img class="rounded-circle" src="@{'/public/images/icon-2.png'}"
 				alt="Generic placeholder image" width="100" height="100">
 			<h2>Pametne odluke</h2>
-			<p>Evidencija naseljenih mesta unos, izmenu i brisanje naseljenih
-				mesta. Kao podatak naseljenog mesta može se uneti međunarodna
-				oznaka, pun naziv, poštanski kod i država u kojoj se nalazi.
-				Prilikom izbora omogućen je zoom mehanizam.</p>
+			<p>
+			 Sve je više svetskih kompanija koja se u svojoj strateškoj orijentaciji odlučuju za 
+			 postupke spajanja i preuzimanja. Elektronsko upravljanje igra sve važniju, 
+			 i u svakodnevnom i u strateškom poslovanju globalnih kompanija. 
+			 Uslužne aktivnosti koje posedujemo omogući će Vam uspešno rukovođenje.
+			</p>
 		</div>
 
 		<div class="col-lg-4">
 			<img class="rounded-circle" src="@{'/public/images/icon-3.png'}"
 				alt="Generic placeholder image" width="100" height="100">
 			<h2>Uštedite</h2>
-			<p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in,
-				egestas eget quam. Vestibulum id ligula porta felis euismod semper.
-				Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum
-				nibh, ut fermentum massa justo sit amet risus.</p>
+			<p>
+			Preko Regionalnog tržišta roba i usluga, svaki privrednik može da objavi svoje tržišne 
+			viškove što trgovinskim preduzećima daje mogućnost da prikupe viškove svojih proizvoda 
+			u regionu, time značajno smanjue transportne troškove, 
+			stvore mogućnost prerađivačkoj proizvodnji i prezentuju tržišne viškove svakog regiona.
+			</p>
 		</div>
 	</div>
 
@@ -110,30 +121,30 @@
 			<div class="col-lg-4">
 				<img class="rounded-circle" src="@{'/public/images/client-1.png'}"
 					alt="Generic placeholder image" width="100" height="100">
-				<h2>Jane, California</h2>
-				<p>Evidencija država podrazumeva unos, izmenu i brisanje država.
-					Kao podatak države može se uneti međunarodna oznaka i pun naziv.
-					Izborom države omogućen je next mehanizam.</p>
+				<h2>Jane, California, BM</h2>
+				<p>Počeli smo kao malo trgovinsko preduzeće, razvijali se uz SMS,
+				a vremenom uz mnogo truda i saradnje sa drugim renomiranim fabrikama, do kojih
+				smo došli preko SMS-a, postali smo to što jesmo.
+				</p>
 			</div>
 
 			<div class="col-lg-4">
 				<img class="rounded-circle" src="@{'/public/images/client-2.png'}"
 					alt="Generic placeholder image" width="100" height="100">
-				<h2>Kate, Colorado</h2>
-				<p>Evidencija naseljenih mesta unos, izmenu i brisanje
-					naseljenih mesta. Kao podatak naseljenog mesta može se uneti
-					međunarodna oznaka, pun naziv, poštanski kod i država u kojoj se
-					nalazi. Prilikom izbora omogućen je zoom mehanizam.</p>
+				<h2>Kate, Colorado, Ponir</h2>
+				<p>Sarađujemo sa SMS- om od njihovog pojavljivanja na tržištu.
+					Svakim danom nas iznenade novostima i olakšavajućim okolnostima za vođenje
+					jedne velike kompanije, kao što je Ponir.
+				</p>
 			</div>
 
 			<div class="col-lg-4">
 				<img class="rounded-circle" src="@{'/public/images/client-3.png'}"
 					alt="Generic placeholder image" width="100" height="100">
-				<h2>John, Nevada</h2>
-				<p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in,
-					egestas eget quam. Vestibulum id ligula porta felis euismod semper.
-					Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum
-					nibh, ut fermentum massa justo sit amet risus.</p>
+				<h2>John, Nevada, BK Pro</h2>
+				<p>Odkada koristimo ovaj servis poslovanje našeg preduzeća stalno raste. Skoro smo pokrenuli
+				i novi program, čime sada naše preduzeće, osim Evrope, pokriva i tržište Azije.
+				</p>
 			</div>
 		</div>
 	</div>

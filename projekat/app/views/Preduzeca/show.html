@@ -10,8 +10,7 @@
 			
 			$('#nextFormModal').modal('toggle');
 			
-			// PITANJE: kako proslediti i nazivForme
-			$(location).attr('href', '/Preduzeca/nextForm?id='+idPreduzeca);
+			$(location).attr('href', '/Preduzeca/nextForm?id='+idPreduzeca+'&forma='+nazivForme);
 		});
 	});
 
@@ -174,42 +173,42 @@
 					<p>
 						#{field 'preduzece.pib'}
 							<label for = "${field.id}">PIB</label>
-							<input type = "text" name = "${field.name}" id = "${field.id}"/>
+							<input type = "text" name = "${field.name}" id = "${field.id}" maxlength="8" size="8"/>
 						#{/}
 					</p>
 					
 					<p>
 						#{field 'preduzece.mesto'}
 							<label for = "${field.id}">Mesto</label>
-							<input type = "text" name = "${field.name}" id = "${field.id}"/>
+							<input type = "text" name = "${field.name}" id = "${field.id}" maxlength="40" size="40"/>
 						#{/}
 					</p>
 					
 					<p>
 						#{field 'preduzece.adresa'}
 							<label for = "${field.id}">Adresa</label>
-							<input type = "text" name = "${field.name}" id = "${field.id}"/>
+							<input type = "text" name = "${field.name}" id = "${field.id}" maxlength="40" size="40"/>
 						#{/}
 					</p>
 					
 					<p>
 						#{field 'preduzece.telefon'}
 							<label for = "${field.id}">Telefon</label>
-							<input type = "text" name = "${field.name}" id = "${field.id}"/>
+							<input type = "text" name = "${field.name}" id = "${field.id}" maxlength="15" size="15"/>
 						#{/}
 					</p>
 					
 					<p>
 						#{field 'preduzece.maticniBroj'}
 							<label for = "${field.id}">Matični broj</label>
-							<input type = "text" name = "${field.name}" id = "${field.id}"/>
+							<input type = "text" name = "${field.name}" id = "${field.id}" maxlength="13" size="13"/>
 						#{/}
 					</p>
 					
 					<p>
 						#{field 'preduzece.tekuciRacun'}
 							<label for = "${field.id}">Tekući račun</label>
-							<input type = "text" name = "${field.name}" id = "${field.id}"/>
+							<input type = "text" name = "${field.name}" id = "${field.id}" maxlength="18" size="18"/>
 						#{/}
 					</p>
 					
@@ -223,26 +222,6 @@
 	</div>
 </div>
 
-<div id="sidenav" class="sidenav">
-  <a href="javascript:void(0)" class="closebtn" onclick="closeSideNav()">&times;</a>
-  <a href="@{Drzave.show("edit")}">Države</a>
-  <a href="@{NaseljenaMesta.show()}">Naseljena mesta</a>
-  <a href="@{Preduzeca.show("edit")}">Preduzeća</a>
-  <a href="#">Poslovne godine</a>
-  <a href="#">Poslovni partneri</a>
-  <a href="#">Fakture</a>
-  <a href="#">Stavke fakture</a>
-  <a href="#">Narudžbe</a>
-  <a href="#">Stavke narudžbe</a>
-  <a href="#">Katalog robe i usluga</a>
-  <a href="#">Cenovnik</a>
-  <a href="#">Stavka cenovnika</a>
-  <a href="#">Stopa PDVa</a>
-  <a href="#">Vrsta PDVa</a>
-  <a href="#">Grupa</a>
-  <a href="#">Podgrupa</a>
-</div>
-
 <p class="status_line">Trenutni režim: ${session.mode}</p>
 
 <button onclick="topFunction()" id="myBtn" title="Idi na vrh">
@@ -250,7 +229,6 @@
 		class="rounded-circle" width="40" height="40">
 </button>
 
-<!-- Modal Drzave -->
 <div class="modal fade" id="nextFormModal" role="dialog">
 	<div class="modal-dialog">
 		<!-- Modal content-->
@@ -263,21 +241,11 @@
 						<th>Forma</th>
 					</tr>
 
+					#{list items:povezaneForme, as:'forma'}
 					<tr>
-						<td class="naziv_forme">Poslovne godine</td>
+						<td class = "naziv_forme">${forma}</td>
 					</tr>
-					
-					<tr>
-						<td class="naziv_forme">Grupe</td>
-					</tr>
-					
-					<tr>
-						<td class="naziv_forme">Poslovni partneri</td>
-					</tr>
-					
-					<tr>
-						<td class="naziv_forme">Fakture</td>
-					</tr>
+					#{/list}
 				</table>
 
 				<div class="modal-footer">

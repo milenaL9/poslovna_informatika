@@ -1,6 +1,6 @@
 package models;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -14,14 +14,19 @@ import play.db.jpa.Model;
 public class Cenovnik extends Model {
 
 	@Required
+	@Column(columnDefinition = "varchar(40)")
+	public String naziv;
+
+	@Required
 	@Column(columnDefinition = "date")
 	public Date datumVazenja;
 
 	@OneToMany(mappedBy = "cenovnik")
 	public List<StavkaCenovnika> stavkeCenovnika;
 
-	public Cenovnik(Date datumVazenja) {
+	public Cenovnik(String naziv, Date datumVazenja) {
 		super();
+		this.naziv = naziv;
 		this.datumVazenja = datumVazenja;
 	}
 

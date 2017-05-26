@@ -6,6 +6,11 @@
 	</projects>
 	<buildSpec>
 		<buildCommand>
+			<name>org.eclipse.wst.common.project.facet.core.builder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
 			<name>org.eclipse.jdt.core.javabuilder</name>
 			<arguments>
 			</arguments>
@@ -14,11 +19,33 @@
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>org.playframework.playclipse.playNature</nature>
+		<nature>org.eclipse.wst.common.project.facet.core.nature</nature>
 	</natures>
-	<linkedResources><link><name>docviewer</name><type>2</type><location>C:/Users/Milena/Desktop/Milena/fax/4.godina/letnji/Poslovna_informatika/play-1.4.4/modules/docviewer/app</location></link>
-<link><name>public/docviewer</name><type>2</type><location>C:/Users/Milena/Desktop/Milena/fax/4.godina/letnji/Poslovna_informatika/play-1.4.4/modules/docviewer/public</location></link>
-<link><name>secure</name><type>2</type><location>C:/Users/Milena/Desktop/Milena/fax/4.godina/letnji/Poslovna_informatika/play-1.4.4/modules/secure/app</location></link>
-<link><name>conf/secure</name><type>2</type><location>C:/Users/Milena/Desktop/Milena/fax/4.godina/letnji/Poslovna_informatika/play-1.4.4/modules/secure/conf</location></link>
-<link><name>public/secure</name><type>2</type><location>C:/Users/Milena/Desktop/Milena/fax/4.godina/letnji/Poslovna_informatika/play-1.4.4/modules/secure/public</location></link>
-</linkedResources>
+	<linkedResources>
+		<link>
+			<name>docviewer</name>
+			<type>2</type>
+			<location>C:/Users/Milena/Desktop/Milena/fax/4.godina/letnji/Poslovna_informatika/play-1.4.4/modules/docviewer/app</location>
+		</link>
+		<link>
+			<name>secure</name>
+			<type>2</type>
+			<location>C:/Users/Milena/Desktop/Milena/fax/4.godina/letnji/Poslovna_informatika/play-1.4.4/modules/secure/app</location>
+		</link>
+		<link>
+			<name>conf/secure</name>
+			<type>2</type>
+			<location>C:/Users/Milena/Desktop/Milena/fax/4.godina/letnji/Poslovna_informatika/play-1.4.4/modules/secure/conf</location>
+		</link>
+		<link>
+			<name>public/docviewer</name>
+			<type>2</type>
+			<location>C:/Users/Milena/Desktop/Milena/fax/4.godina/letnji/Poslovna_informatika/play-1.4.4/modules/docviewer/public</location>
+		</link>
+		<link>
+			<name>public/secure</name>
+			<type>2</type>
+			<location>C:/Users/Milena/Desktop/Milena/fax/4.godina/letnji/Poslovna_informatika/play-1.4.4/modules/secure/public</location>
+		</link>
+	</linkedResources>
 </projectDescription>

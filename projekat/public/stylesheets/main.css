@@ -343,3 +343,10 @@ p.status_line {
 	width: 1560px;
 	height: 592px;
 }
+
+/*Datepicker*/
+$('#sandbox-container .input-group.date').datepicker({
+    format: "dd/mm/yyyy",
+    autoclose: true,
+    todayHighlight: true
+});

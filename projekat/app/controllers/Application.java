@@ -7,15 +7,12 @@ import java.util.*;
 
 import models.*;
 
-
-@With(Secure.class)
-@Check("administrator")
 public class Application extends Controller {
 
 	public static void index() {
 		String user = Security.connected();
 		render(user);
-		//render();
+		// render();
 	}
 
 	public static void about() {

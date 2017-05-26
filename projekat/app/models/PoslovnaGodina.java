@@ -16,24 +16,24 @@ import play.db.jpa.Model;
 public class PoslovnaGodina extends Model {
 
 	@Required
-	@Column(columnDefinition = "numeric")
-	public int brojGodine;
+	@MaxSize(4)
+	@Column(columnDefinition = "varchar(4)")
+	public String brojGodine;
 
-	@Required
-	@MaxSize(1)
 	@Column(columnDefinition = "character(1)")
-	public boolean aktivna;
+	public Character aktivna;
 
 	@ManyToOne
 	public Preduzece preduzece;
-	
-	@OneToMany(mappedBy="poslovnaGodina")
+
+	@OneToMany(mappedBy = "poslovnaGodina")
 	public List<Faktura> fakture;
 
-	public PoslovnaGodina(int brojGodine, boolean aktivna) {
+	public PoslovnaGodina(String brojGodine, Character aktivna, Preduzece preduzece) {
 		super();
 		this.brojGodine = brojGodine;
 		this.aktivna = aktivna;
+		this.preduzece = preduzece;
 	}
 
 }
