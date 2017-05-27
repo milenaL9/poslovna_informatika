@@ -1,13 +1,23 @@
 #{extends 'standardForm.html' /}
 #{set title:'Cenovnici' /}
 
-<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.12.0/moment.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
+
+<script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
 
 <script>
+    
+    $(document).ready(function(){
+		$("#nextFormPickup").click(function(){
+			nazivForme = $(".highlighted").find(".naziv_forme").html();
+			
+			var idCenovnika = sessionStorage.getItem("selektovaniID");
+			
+			$('#nextFormModal').modal('toggle');
+			
+			$(location).attr('href', '/Cenovnici/nextForm?id='+idCenovnika+'&forma='+nazivForme);
+		});
+	});
     
 	function sync(item){
 		if ("${session.mode}" == "edit"){
@@ -15,11 +25,8 @@
 	    	datumVazenja = item.find(".datumVazenja").html()
 	    	id = item.find(".id").html()
 	    	$("#cenovnik_naziv").val(naziv);
-	    	
+	    	$("#cenovnik_datumVazenja").val(datumVazenja);
 	    	$("#cenovnik_id").val(id);
-	    	
-	    	var date = new Date(2017,05,21);
-	    	$("#cenovnik_datumVazenja").datepicker("update","2017-05-21");
     	}
 	}
 
@@ -36,21 +43,24 @@
 		}
 	}
 
+	function nextform_func(id){
+		if(id==null){
+			alert("Označite red u tabeli!");
+		}else{
+			sessionStorage.setItem("selektovaniID",id);
+			$('#nextFormModal').modal('show');
+		}	
+	}
+
 	function refresh_page(){
 		$(location).attr('href', '/Cenovnici/refresh');
 	}
 	
+	$(function(){
+		$( "#cenovnik_datumVazenja" ).datepicker();
+	});
 	
-	$(document).ready(function(){
-		var date_input=$('input[name="cenovnik.datumVazenja"]'); //our date input has the name "date"
-		var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
-		date_input.datepicker({
-			format: 'yyyy-mm-dd',
-			container: container,
-			todayHighlight: true,
-			autoclose: true,
-		})
-	})
+	
 	
 </script>
 
@@ -153,8 +163,8 @@
 				
 					<p>
 						#{field 'cenovnik.datumVazenja'}
-					      	<label id = "${field.id}">Datum važenja</label>
-					      	<input name = "${field.name}" id = "${field.id}" placeholder="DD/MM/YYYY" type="text"/>
+					      	<label for = "${field.id}">Datum važenja</label>
+							<input type="text" name="${field.name}" id="${field.id}"/>
 						#{/}
 					</p>
 					
@@ -174,3 +184,30 @@
 	<img src="@{'/public/images/back_top.png'}" alt=""
 		class="rounded-circle" width="40" height="40">
 </button>
+
+<div class="modal fade" id="nextFormModal" role="dialog">
+	<div class="modal-dialog">
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">Izaberite sledeću formu</div>
+
+			<div class="modal-body">
+				<table style="padding: 2em">
+					<tr class="header">
+						<th>Forma</th>
+					</tr>
+
+					#{list items:povezaneForme, as:'forma'}
+					<tr>
+						<td class = "naziv_forme">${forma}</td>
+					</tr>
+					#{/list}
+				</table>
+
+				<div class="modal-footer">
+					<input id="nextFormPickup" type="button" value="izbor" />
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

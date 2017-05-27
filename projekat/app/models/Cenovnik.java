@@ -1,6 +1,5 @@
 package models;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -18,13 +17,13 @@ public class Cenovnik extends Model {
 	public String naziv;
 
 	@Required
-	@Column(columnDefinition = "date")
-	public Date datumVazenja;
+	@Column(columnDefinition = "varchar(10)")
+	public String datumVazenja;
 
 	@OneToMany(mappedBy = "cenovnik")
 	public List<StavkaCenovnika> stavkeCenovnika;
 
-	public Cenovnik(String naziv, Date datumVazenja) {
+	public Cenovnik(String naziv, String datumVazenja) {
 		super();
 		this.naziv = naziv;
 		this.datumVazenja = datumVazenja;

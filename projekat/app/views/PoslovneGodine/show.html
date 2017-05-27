@@ -168,7 +168,7 @@
 						<p>
 							#{field 'poslovnaGodina.brojGodine'} 
 								<label for="${field.id}">Broj godine</label>
-								<input type="text" name="${field.name}" id="${field.id}" value="${session.brojGodine}" /> 
+								<input type="text" name="${field.name}" id="${field.id}" value="${session.brojGodine}" maxlength="4" size="4" /> 
 								<span>#{error field.name /}</span>
 							#{/}
 						</p>

@@ -115,7 +115,7 @@ public class Preduzeca extends Controller {
 			validation.clear();
 			clearSession();
 
-			renderTemplate("preduzeca/show.html", preduzeca, idd, mode);
+			renderTemplate("preduzeca/show.html", preduzeca, povezaneForme, idd, mode);
 		} else {
 			validation.keep();
 
@@ -139,9 +139,13 @@ public class Preduzeca extends Controller {
 						"%" + preduzece.adresa + "%", "%" + preduzece.telefon + "%", "%" + preduzece.maticniBroj + "%",
 						"%" + preduzece.tekuciRacun + "%")
 				.fetch();
+
 		session.put("mode", "edit");
 		String mode = session.get("mode");
-		renderTemplate("preduzeca/show.html", preduzeca, mode);
+
+		List<String> povezaneForme = getForeignKeysFields();
+
+		renderTemplate("preduzeca/show.html", preduzeca, povezaneForme, mode);
 	}
 
 	public static void delete(Long id) {
@@ -193,8 +197,9 @@ public class Preduzeca extends Controller {
 		String mode = session.get("mode");
 
 		List<Preduzece> preduzeca = checkCache();
+		List<String> povezaneForme = getForeignKeysFields();
 
-		renderTemplate("preduzeca/show.html", preduzeca, mode);
+		renderTemplate("preduzeca/show.html", preduzeca, povezaneForme, mode);
 	}
 
 	/** Pomocna metoda za brisanje podataka iz sesije. */
