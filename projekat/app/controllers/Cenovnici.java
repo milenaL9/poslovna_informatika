@@ -3,14 +3,11 @@ package controllers;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.OneToMany;
 
 import models.Cenovnik;
-import models.PoslovnaGodina;
-import models.Preduzece;
 import models.StavkaCenovnika;
 import play.cache.Cache;
 import play.mvc.Controller;

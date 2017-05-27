@@ -146,7 +146,6 @@ public class PoslovneGodine extends Controller {
 
 			poslovneGodine = fillList();
 
-			session.put("idPG", poslovnaGodina.id);
 			session.put("brojGodine", poslovnaGodina.brojGodine);
 			session.put("aktivna", poslovnaGodina.aktivna);
 

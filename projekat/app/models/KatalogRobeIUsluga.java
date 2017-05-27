@@ -27,14 +27,14 @@ public class KatalogRobeIUsluga extends Model {
 	@Column(columnDefinition = "varchar(1024)")
 	public String opisStavkeKataloga;
 
-	@OneToMany(mappedBy = "katalogRobeIUsluga")
-	public List<StavkaCenovnika> stavkeCenovnika;
-	
-	@OneToMany(mappedBy = "katalogRobeIUsluga")
-	public List<StavkaFakture> stavkeFakture;
-	
 	@ManyToOne
 	public Podgrupa podgrupa;
+
+	@OneToMany(mappedBy = "katalogRobeIUsluga")
+	public List<StavkaCenovnika> stavkeCenovnika;
+
+	@OneToMany(mappedBy = "katalogRobeIUsluga")
+	public List<StavkaFakture> stavkeFakture;
 
 	public KatalogRobeIUsluga(String nazivStavkeKataloga, String opisStavkeKataloga) {
 		super();
