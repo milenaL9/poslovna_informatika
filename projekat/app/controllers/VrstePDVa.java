@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import models.NaseljenoMesto;
+import models.PoslovnaGodina;
+import models.StopaPDVa;
 import models.VrstaPDVa;
 import play.cache.Cache;
 import play.mvc.Controller;
@@ -55,7 +57,7 @@ public class VrstePDVa extends Controller {
 
 			session.put("idVrstePDVa", vrstaPDVa.id);
 			// session.put("editOznaka", drzava.oznaka);
-			session.put("editNazivVrstePDVa", vrstaPDVa.nazivVrstePDva);
+			session.put("editNazivVrstePDva", vrstaPDVa.nazivVrstePDva);
 		}
 
 		renderTemplate("vrstePDVa/show.html", vrstePDVa);
@@ -92,7 +94,7 @@ public class VrstePDVa extends Controller {
 
 	 public static void filter(VrstaPDVa vrstaPDVa) {
 	 List<VrstaPDVa> vrstePDVa = VrstaPDVa
-	 .find("byNazivVrstePDVaLike", "%" + vrstaPDVa.nazivVrstePDva).fetch();
+	 .find("byNazivVrstePDvaLike", "%" + vrstaPDVa.nazivVrstePDva).fetch();
 	 session.put("mode", "edit");
 	 renderTemplate("vrstePDVa/show.html", vrstePDVa);
 	 }
@@ -153,10 +155,23 @@ public class VrstePDVa extends Controller {
 
 	private static boolean clearSession() {
 		session.put("idVrstePDVa", null);
-		session.put("editOznaka", null);
-		session.put("editNaziv", null);
+		session.put("editNazivVrstePDva", null);
+		//session.put("editNaziv", null);
 
 		return true;
+	}
+
+	public static List<StopaPDVa> findStopePDVa(Long idVrstePDVa) {
+		List<StopaPDVa> stopePDVaAll = StopaPDVa.findAll();
+		List<StopaPDVa> stopePDVa = new ArrayList<>();
+
+		for (StopaPDVa s : stopePDVaAll) {
+			if (s.vrstaPDVa.id == idVrstePDVa) {
+				stopePDVa.add(s);
+			}
+		}
+
+		return stopePDVa;
 	}
 
 	// public static List<NaseljenoMesto> findNaseljenaMesta(Long idDrzave) {

@@ -1,12 +1,3 @@
+#Tue Feb 17 18:35:42 CET 2009
 eclipse.preferences.version=1
-encoding//app/views/Application/index.html=UTF-8
-encoding//app/views/Cenovnici/show.html=UTF-8
-encoding//app/views/Drzave/show.html=UTF-8
-encoding//app/views/KataloziRobeIUsluga/show.html=UTF-8
-encoding//app/views/NaseljenaMesta/show.html=UTF-8
-encoding//app/views/PoslovneGodine/show.html=UTF-8
-encoding//app/views/Preduzeca/show.html=UTF-8
-encoding//app/views/VrstePDVa/show.html=UTF-8
-encoding//app/views/main.html=UTF-8
-encoding//app/views/standardForm.html=UTF-8
 encoding/<project>=UTF-8

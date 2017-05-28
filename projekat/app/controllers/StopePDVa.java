@@ -2,7 +2,9 @@ package controllers;
 
 import java.util.List;
 
+import models.Cenovnik;
 import models.Drzava;
+import models.PoslovnaGodina;
 import models.StopaPDVa;
 import models.VrstaPDVa;
 import play.cache.Cache;
@@ -12,43 +14,63 @@ import play.mvc.Controller;
  * Obrati paznju na VrstuPDVa unutar StopePDVa
  * 
  * 
- * */
-
-
-
-
+ */
 
 public class StopePDVa extends Controller {
 
-	public static void show(String mode) {
+	public static void show() {
 		validation.clear();
-		session.put("idStopePDVa", "null");
+		clearSession();
+		session.put("idVrstePDVa", "null");
 
-		if (mode == null || mode.equals("")) {
-			mode = "edit";
-		}
+		String mode = "edit";
+
 		session.put("mode", mode);
 
 		List<VrstaPDVa> vrstePDVa = VrstePDVa.checkCache();
 		List<StopaPDVa> stopePDVa = checkCache();
 
-		renderTemplate("StopePDVa/show.html", stopePDVa, vrstePDVa);
+		render(vrstePDVa, stopePDVa, mode);
 	}
 
-	public static void edit(StopaPDVa stopaPDVa) {
+	public static void  changeMode(String mode) {
+		
+		if(mode == null || mode.equals("")) {
+			mode="edit";
+		}
+		session.put("mode", mode);
+		
+		List<VrstaPDVa> vrstePDVa = VrstePDVa.checkCache();
+		List<StopaPDVa> stopePDVa = fillList();
+
+		renderTemplate("StopePDVa/show.html", vrstePDVa, stopePDVa, mode);
+	}
+
+
+	public static void edit(StopaPDVa stopaPDVa, Long vrstaPDVa) {
 		validation.clear();
 		validation.valid(stopaPDVa);
 		clearSession();
 		session.put("mode", "edit");
+		String mode = session.get("mode");
 
 		List<StopaPDVa> stopePDVa = null;
+		List<VrstaPDVa> vrstePDVa = VrstePDVa.checkCache();
 
 		if (!validation.hasErrors()) {
 			stopePDVa = StopaPDVa.findAll();
 
+			VrstaPDVa findVrstaPDVa = null;
+			if (vrstaPDVa == null) {
+				Long id = Long.parseLong(session.get("idVrstePDVa"));
+				findVrstaPDVa = VrstaPDVa.findById(id);
+			} else {
+				findVrstaPDVa = VrstaPDVa.findById(vrstaPDVa);
+			}
+
 			for (StopaPDVa tmp : stopePDVa) {
 				if (tmp.id == stopaPDVa.id) {
-					tmp.vrstaPDVa = stopaPDVa.vrstaPDVa;
+					tmp.vrstaPDVa = findVrstaPDVa;
 					tmp.procenatPDVa = stopaPDVa.procenatPDVa;
 					tmp.datumKreiranja = stopaPDVa.datumKreiranja;
 					tmp.save();
@@ -58,81 +80,98 @@ public class StopePDVa extends Controller {
 
 			Cache.set("stopePDVa", stopePDVa);
 
+			stopePDVa.clear();
+			stopePDVa = fillList();
 			validation.clear();
 
 		} else {
-			stopePDVa = checkCache();
-
 			validation.keep();
+			stopePDVa = fillList();
 
 			session.put("idStopePDVa", stopaPDVa.id);
 			session.put("datumKreiranja", stopaPDVa.datumKreiranja);
 			session.put("procenatPDVa", stopaPDVa.procenatPDVa);
-			// session.put("editOznaka", drzava.oznaka);
-			// session.put("editNazivStopePDVa", stopaPDVa.nazivVrstePDva);
+
 		}
 
-		renderTemplate("stopePDVa/show.html", stopePDVa);
+		renderTemplate("StopePDVa/show.html", stopePDVa, vrstePDVa, mode);
 	}
 
-	public static void create(StopaPDVa stopaPDVa, VrstaPDVa vrstaPDVa) {
+	public static void create(StopaPDVa stopaPDVa, Long vrstaPDVa) {
 		validation.clear();
+		clearSession();
+
 		validation.valid(stopaPDVa);
 
 		session.put("mode", "add");
+		String mode = session.get("mode");
 
 		List<StopaPDVa> stopePDVa = null;
 		List<VrstaPDVa> vrstePDVa = VrstePDVa.checkCache();
-		
+
 		if (!validation.hasErrors()) {
-			
+
 			stopePDVa = StopaPDVa.findAll();
-			
-			if(vrstaPDVa.id == null) {
-				Long id = Long.parseLong(session.get("id"));
-				VrstaPDVa newvrstaPDVa = VrstaPDVa.findById(id);
-				vrstaPDVa = newvrstaPDVa;
+
+			VrstaPDVa findVrstaPDVa = null;
+			if (vrstaPDVa == null) {
+				Long id = Long.parseLong(session.get("idVrstePDVa"));
+				findVrstaPDVa = VrstaPDVa.findById(id);
+			} else {
+				findVrstaPDVa = VrstaPDVa.findById(vrstaPDVa);
 			}
-			
-			stopaPDVa.vrstaPDVa = vrstaPDVa;
-			
-			
+
+			stopaPDVa.vrstaPDVa = findVrstaPDVa;
+
 			stopaPDVa.save();
 			stopePDVa.add(stopaPDVa);
 			Cache.set("stopePDVa", stopePDVa);
 
 			Long idd = stopaPDVa.id;
 
-			
-			
 			validation.clear();
-			clearSession();
+			stopePDVa = fillList();
+			validation.clear();
 
-			renderTemplate("stopePDVa/show.html", stopePDVa, idd);
-		} else {
+			renderTemplate("StopePDVa/show.html", stopePDVa, vrstePDVa, idd, mode);
+		} else
+
+		{
 			validation.keep();
 
+			stopePDVa = fillList();
 			// session.put("editNazivVrstePDVa", stopaPDVa.nazivVrstePDva);
 			// session.put("editNaziv", vrstaPDVa.naziv);
 			session.put("datumKreiranja", stopaPDVa.datumKreiranja);
 			session.put("procenatPDVa", stopaPDVa.procenatPDVa);
-			session.put("vrstaPDVa", stopaPDVa.vrstaPDVa);
-			renderTemplate("stopePDVa/show.html", stopePDVa);
+			// session.put("vrstaPDVa", stopaPDVa.vrstaPDVa);
+			renderTemplate("StopePDVa/show.html", stopePDVa, vrstePDVa,  mode);
 		}
 	}
 
-//	public static void filter(StopaPDVa stopaPDVa) {
-////			List<StopaPDVa> stopePDVa = StopePDVa.checkCache();
-//////					StopaPDVa.find("byProcenatPDVaLike",
-//////					"%" + stopaPDVa.procenatPDVa + "%"
-//////					, "%" + stopaPDVa.vrstaPDVa.nazivVrstePDva + "%"
-//////					).fetch();
-////		session.put("mode", "edit");
-////		List<VrstaPDVa> vrstePDVa = VrstePDVa.checkCache();
-////		renderTemplate("stopePDVa/show.html", stopePDVa,vrstePDVa);
-//	}
+
+	public static void filter(StopaPDVa stopaPDVa) {
+		
+		//Integer broj = Integer.parseInt(stopaPDVa.procenatPDVa);
+		List<StopaPDVa> stopePDVa = StopaPDVa
+				//.find("byProcenatPDVaLike",  "%" + stopaPDVa.procenatPDVa + "%")
+				//.fetch();
+				.find("procenatPDVa = ?", stopaPDVa.procenatPDVa).fetch();
+
+	
+	
+		//Long.parseLong(session.get("idVrstePDVa"))
+		session.put("mode", "edit");
+		String mode = session.get("mode");
+
+		//List<String> povezaneForme = getForeignKeysFields();
+
+		renderTemplate("StopePDVa/show.html", stopePDVa, mode);
+	}
 
 	public static void delete(Long id) {
+		String mode = session.get("mode");
+
 		List<VrstaPDVa> vrstePDVa = VrstePDVa.checkCache();
 		List<StopaPDVa> stopePDVa = checkCache();
 
@@ -147,10 +186,12 @@ public class StopePDVa extends Controller {
 		}
 		stopaPDVa.delete();
 
-		stopePDVa = StopaPDVa.findAll();
+	
 		Cache.set("stopePDVa", stopePDVa);
 
-		renderTemplate("stopePDVa/show.html", stopePDVa, vrstePDVa, idd);
+		stopePDVa.clear();
+		stopePDVa = fillList();
+		renderTemplate("StopePDVa/show.html", stopePDVa, vrstePDVa, idd, mode);
 
 	}
 
@@ -170,9 +211,9 @@ public class StopePDVa extends Controller {
 	public static void refresh() {
 		List<StopaPDVa> stopePDVa = checkCache();
 		List<VrstaPDVa> vrstePDVa = VrstePDVa.checkCache();
-		renderTemplate("stopePDVa/show.html", stopePDVa, vrstePDVa);
-	
-		
+		String mode = session.get("mode");
+		renderTemplate("StopePDVa/show.html", stopePDVa, vrstePDVa, mode);
+
 	}
 
 	/**
@@ -181,7 +222,7 @@ public class StopePDVa extends Controller {
 	public static List<StopaPDVa> checkCache() {
 		List<StopaPDVa> stopePDVa = (List<StopaPDVa>) Cache.get("stopePDVa");
 
-		if (stopePDVa == null) {
+		if ((stopePDVa == null) || (stopePDVa.size() == 0) ) {
 			stopePDVa = StopaPDVa.findAll();
 			Cache.set("stopePDVa", stopePDVa);
 		}
@@ -191,11 +232,27 @@ public class StopePDVa extends Controller {
 
 	private static boolean clearSession() {
 		session.put("idStopePDVa", null);
-		// session.put("editOznaka", null);
-		// session.put("editNaziv", null);
-
+		session.put("datumKreiranja", null);
+		session.put("procenatPDVa", null);
+		
 		return true;
 	}
+	
+	
+	public static List<StopaPDVa> fillList() {
+		List<StopaPDVa> stopePDVa = null;
+		if (!session.get("idVrstePDVa").equals("null")) {
+			Long id = Long.parseLong(session.get("idVrstePDVa"));
+			stopePDVa = VrstePDVa.findStopePDVa(id);
+		} else {
+			stopePDVa = checkCache();
+		}
+
+		return stopePDVa;
+	}
+	
+	
+	
 
 	// public static List<NaseljenoMesto> findNaseljenaMesta(Long idDrzave) {
 	// List<NaseljenoMesto> naseeljenaMestaAll = NaseljenoMesto.findAll();

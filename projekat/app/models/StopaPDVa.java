@@ -24,10 +24,10 @@ public class StopaPDVa extends Model {
 
 
 
-	@Temporal(TemporalType.DATE)
-	// @DateTimeFormat(pattern="yyyy-MM-dd")
-//	@Required
-	public Date datumKreiranja;
+
+	@Required
+	@Column(columnDefinition = "varchar(10)")
+	public String datumKreiranja;
 
 	
 	public int procenatPDVa;
@@ -35,7 +35,7 @@ public class StopaPDVa extends Model {
 	@ManyToOne
 	public VrstaPDVa vrstaPDVa;
 
-	public StopaPDVa(int procenatPDVa, Date datumKreiranja) {
+	public StopaPDVa(int procenatPDVa, String datumKreiranja) {
 		super();
 		this.procenatPDVa = procenatPDVa;
 		this.datumKreiranja = datumKreiranja;

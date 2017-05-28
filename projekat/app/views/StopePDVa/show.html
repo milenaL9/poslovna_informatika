@@ -1,217 +1,239 @@
-<!-- #{extends 'standardForm.html' /} #{set title:'StopePDVa' /} -->
+#{extends 'standardForm.html' /} #{set title:'Stope PDVa' /}
 
-<!-- <script> -->
-// 	function sync(item){
-// 		if ("${mode}" == "edit"){
-// 			<!--nazivVrstePDva = item.find(".nazivVrstePDva").html() -->
-// 	    	id = item.find(".id").html()
-// 	    	vrstaPDVa = item.find(".vrstaPDVa").html()
-	 
-// 			$("#stopaPDVa_datumKreiranja").val(datumKreiranja);
-// 			$("#stopaPDVa_procenatPDVa").val(procenatPDVa);
-// 	    	$("#stopaPDVa_id").val(id);
-	    	
-// 	    	 var options = document.getElementById("vrstaPDVa_id").children;
-// 				for (i = 0; i < options.length; i++) { 
-// 	    			if(options[i].label == vrstaPDVa){
-// 	    				document.getElementById("vrstaPDVa_id").selectedIndex = i;
-// 	    				break;
-// 	    			}
-// 				}
-//     	}
-// 	}
+<script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
 
-	
-	
-// 	function SelectElement()
-// 	{   
-// 		if(${session.id} != null){  
-// 			var options = document.getElementById("vrstaPDVa_id").children;
-// 			for (i = 0; i < options.length; i++) {
-//     			if(options[i].value == ${session.id}){
-//     				document.getElementById("vrstaPDVa_id").selectedIndex = i;
-//     				break;
-//     			}
-// 			}
-// 			document.getElementById("vrstaPDVa_id").disabled = true;
-// 			document.getElementById("zoomBtn").disabled = true;
-// 		}else{
-// 			document.getElementById("vrstaPDVa_id").disabled = false;
-// 			document.getElementById("zoomBtn").disabled = false;
-// 		}
-// 	}
+<script>
+	function sync(item){
+		if ("${session.mode}" == "edit"){
+			datumKreiranja = item.find(".s_datumKreiranja").html()
+		    procenatPDVa = item.find(".s_procenatPDVa").html()
+		    vrstaPDVa = item.find(".vrstaPDVa").html()
+		    id = item.find(".id").html()
+		    $("#stopaPDVa_procenatPDVa").val(procenatPDVa);
+		    $("#stopaPDVa_datumKreiranja").val(datumKreiranja);
+		    $("#stopaPDVa_id").val(id);
+		    
 		
+
+			var options = document.getElementById("vrstaPDVa").children;
+			for (i = 0; i < options.length; i++) { 
+    			if(options[i].label == vrstaPDVa){
+    				document.getElementById("vrstaPDVa").selectedIndex = i;
+    				break;
+    			}
+			}
+		}
+	}
+	
+	function SelectElement(){
+		if(${session.idVrstePDVa} != null){
+			var options = document.getElementById("vrstaPDVa").children;
+			for (i = 0; i < options.length; i++) {
+    			if(options[i].value == ${session.idVrstePDVa}){
+    				document.getElementById("vrstaPDVa").selectedIndex = i;
+    				break;
+    			}
+			}
+
+			document.getElementById("vrstaPDVa").disabled = true;
+			document.getElementById("zoomBtn").disabled = true;
+		}else{
+			document.getElementById("vrstaPDVa").disabled = false;
+			document.getElementById("zoomBtn").disabled = false;
+		}
+	}
+
+	function remove(id){  <!-- ne znam koji je uanpred selektovani red , ovde se vrsi redirekcija -->
+		if(id == null){
+			alert("OznaÄ�ite red u tabeli!");
+		}else{
+			var r  = confirm("Da li Å¾elite da obriÅ¡te slog?");
+			if(r == true) {
+		    	$(location).attr('href', '/StopePDVa/delete?id='+id);
+			}
+			else{
+				txt = "You pressed Cancel"
+			}
+		}
+	}
+	
+	function refresh_page(){
+		$(location).attr('href', '/StopePDVa/refresh');
+	}
 	
 	
 	
+	$(function(){
+		$( "#stopaPDVa_datumKreiranja" ).datepicker();
+	});
 	
 	
-// 	function remove(id){  <!-- ne znam koji je uanpred selektovani red , ovde se vrsi redirekcija -->
-// 		if(id == null){
-// 			alert("OznaÄ�ite red u tabeli!");
-// 		}else{
-// 			var r  = confirm("Da li Å¾elite da obriÅ¡ete slog?");
-// 			if(r==true) {
-// 	    		$(location).attr('href', '/StopePDVa/delete?id='+id);
-// 			}else{
-// 				txt = "You pressed Cancel"
-// 			}
-// 		}
-// 	}
-
-// 	function nextform_func(id){
-// 		if(id==null){
-// 			alert("OznaÃƒâ€žÃ¯Â¿Â½ite red u tabeli!");
-// 		}else{
-// 			$(location).attr('href', '/StopePDVa/nextForm?id='+id);
-// 		}	
-// 	}
-
-// 	function refresh_page(){
-// 		$(location).attr('href', '/StopaPDVa/refresh');
-// 	}
+	$(document).ready(function(){
+		$("#vrstaPDVaPickup").click(function(){
+			id = $(".highlighted").find(".p_id").html();
+			$("select").val(id);
+			$('#vrstePDVaModal').modal('toggle');
+		});
+	});
 	
-<!-- </script> -->
-
-<!-- <div class="container-fluid"> -->
-<!-- 	<div class="row"> -->
-<!-- 		<div class="icon-bar"> -->
-<!-- 			<a href="#" onclick="openSideNav()"> <img width="16px" -->
-<!-- 				height="16px" src="@{'/public/images/menu_icon.png'}" /> -->
-<!-- 			</a> <a href="@{VrstePDVa.show(" search")}" id="search"> <img -->
-<!-- 				src="@{'/public/images/search.gif'}" /> -->
-<!-- 			</a> <a href="@{VrstePDVa.show(" edit")}" id="refresh"> <img -->
-<!-- 				src="@{'/public/images/refresh.gif'}" /> -->
-<!-- 			</a> <a href="#" id="pickup"> <img -->
-<!-- 				src="@{'/public/images/zoom-pickup.gif'}" /> -->
-<!-- 			</a> <a href="#" id="help"> <img src="@{'/public/images/help.gif'}" /> -->
-<!-- 			</a> <a id="first"> <img src="@{'/public/images/first.gif'}" /> -->
-<!-- 			</a> <a id="prev"> <img src="@{'/public/images/prev.gif'}" /> -->
-<!-- 			</a> <a id="next"> <img src="@{'/public/images/next.gif'}" /> -->
-<!-- 			</a> <a id="last"> <img src="@{'/public/images/last.gif'}" /> -->
-<!-- 			</a> <a href="@{StopePDVa.show(" add")}" id="add"> <img -->
-<!-- 				src="@{'/public/images/add.gif'}" /> -->
-<!-- 			</a> <a href="#" id="remove"> <img -->
-<!-- 				src="@{'/public/images/remove.gif'}" /> -->
-<!-- 			</a> <a href="#" id="nextform"> <img -->
-<!-- 				src="@{'/public/images/nextform.gif'}" /> -->
-<!-- 			</a> -->
-<!-- 		</div> -->
-
-<!-- 		<div class="container-fluid"> -->
-<!-- 			<h1>Stope PDVa</h1> -->
-
-<!-- 			<table> -->
-<!-- 				<tr class="header"> -->
-<!-- 					<th>Naziv</th> -->
-<!-- 				</tr> -->
-
-<!-- 				#{list items:stopePDVa, as:'stopaPDVa'} -->
-<!-- 				<tr #{if stopaPDVa.id== idd} class="highlighted"#{/if}> -->
-<!-- 					<td class="procenatPDVa">${stopaPDVa.procenatPDVa}</td> -->
-<!-- 					<td class="vrstaPDVa">${stopaPDVa.vrstaPDVa.nazivVrstePDva}</td> -->
-<!-- 					<td class="datumKreiranja">${stopaPDVa.datumKreiranja}</td> -->
-<!-- 					<td style="visibility: hidden; max-width: 0px" class="id">${stopaPDVa.id}</td> -->
-<!-- 				</tr> -->
-<!-- 				#{/list} -->
-<!-- 			</table> -->
-
-		
+</script>
+<div class="container-fluid">
+	<div class="row">
+		<div class="icon-bar">
+			<a href="#" onclick="openSideNav()"> <img width="16px"
+				height="16px" src="@{'/public/images/menu_icon.png'}" />
+				
+			</a> <a href="@{StopePDVa.changeMode(" search")}" id="search"> <img
+				src="@{'/public/images/search.gif'}" />
+				
+			</a> <a href="#" onclick="refresh_page()"> <img
+				src="@{'/public/images/refresh.gif'}" />
+				
+			</a> <a href="#" id="pickup"> <img
+				src="@{'/public/images/zoom-pickup.gif'}" />
+				
+			</a> <a href="#" id="help"> <img src="@{'/public/images/help.gif'}" />
 			
-<!-- 				#{set 'action'} -->
-<!--     			#{if mode == 'add'} -->
-<!--         			@{StopePDVa.create()} -->
-<!--    				#{/if} -->
-<!--    				#{elseif mode == 'edit'} -->
-<!--        				@{StopePDVa.edit()} -->
-<!--    				#{/elseif} -->
-
-<!--  	    	#{/set} -->
+			</a> <a id="first"> <img src="@{'/public/images/first.gif'}" />
 			
+			</a> <a id="prev"> <img src="@{'/public/images/prev.gif'}" />
 			
+			</a> <a id="next"> <img src="@{'/public/images/next.gif'}" />
+			
+			</a> <a id="last"> <img src="@{'/public/images/last.gif'}" />
+			
+			<a href="@{StopePDVa.changeMode("add")}" id="add"> 
+				<img src="@{'/public/images/add.gif'}" />
+			</a>
+			</a> <a href="#" id="remove"> <img
+				src="@{'/public/images/remove.gif'}" />
+				
+			</a> <a href="#" id="nextform"> <img
+				src="@{'/public/images/nextform.gif'}" />
+			</a>
+		</div>
 
-<!-- 			<div class="panel"> -->
-<!-- 				<form action=${action} method="post"> -->
-<!-- 					umesto Drzave.show -->
-<!-- 					<p> -->
-<!-- 						#{field 'stopaPDVa.id'} <input type="hidden" name="${field.name}" -->
-<!-- 							id="${field.id}" /> #{/} -->
-<!-- 					</p> -->
+		<div class="container-fluid">
+			<h1>StopePDVa</h1>
 
-<!-- 					<p> -->
-<!-- 						#{field 'stopaPDVa.procenatPDva'} <label for="${field.id}">Procenat</label> -->
-<!-- 						<input type="text" name="${field.name}" id="${field.id}" /> #{/} -->
-<!-- 					</p> -->
-
-<!-- 					<p> -->
-<!-- 						#{field 'vrstaPDVa.id'}  -->
-<!-- 							<label for="${field.id}">Vrsta PDVa</label>  -->
-<!-- 							<select name="${field.name}" id="${field.id}">  -->
-<!-- 								#{list items:vrstePDVa, as:'vrstaPDVaa'} -->
-<!-- 									<option value="${vrstaPDVaa.id}">${vrstaPDVaa.nazivVrstePDva}</option> -->
-<!-- 								#{/list} -->
-<!-- 							</select> -->
-
-<!-- 							<button id="zoomBtn" type="button" class="btn btn-info btn-sm" -->
-<!-- 							data-toggle="modal" data-target="#vrstePDVaModal">...</button> -->
-
-<!-- 							<script> -->
-//            						SelectElement(${session.id});
-<!--         					</script> -->
-<!-- 						#{/} -->
-<!-- 					</p> -->
-
-<!-- 					<p> -->
-<!-- 						#{field 'stopaPDVa.datumKreiranja'} <label for="${field.id}">Datum</label> -->
-<!-- 						<input type="text" name="${field.name}" id="${field.id}" /> #{/} -->
-<!-- 					</p> -->
+			<table>
+				<tr class="header">
+					<th>Datum kreiranja</th>
+					<th>Procenat PDVa</th>
+					<th>Vrsta PDVa</th>
+				</tr>
+				#{list items:stopePDVa, as:'stopaPDVa'}
+				<tr #{if stopaPDVa.id== idd} class="highlighted"#{/if}>
+					<td class="s_datumKreiranja">${stopaPDVa.datumKreiranja}</td>
+					<td class="s_procenatPDVa">${stopaPDVa.procenatPDVa}</td>
+					<td class="vrstaPDVa">${stopaPDVa.vrstaPDVa.nazivVrstePDva}</td>
+					<td style="visibility: hidden; max-width: 0px" class="id">${stopaPDVa.id}</td>
+				</tr>
+				#{/list}
+			</table>
 
 
-<!-- 					<div id="formActions"> -->
-<!-- 						<input type="submit" value="Potvrda" style="margin-left: 6em" /> <a -->
-<!-- 							href="@{StopePDVa.show(" edit")}" style="margin-left: 1em">Rollback</a> -->
-<!-- 					</div> -->
-<!-- 				</form> -->
-<!-- 			</div> -->
-<!-- 		</div> -->
-<!-- 	</div> -->
-<!-- </div> -->
+			#{set 'action'}
+				 #{if mode == 'add'}
+				 	 @{StopePDVa.create()}
+				 #{/if}
+				 #{elseif mode == 'edit'} 
+				 	 @{StopePDVa.edit()} 
+				 #{/elseif}
+				  #{else}
+					@{StopePDVa.filter()}
+				 #{/else} 
+			#{/set}
 
-<!-- <p class="status_line">Trenutni reÅ¾im: ${session.mode}</p> -->
+			<div class="panel">
+				<form action=${action} method="post">
 
-<!-- <button onclick="topFunction()" id="myBtn" title="Idi na vrh"> -->
-<!-- 	<img src="@{'/public/images/back_top.png'}" alt="" -->
-<!-- 		class="rounded-circle" width="40" height="40"> -->
-<!-- </button> -->
 
-<!-- <!-- Modal VrstaPDVa --> -->
-<!-- <div class="modal fade" id="vrstePDVaModal" role="dialog"> -->
-<!-- 	<div class="modal-dialog"> -->
-<!-- 		<!-- Modal content--> -->
-<!-- 		<div class="modal-content"> -->
-<!-- 			<div class="modal-header">Vrste PDVa</div> -->
+					<p>
+						#{field 'stopaPDVa.datumKreiranja'}
+						 <label for="${field.id}">Datum kreiranja</label> 
+						 <input type="text" name="${field.name}" id="${field.id}" />
+						#{/} 
+					</p>
 
-<!-- 			<div class="modal-body"> -->
-<!-- 				<table style="padding: 2em"> -->
-<!-- 					<tr class="header"> -->
-<!-- 						<th>Oznaka</th> -->
-<!-- 						<th>Naziv</th> -->
-<!-- 					</tr> -->
+					<p>
+						#{field 'stopaPDVa.id'}
+						 <input type="hidden" name="${field.name}"
+							id="${field.id}" value="${session.idStopePDVa}" />
+						 #{/}
+					</p>
 
-<!-- 					#{list items:vrstePDVa, as:'vrstaPDVa'} -->
-<!-- 					<tr> -->
-					
-<!-- 						<td class="naziv">${vrstaPDVa.nazivVrstePDva}</td> -->
-<!-- 						<td style="visibility: hidden; max-width: 0px" class="id">${vrstaPDVa.id}</td> -->
-<!-- 					</tr> -->
-<!-- 					#{/list} -->
-<!-- 				</table> -->
+					<p>
+						#{field 'stopaPDVa.procenatPDVa'} 
+						<label for="${field.id}">Procenat PDVa</label> 
+						<input type="text" name="${field.name}" id="${field.id}"
+							value="${session.prcenatPDVa}" /> 
+							<span>#{error field.name /}</span> 
+						#{/}
+					</p>
 
-<!-- 				<div class="modal-footer"> -->
-<!-- 					<input id="vrstaPDVaPickup" type="button" value="izbor" /> -->
-<!-- 				</div> -->
-<!-- 			</div> -->
-<!-- 		</div> -->
-<!-- 	</div> -->
-<!-- </div> -->
-<!-- </div> -->
+
+
+					<p>
+						#{field 'vrstaPDVa'} <label for="${field.id}">VrstaPDVa</label>
+						&nbsp &nbsp &nbsp <select name="${field.name}" id="${field.id}">
+							#{list items:vrstePDVa, as:'vrstaPDVa'}
+							<option value="${vrstaPDVa.id}">${vrstaPDVa.nazivVrstePDva}</option>
+							#{/list}
+						</select>
+
+						<button id="zoomBtn" type="button" class="btn btn-info btn-sm"
+							data-toggle="modal" data-target="#vrstePDVaModal">...</button>
+						#{/}
+
+						<script>SelectElement()</script>
+					</p>
+
+					<div id="formActions">
+						<input type="submit" value="Potvrda" style="margin-left: 6em" /> <a
+							href="@{StopePDVa.changeMode(" edit")}" style="margin-left: 1em">Rollback</a>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+<p class="status_line">Trenutni reÅ¾im: ${session.mode}</p>
+
+<button onclick="topFunction()" id="myBtn" title="Idi na vrh">
+	<img src="@{'/public/images/back_top.png'}" alt=""
+		class="rounded-circle" width="40" height="40">
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="vrstePDVaModal" role="dialog">
+	<div class="modal-dialog">
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">Vrste PDVa</div>
+
+			<div class="modal-body">
+				<table style="padding: 2em">
+					<tr class="header">
+						<th>Naziv vrste PDVa</th>
+
+					</tr>
+
+					#{list items:vrstePDVa, as:'vrstaPDVa'}
+					<tr #{if vrstaPDVa.id== idd} class="highlighted"#{/if}>
+						<td class="naziv">${vrstaPDVa.nazivVrstePDva}</td>
+
+						<td style="visibility: hidden; max-width: 0px" class="p_id">${vrstaPDVa.id}</td>
+					</tr>
+					#{/list}
+				</table>
+
+				<div class="modal-footer">
+					<input id="vrstaPDVaPickup" type="button" value="izbor" />
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

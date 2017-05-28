@@ -3,10 +3,10 @@
 
 <script>
 	function sync(item){
-		if ("${mode}" == "edit"){
+		if ("${session.mode}" == "edit"){
 			nazivVrstePDva = item.find(".nazivVrstePDva").html()
 	    	id = item.find(".id").html()
-	    	$("#vrstaPDVa_nazivVrstePDva").val(nazivVrstePDVa);
+	    	$("#vrstaPDVa_nazivVrstePDva").val(nazivVrstePDva);
 	    	$("#vrstaPDVa_id").val(id);
     	}
 	}
@@ -100,7 +100,7 @@
 				
 				#{list items:vrstePDVa, as:'vrstaPDVa'}
 				<tr #{if vrstaPDVa.id == idd} class = "highlighted" #{/if}>
-					<td class = "nazivVrstePDVa">${vrstaPDVa.nazivVrstePDva}</td>
+					<td class = "nazivVrstePDva">${vrstaPDVa.nazivVrstePDva}</td>
 					<td style = "visibility: hidden; max-width: 0px" class = "id">${vrstaPDVa.id}</td>
 				</tr>
 				#{/list}
