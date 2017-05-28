@@ -167,8 +167,6 @@ public class Cenovnici extends Controller {
 			List<StavkaCenovnika> stavkeCenovnika = findStavkeCenovnika(id);
 			List<KatalogRobeIUsluga> kataloziRobeIUsluga = KataloziRobeIUsluga.checkCache();
 
-			System.out.println("cenovnici: " + cenovnici.size());
-
 			renderTemplate("StavkeCenovnika/show.html", stavkeCenovnika, kataloziRobeIUsluga, cenovnici);
 		}
 	}
