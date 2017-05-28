@@ -13,7 +13,10 @@ import models.Podgrupa;
 import models.StavkaCenovnika;
 import play.cache.Cache;
 import play.mvc.Controller;
+import play.mvc.With;
 
+@With(Secure.class)
+@Check("administrator")
 public class KataloziRobeIUsluga extends Controller {
 
 	/**
@@ -194,8 +197,19 @@ public class KataloziRobeIUsluga extends Controller {
 
 	}
 
+	/**
+	 * Metoda koja na osnovu oznacenog kataloga robe i usluga, prelazi na
+	 * odabarnu formu, i prikazuje samo podatke izabrane forme u okviru tog
+	 * kataloga.
+	 * 
+	 * @param id
+	 *            ID oznacenog Kataloga robe i usluga
+	 * @param forma
+	 *            Izabrana forma na koju se prelazi
+	 */
 	public static void nextForm(Long id, String forma) {
 		session.put("idKataloga", id);
+		session.put("idCenovnika", "null");
 		clearSession();
 
 		if (forma.equals("stavkeCenovnika")) {

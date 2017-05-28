@@ -7,7 +7,10 @@ import models.KatalogRobeIUsluga;
 import models.StavkaCenovnika;
 import play.cache.Cache;
 import play.mvc.Controller;
+import play.mvc.With;
 
+@With(Secure.class)
+@Check("administrator")
 public class StavkeCenovnika extends Controller {
 
 	/**
@@ -53,28 +56,180 @@ public class StavkeCenovnika extends Controller {
 
 	}
 
-	public static void create() {
+	public static void create(StavkaCenovnika stavkaCenovnika, Long cenovnik, Long katalogRobeIUsluga) {
+		validation.clear();
+		clearSession();
+
+		validation.valid(stavkaCenovnika);
+
+		session.put("mode", "add");
+		String mode = session.get("mode");
+
+		List<StavkaCenovnika> stavkeCenovnika = null;
+		List<Cenovnik> cenovnici = Cenovnici.checkCache();
+		List<KatalogRobeIUsluga> kataloziRobeIUsluga = KataloziRobeIUsluga.checkCache();
+
+		if (!validation.hasErrors()) {
+			stavkeCenovnika = StavkaCenovnika.findAll();
+
+			// kada je disable- ovan combobox ne pokupi vrednost
+			Cenovnik findCenovnik = null;
+			if (cenovnik == null) {
+				Long id = Long.parseLong(session.get("idCenovnika"));
+				findCenovnik = Cenovnik.findById(id);
+			} else {
+				findCenovnik = Cenovnik.findById(cenovnik);
+			}
+
+			KatalogRobeIUsluga findKatalog = null;
+			if (katalogRobeIUsluga == null) {
+				Long id = Long.parseLong(session.get("idKataloga"));
+				findKatalog = KatalogRobeIUsluga.findById(id);
+			} else {
+				findKatalog = KatalogRobeIUsluga.findById(katalogRobeIUsluga);
+			}
+
+			stavkaCenovnika.cenovnik = findCenovnik;
+			stavkaCenovnika.katalogRobeIUsluga = findKatalog;
+
+			stavkaCenovnika.save();
+			stavkeCenovnika.add(stavkaCenovnika);
+			Cache.set("stavkeCenovnika", stavkeCenovnika);
+
+			Long idd = stavkaCenovnika.id;
+
+			stavkeCenovnika.clear();
+			stavkeCenovnika = fillList();
+
+			validation.clear();
+
+			renderTemplate("StavkeCenovnika/show.html", stavkeCenovnika, cenovnici, kataloziRobeIUsluga, idd, mode);
+		} else {
+			validation.keep();
+
+			stavkeCenovnika = fillList();
+
+			session.put("cena", null);
+
+			renderTemplate("StavkeCenovnika/show.html", stavkeCenovnika, cenovnici, kataloziRobeIUsluga, mode);
+		}
 
 	}
 
-	public static void edit() {
+	public static void edit(StavkaCenovnika stavkaCenovnika, Long cenovnik, Long katalogRobeIUsluga) {
+		validation.clear();
+		clearSession();
 
+		validation.valid(stavkaCenovnika);
+
+		session.put("mode", "add");
+		String mode = session.get("mode");
+
+		List<StavkaCenovnika> stavkeCenovnika = null;
+		List<Cenovnik> cenovnici = Cenovnici.checkCache();
+		List<KatalogRobeIUsluga> kataloziRobeIUsluga = KataloziRobeIUsluga.checkCache();
+
+		if (!validation.hasErrors()) {
+			stavkeCenovnika = StavkaCenovnika.findAll();
+
+			// kada je disable- ovan combobox ne pokupi vrednost
+			Cenovnik findCenovnik = null;
+			if (cenovnik == null) {
+				Long id = Long.parseLong(session.get("idCenovnika"));
+				findCenovnik = Cenovnik.findById(id);
+			} else {
+				findCenovnik = Cenovnik.findById(cenovnik);
+			}
+
+			KatalogRobeIUsluga findKatalog = null;
+			if (katalogRobeIUsluga == null) {
+				Long id = Long.parseLong(session.get("idKataloga"));
+				findKatalog = KatalogRobeIUsluga.findById(id);
+			} else {
+				findKatalog = KatalogRobeIUsluga.findById(katalogRobeIUsluga);
+			}
+
+			stavkaCenovnika.cenovnik = findCenovnik;
+			stavkaCenovnika.katalogRobeIUsluga = findKatalog;
+
+			for (StavkaCenovnika tmp : stavkeCenovnika) {
+				if (tmp.id == stavkaCenovnika.id) {
+					tmp.cena = stavkaCenovnika.cena;
+					tmp.cenovnik = stavkaCenovnika.cenovnik;
+					tmp.katalogRobeIUsluga = stavkaCenovnika.katalogRobeIUsluga;
+					tmp.save();
+					break;
+				}
+			}
+
+			Cache.set("stavkeCenovnika", stavkeCenovnika);
+
+			stavkeCenovnika.clear();
+			stavkeCenovnika = fillList();
+
+			validation.clear();
+		} else {
+			validation.keep();
+
+			stavkeCenovnika = fillList();
+
+			session.put("idSC", null);
+			session.put("cena", null);
+		}
+
+		renderTemplate("StavkeCenovnika/show.html", stavkeCenovnika, cenovnici, kataloziRobeIUsluga, mode);
 	}
 
-	public static void filter() {
+	public static void filter(StavkaCenovnika stavkaCenovnika) {
+		List<StavkaCenovnika> stavkeCenovnika = StavkaCenovnika.find("byCena", stavkaCenovnika.cena).fetch();
 
+		List<Cenovnik> cenovnici = Cenovnici.checkCache();
+		List<KatalogRobeIUsluga> kataloziRobeIUsluga = KataloziRobeIUsluga.checkCache();
+
+		session.put("mode", "edit");
+		String mode = session.get("mode");
+
+		renderTemplate("StavkeCenovnika/show.html", stavkeCenovnika, cenovnici, kataloziRobeIUsluga, mode);
 	}
 
-	public static void delete() {
+	public static void delete(Long id) {
+		String mode = session.get("mode");
 
+		List<StavkaCenovnika> stavkeCenovnika = checkCache();
+		List<Cenovnik> cenovnici = Cenovnici.checkCache();
+		List<KatalogRobeIUsluga> kataloziRobeIUsluga = KataloziRobeIUsluga.checkCache();
+
+		StavkaCenovnika stavkaCenovnika = StavkaCenovnika.findById(id);
+		Long idd = null;
+
+		for (int i = 1; i < stavkeCenovnika.size(); i++) {
+			if (stavkeCenovnika.get(i).id == id) {
+				StavkaCenovnika prethodni = stavkeCenovnika.get(i - 1);
+				idd = prethodni.id;
+			}
+		}
+		stavkaCenovnika.delete();
+
+		Cache.set("stavkeCenovnika", stavkeCenovnika);
+
+		stavkeCenovnika.clear();
+		stavkeCenovnika = fillList();
+
+		renderTemplate("StavkeCenovnika/show.html", stavkeCenovnika, cenovnici, kataloziRobeIUsluga, idd, mode);
 	}
 
 	public static void nextForm() {
 
 	}
 
-	public static void search() {
+	public static void refresh() {
+		List<Cenovnik> cenovnici = Cenovnici.checkCache();
+		List<KatalogRobeIUsluga> kataloziRobeIUsluga = KataloziRobeIUsluga.checkCache();
+		List<StavkaCenovnika> stavkeCenovnika = fillList();
 
+		String mode = session.get("mode");
+
+		renderTemplate("StavkeCenovnika/show.html", stavkeCenovnika, cenovnici, kataloziRobeIUsluga, mode);
 	}
 
 	/** Pomocna metoda za brisanje podataka iz sesije. */
@@ -91,7 +246,7 @@ public class StavkeCenovnika extends Controller {
 	public static List<StavkaCenovnika> checkCache() {
 		List<StavkaCenovnika> stavkeCenovnika = (List<StavkaCenovnika>) Cache.get("stavkeCenovnika");
 
-		if (stavkeCenovnika == null) {
+		if ((stavkeCenovnika == null) || (stavkeCenovnika.size() == 0)) {
 			stavkeCenovnika = StavkaCenovnika.findAll();
 			Cache.set("stavkeCenovnika", stavkeCenovnika);
 		}
