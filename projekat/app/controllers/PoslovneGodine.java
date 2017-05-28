@@ -207,7 +207,7 @@ public class PoslovneGodine extends Controller {
 	public static List<PoslovnaGodina> checkCache() {
 		List<PoslovnaGodina> poslovneGodine = (List<PoslovnaGodina>) Cache.get("poslovneGodine");
 
-		if (poslovneGodine == null) {
+		if ((poslovneGodine == null) || (poslovneGodine.size() == 0)) {
 			poslovneGodine = PoslovnaGodina.findAll();
 			Cache.set("poslovneGodine", poslovneGodine);
 		}
