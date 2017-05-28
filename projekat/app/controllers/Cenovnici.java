@@ -8,10 +8,14 @@ import java.util.List;
 import javax.persistence.OneToMany;
 
 import models.Cenovnik;
+import models.KatalogRobeIUsluga;
 import models.StavkaCenovnika;
 import play.cache.Cache;
 import play.mvc.Controller;
+import play.mvc.With;
 
+@With(Secure.class)
+@Check("administrator")
 public class Cenovnici extends Controller {
 
 	/**
@@ -155,12 +159,15 @@ public class Cenovnici extends Controller {
 	 */
 	public static void nextForm(Long id, String forma) {
 		session.put("idCenovnika", id);
+		session.put("idKataloga", "null");
 		clearSession();
 
 		if (forma.equals("stavkeCenovnika")) {
 			List<Cenovnik> cenovnici = checkCache();
 			List<StavkaCenovnika> stavkeCenovnika = findStavkeCenovnika(id);
-			renderTemplate("StavkeCenovnika/show.html", stavkeCenovnika, cenovnici);
+			List<KatalogRobeIUsluga> kataloziRobeIUsluga = KataloziRobeIUsluga.checkCache();
+
+			renderTemplate("StavkeCenovnika/show.html", stavkeCenovnika, kataloziRobeIUsluga, cenovnici);
 		}
 	}
 
