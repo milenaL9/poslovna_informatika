@@ -66,6 +66,27 @@
 		});
 	});
 	
+	function nextform_func(id){
+		if(id==null){
+			alert("Označite red u tabeli!");
+		}else{
+			sessionStorage.setItem("selektovaniID",id);
+			$('#nextFormModal').modal('show');
+		}	
+	}
+	
+	$(document).ready(function(){
+		$("#nextFormPickup").click(function(){
+			nazivForme = $(".highlighted").find(".naziv_forme").html();
+			
+			var idKataloga = sessionStorage.getItem("selektovaniID");
+			
+			$('#nextFormModal').modal('toggle');
+			
+			$(location).attr('href', '/KataloziRobeIUsluga/nextForm?id='+idKataloga+'&forma='+nazivForme);
+		});
+	});
+	
 </script>
 <div class="container-fluid">
 	<div class="row">
@@ -236,6 +257,34 @@
 				
 				<div class="modal-footer">
 					<input id = "izborPickup" type = "button" value = "izbor"/>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+ <!-- NextFormModal -->
+<div class="modal fade" id="nextFormModal" role="dialog">
+	<div class="modal-dialog">
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">Izaberite sledeću formu</div>
+
+			<div class="modal-body">
+				<table style="padding: 2em">
+					<tr class="header">
+						<th>Forma</th>
+					</tr>
+
+					#{list items:povezaneForme, as:'forma'}
+					<tr>
+						<td class = "naziv_forme">${forma}</td>
+					</tr>
+					#{/list}
+				</table>
+
+				<div class="modal-footer">
+					<input id="nextFormPickup" type="button" value="izbor" />
 				</div>
 			</div>
 		</div>

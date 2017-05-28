@@ -8,6 +8,7 @@ import java.util.List;
 import javax.persistence.OneToMany;
 
 import models.Cenovnik;
+import models.KatalogRobeIUsluga;
 import models.StavkaCenovnika;
 import play.cache.Cache;
 import play.mvc.Controller;
@@ -160,7 +161,8 @@ public class Cenovnici extends Controller {
 		if (forma.equals("stavkeCenovnika")) {
 			List<Cenovnik> cenovnici = checkCache();
 			List<StavkaCenovnika> stavkeCenovnika = findStavkeCenovnika(id);
-			renderTemplate("StavkeCenovnika/show.html", stavkeCenovnika, cenovnici);
+			List<KatalogRobeIUsluga> kataloziRobeIUsluga = KataloziRobeIUsluga.checkCache();
+			renderTemplate("StavkeCenovnika/show.html", stavkeCenovnika, kataloziRobeIUsluga, cenovnici);
 		}
 	}
 

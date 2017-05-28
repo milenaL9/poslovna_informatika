@@ -185,10 +185,17 @@ public class Preduzeca extends Controller {
 		session.put("idPreduzeca", id);
 		clearSession();
 
+		/** TODO: Dodati prelazak na ostale forme. */
 		if (forma.equals("poslovneGodine")) {
 			List<Preduzece> preduzeca = checkCache();
 			List<PoslovnaGodina> poslovneGodine = findPoslovneGodine(id);
 			renderTemplate("PoslovneGodine/show.html", poslovneGodine, preduzeca);
+		} else if (forma.equals("grupe")) {
+
+		} else if (forma.equals("poslovniPartneri")) {
+
+		} else if (forma.equals("fakture")) {
+
 		}
 
 	}
