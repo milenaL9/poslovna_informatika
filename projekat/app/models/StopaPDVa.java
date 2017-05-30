@@ -12,17 +12,9 @@ import play.data.validation.Required;
 import play.db.jpa.Model;
 
 
-/**
- * 
- * NAMESTI DATE PICKER
- * 
- * */
-
 
 @Entity
 public class StopaPDVa extends Model {
-
-
 
 
 	@Required

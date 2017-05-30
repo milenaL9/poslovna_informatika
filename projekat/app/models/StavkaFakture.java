@@ -19,16 +19,16 @@ public class StavkaFakture extends Model {
 	public int rabat;
 	
 	@Required
-	public int osnovicaZaPDV;
+	public double osnovicaZaPDV;
 	
 	@Required
 	public StopaPDVa stopaPDVa;
 	
 	@Required
-	public int iznosPDVa;
+	public double iznosPDVa;
 	
 	@Required
-	public int ukupno;
+	public double ukupno;
 	
 	
 	@ManyToOne
@@ -37,8 +37,8 @@ public class StavkaFakture extends Model {
 	@ManyToOne
 	public KatalogRobeIUsluga katalogRobeIUsluga;
 
-	public StavkaFakture(int kolicina, float cena, int rabat, int osnovicaZaPDV, StopaPDVa stopaPDVa, int iznosPDVa,
-			int ukupno) {
+	public StavkaFakture(int kolicina, float cena, int rabat, double osnovicaZaPDV, StopaPDVa stopaPDVa, double iznosPDVa,
+			double ukupno) {
 		super();
 		this.kolicina = kolicina;
 		this.cena = cena;
