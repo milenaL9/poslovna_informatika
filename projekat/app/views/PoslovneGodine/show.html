@@ -134,7 +134,7 @@
 	   				<th>Preduzeće</th>
 				</tr>
 				#{list items:poslovneGodine, as:'poslovnaGodina'}
-					<tr #{if poslovnaGodina.id== idd} class="highlighted"#{/if}>
+					<tr #{if poslovnaGodina.id== idd} class="highlighted"#{/if} class="tableRow">
 						<td class="pg_brojGodine">${poslovnaGodina.brojGodine}</td>
 						<td class="pg_aktivna">${poslovnaGodina.aktivna}</td>
 						<td class="preduzece">${poslovnaGodina.preduzece.naziv}</td>

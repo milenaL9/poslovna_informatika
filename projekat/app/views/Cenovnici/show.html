@@ -126,7 +126,7 @@
 				</tr>
 				
 				#{list items:cenovnici, as:'cenovnik'}
-				<tr #{if cenovnik.id == idd} class = "highlighted" #{/if}>
+				<tr #{if cenovnik.id == idd} class = "highlighted" #{/if} class="tableRow">
 					<td class = "naziv">${cenovnik.naziv}</td>
 					<td class = "datumVazenja">${cenovnik.datumVazenja}</td>
 					<td style = "visibility: hidden; max-width: 0px" class = "id">${cenovnik.id}</td>

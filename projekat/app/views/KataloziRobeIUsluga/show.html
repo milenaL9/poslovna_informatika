@@ -150,7 +150,7 @@
 	   				<th>Podgrupa</th>
 				</tr>
 				#{list items:kataloziRobeIUsluga, as:'katalogRobeIUsluga'}
-					<tr #{if katalogRobeIUsluga.id== idd} class="highlighted"#{/if}>
+					<tr #{if katalogRobeIUsluga.id== idd} class="highlighted"#{/if} class="tableRow">
 						<td class="kru_nazivStavkeKataloga">${katalogRobeIUsluga.nazivStavkeKataloga}</td>
 						<td class="kru_opisStavkeKataloga">${katalogRobeIUsluga.opisStavkeKataloga}</td>
 						<td class="podgrupa">${katalogRobeIUsluga.podgrupa.nazivPodgrupe}</td>

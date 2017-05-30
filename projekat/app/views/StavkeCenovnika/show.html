@@ -163,7 +163,7 @@
 	   				<th>Katalog robe i usluga</th>
 				</tr>
 				#{list items:stavkeCenovnika, as:'stavkaCenovnika'}
-					<tr #{if stavkaCenovnika.id== idd} class="highlighted"#{/if}>
+					<tr #{if stavkaCenovnika.id== idd} class="highlighted"#{/if} class="tableRow">
 						<td class="sc_cena">${stavkaCenovnika.cena}</td>
 						<td class="cenovnik">${stavkaCenovnika.cenovnik.naziv}</td>
 						<td class="katalogRobeIUsluga">${stavkaCenovnika.katalogRobeIUsluga.nazivStavkeKataloga}</td>
