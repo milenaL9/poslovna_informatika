@@ -41,8 +41,9 @@
 
 		$("#last").click(function() {
 			//indeksi pocinju od 1
-			var count = $("tr").length;
-			item = $("tr:nth-child(" + count + ")");
+			var rowsCount = $('.tableRow').length + 1;
+
+			item = $("tr:nth-child(" + rowsCount + ")");
 			$(".highlighted").removeClass("highlighted");
 			item.addClass("highlighted");
 			sync(item);
@@ -52,7 +53,7 @@
 			highlighted = $(".highlighted");
 			//nalazi poziciju trazanog u okviru selektovane selekcije
 			//indeksi pocinju od 0
-			var count = $("tr").length;
+			var count = $('.tableRow').length + 1;
 			if (count == 0)
 				return;
 			index = $("tr").index(highlighted);
@@ -73,7 +74,7 @@
 			highlighted = $(".highlighted");
 			//nalazi poziciju trazanog u okviru selektovane selekcije
 			//indeksi pocinju od 0
-			var count = $("tr").length;
+			var count = $('.tableRow').length + 1;
 			if (count == 0)
 				return;
 			index = $("tr").index(highlighted);

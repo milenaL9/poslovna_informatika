@@ -130,7 +130,7 @@
 				</tr>
 				
 				#{list items:preduzeca, as:'preduzece'}
-				<tr #{if preduzece.id == idd} class = "highlighted" #{/if}>
+				<tr #{if preduzece.id == idd} class = "highlighted" #{/if} class="tableRow">
 					<td class = "naziv">${preduzece.naziv}</td>
 					<td class = "pib">${preduzece.pib}</td>
 					<td class = "mesto">${preduzece.mesto}</td>
