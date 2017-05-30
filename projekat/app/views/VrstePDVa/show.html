@@ -28,9 +28,9 @@
 
 	function remove(id){  <!-- ne znam koji je uanpred selektovani red , ovde se vrsi redirekcija -->
 		if(id == null){
-			alert("OznaÄ�ite red u tabeli!");
+			alert("OznaÃ„ï¿½ite red u tabeli!");
 		}else{
-			var r  = confirm("Da li Å¾elite da obriÅ¡ete slog?");
+			var r  = confirm("Da li Ã…Â¾elite da obriÃ…Â¡ete slog?");
 			if(r==true) {
 	    		$(location).attr('href', '/VrstePDVa/delete?id='+id);
 			}else{
@@ -41,7 +41,7 @@
 
 	function nextform_func(id){
 		if(id==null){
-			alert("Označite red u tabeli!");
+			alert("OznaÄ�ite red u tabeli!");
 		}else{
 			sessionStorage.setItem("selektovaniID",id);
 			$('#nextFormModal').modal('show');
@@ -116,7 +116,7 @@
 				</tr>
 				
 				#{list items:vrstePDVa, as:'vrstaPDVa'}
-				<tr #{if vrstaPDVa.id == idd} class = "highlighted" #{/if}>
+				<tr #{if vrstaPDVa.id == idd} class = "highlighted" #{/if} class="tableRow">
 					<td class = "nazivVrstePDva">${vrstaPDVa.nazivVrstePDva}</td>
 					<td style = "visibility: hidden; max-width: 0px" class = "id">${vrstaPDVa.id}</td>
 				</tr>
@@ -160,7 +160,7 @@
 	</div>
 </div>
 
-<p class="status_line">Trenutni reÅ¾im: ${session.mode}</p>
+<p class="status_line">Trenutni reÃ…Â¾im: ${session.mode}</p>
 
 <button onclick="topFunction()" id="myBtn" title="Idi na vrh">
 	<img src="@{'/public/images/back_top.png'}" alt=""
@@ -171,7 +171,7 @@
 	<div class="modal-dialog">
 		<!-- Modal content-->
 		<div class="modal-content">
-			<div class="modal-header">Izaberite sledeću formu</div>
+			<div class="modal-header">Izaberite sledeÄ‡u formu</div>
 
 			<div class="modal-body">
 				<table style="padding: 2em">

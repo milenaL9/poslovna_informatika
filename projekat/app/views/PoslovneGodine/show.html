@@ -47,9 +47,9 @@
 
 	function remove(id){  <!-- ne znam koji je uanpred selektovani red , ovde se vrsi redirekcija -->
 		if(id == null){
-			alert("Označite red u tabeli!");
+			alert("OznaÄ�ite red u tabeli!");
 		}else{
-			var r  = confirm("Da li želite da obrište slog?");
+			var r  = confirm("Da li Å¾elite da obriÅ¡te slog?");
 			if(r == true) {
 		    	$(location).attr('href', '/PoslovneGodine/delete?id='+id);
 			}
@@ -131,7 +131,7 @@
 				<tr class = "header">
 	   				<th>Broj godine</th> 
 	   				<th>Aktivna</th>
-	   				<th>Preduzeće</th>
+	   				<th>PreduzeÄ‡e</th>
 				</tr>
 				#{list items:poslovneGodine, as:'poslovnaGodina'}
 					<tr #{if poslovnaGodina.id== idd} class="highlighted"#{/if} class="tableRow">
@@ -183,7 +183,7 @@
 						
 						<p>
 							#{field 'preduzece'}
-								<label for = "${field.id}">Preduzeće</label>
+								<label for = "${field.id}">PreduzeÄ‡e</label>
 								&nbsp &nbsp &nbsp
 								<select name = "${field.name}" id = "${field.id}">
 									#{list items:preduzeca, as:'preduzece'}
@@ -207,7 +207,7 @@
 	</div>
 </div>
 
-<p class="status_line">Trenutni režim: ${session.mode}</p>
+<p class="status_line">Trenutni reÅ¾im: ${session.mode}</p>
 
 <button onclick="topFunction()" id="myBtn" title="Idi na vrh">
 	<img src="@{'/public/images/back_top.png'}" alt=""
@@ -220,7 +220,7 @@
 		<!-- Modal content-->
 		<div class="modal-content">
 			<div class="modal-header">
-				Preduzeća
+				PreduzeÄ‡a
 			</div>
 			
       		<div class="modal-body">
@@ -231,8 +231,8 @@
 	   					<th width="12%">Mesto</th>
 	   					<th>Adresa</th>
 	   					<th>Telefon</th>
-	   					<th>Matični broj</th>
-	   					<th>Tekući račun</th>
+	   					<th>MatiÄ�ni broj</th>
+	   					<th>TekuÄ‡i raÄ�un</th>
 					</tr>
 					
 					#{list items:preduzeca, as:'preduzece'}

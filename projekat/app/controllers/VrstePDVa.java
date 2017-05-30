@@ -202,7 +202,7 @@ public class VrstePDVa extends Controller {
 
 	
 	public static List<StopaPDVa> findStopePDVa(Long idVrstePDVa) {
-		List<StopaPDVa> stopePDVaAll = StavkaCenovnika.findAll();
+		List<StopaPDVa> stopePDVaAll = StopaPDVa.findAll();
 		List<StopaPDVa> stopePDVa = new ArrayList<>();
 
 		for (StopaPDVa sp : stopePDVaAll) {

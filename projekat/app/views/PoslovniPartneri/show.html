@@ -1,0 +1,359 @@
+#{extends 'standardForm.html' /}
+#{set title:'PoslovniPartneri' /}
+
+
+<script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
+
+<script>
+    
+    $(document).ready(function(){
+		$("#nextFormPickup").click(function(){
+			nazivForme = $(".highlighted").find(".naziv_forme").html();
+			
+			var idPoslovnogPartnera = sessionStorage.getItem("selektovaniID");
+			
+			$('#nextFormModal').modal('toggle');
+			
+			$(location).attr('href', '/PoslovniPartneri/nextForm?id='+idPoslovnogPartnera+'&forma='+nazivForme);
+		});
+	});
+    
+	function sync(item){
+		if ("${session.mode}" == "edit"){
+	    	naziv = item.find(".naziv").html()
+	    	mesto = item.find(".mesto").html()
+	    	adresa = item.find(".adresa").html()
+	    	vrsta = item.find(".vrsta").html()
+	    	telefon = item.find(".telefon").html()
+	    	pib = item.find(".pib").html()
+			tekuciRacun = item.find(".tekuciRacun").html()
+			preduzece = item.find(".preduzece").html();
+			id = item.find(".id").html()
+	    	$("#poslovniPartner_naziv").val(naziv);
+	    	$("#poslovniPartner_mesto").val(mesto);
+	    	$("#poslovniPartner_adresa").val(adresa);
+	    	$("#poslovniPartner_vrsta").val(vrsta);
+	    	$("#poslovniPartner_telefon").val(telefon);
+	    	$("#poslovniPartner_pib").val(pib);
+	    	$("#poslovniPartner_tekuciRacun").val(tekuciRacun);
+	    	$("#poslovniPartner_id").val(id);
+	    	
+	    	
+	    	var options = document.getElementById("preduzece").children;
+			for (i = 0; i < options.length; i++) { 
+    			if(options[i].label == preduzece){
+    				document.getElementById("preduzece").selectedIndex = i;
+    				break;
+    			}
+			}
+	    	
+	    	
+    	}
+	}
+
+	
+	function SelectElement(){
+		if(${session.idPreduzeca} != null){
+			var options = document.getElementById("preduzece").children;
+			for (i = 0; i < options.length; i++) {
+    			if(options[i].value == ${session.idPreduzeca}){
+    				document.getElementById("preduzece").selectedIndex = i;
+    				break;
+    			}
+			}
+
+			document.getElementById("preduzece").disabled = true;
+			document.getElementById("zoomBtn").disabled = true;
+		}else{
+			document.getElementById("preduzece").disabled = false;
+			document.getElementById("zoomBtn").disabled = false;
+		}
+	}
+	
+	
+	
+	function remove(id){  <!-- ne znam koji je uanpred selektovani red , ovde se vrsi redirekcija -->
+		if(id == null){
+			alert("OznaÄ�ite red u tabeli!");
+		}else{
+			var r  = confirm("Da li Å¾elite da obriÅ¡ete slog?");
+			if(r==true) {
+	    		$(location).attr('href', '/PoslovniPartneri/delete?id='+id);
+			}else{
+				txt = "You pressed Cancel"
+			}
+		}
+	}
+
+	function nextform_func(id){
+		if(id==null){
+			alert("OznaÄ�ite red u tabeli!");
+		}else{
+			sessionStorage.setItem("selektovaniID",id);
+			$('#nextFormModal').modal('show');
+		}	
+	}
+
+	function refresh_page(){
+		$(location).attr('href', '/PoslovniPartneri/refresh');
+	}
+	
+
+	$(document).ready(function(){
+		$("#preduzecePickup").click(function(){
+			id = $(".highlighted").find(".p_id").html();
+			$("select").val(id);
+			$('#preduzeceModal').modal('toggle');
+		});
+	});
+	
+	
+</script>
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="icon-bar">
+			<a href="#" onclick="openSideNav()">
+				<img width="16px" height="16px" src="@{'/public/images/menu_icon.png'}" />
+			</a>
+			
+			<a href="@{PoslovniPartneri.changeMode("search")}" id = "search">
+				<img src="@{'/public/images/search.gif'}"/>
+			</a>
+			
+			<a href="@{PoslovniPartneri.changeMode("edit")}" id = "refresh">
+				<img src="@{'/public/images/refresh.gif'}"/>
+			</a>
+			
+			<a href="#" id = "pickup">
+				<img src="@{'/public/images/zoom-pickup.gif'}"/>
+			</a>
+			
+			<a href="#" id = "help">
+				<img src="@{'/public/images/help.gif'}"/>
+			</a>
+			
+			<a id = "first">
+				<img src="@{'/public/images/first.gif'}"/>
+			</a>
+
+			<a id = "prev">
+				<img src="@{'/public/images/prev.gif'}"/>
+			</a>
+
+			<a id = "next">
+				<img src="@{'/public/images/next.gif'}"/>
+			</a>
+
+			<a id = "last">
+				<img src="@{'/public/images/last.gif'}"/>
+			</a>
+			
+			<a href="@{PoslovniPartneri.changeMode("add")}" id = "add">
+				<img src="@{'/public/images/add.gif'}"/>
+			</a>
+			
+			<a href="#" id = "remove">
+				<img src="@{'/public/images/remove.gif'}"/>
+			</a>
+			
+			<a href="#" id = "nextform">
+				<img src="@{'/public/images/nextform.gif'}"/>
+			</a>
+		</div>
+
+		<div class="container-fluid">
+			<h1>Poslovni Partneri</h1>
+
+			<table>
+				<tr class = "header">
+	   				<th>Naziv</th>
+	   				<th>Mesto</th>
+	   				<th>Adresa</th>
+	   				<th>Vrsta</th>
+	   				<th>Telefon</th>
+	   				<th>PIB</th>
+	   				<th>Tekuci racun</th>
+	   				<th>Preduzece</th>
+	   			</tr>
+				
+				#{list items:poslovniPartneri, as:'poslovniPartner'}
+				<tr #{if poslovniPartner.id == idd} class = "highlighted" #{/if} class="tableRow">
+					<td class = "naziv">${poslovniPartner.naziv}</td>
+					<td class = "mesto">${poslovniPartner.mesto}</td>
+					<td class = "adresa">${poslovniPartner.adresa}</td>
+					<td class = "vrsta">${poslovniPartner.vrsta}</td>
+					<td class = "telefon">${poslovniPartner.telefon}</td>
+					<td class = "pib">${poslovniPartner.pib}</td>
+					<td class = "tekuciRacun">${poslovniPartner.tekuciRacun}</td>
+					<td class="preduzece">${poslovniPartner.preduzece.naziv}</td>
+					<td style = "visibility: hidden; max-width: 0px" class = "id">${poslovniPartner.id}</td>
+				</tr>
+				#{/list}
+			</table>
+
+			#{set 'action'}
+    			#{if mode == 'add'}
+        			@{PoslovniPartneri.create()}
+   				#{/if}
+   				#{elseif mode == 'edit'}
+       				@{PoslovniPartneri.edit()}
+   				#{/elseif}
+  	   	    	#{else}
+     	        	@{PoslovniPartneri.filter()}
+  	        	#{/else}
+ 	    	#{/set}
+ 	
+			<div class="panel">
+				<form action=${action} method="post"> 
+					<p>
+						#{field 'poslovniPartner.id'}
+							<input type = "hidden" name = "${field.name}" id = "${field.id}"/>
+						#{/}
+					</p>
+				
+					<p>
+						#{field 'poslovniPartner.naziv'} 
+							<label for = "${field.id}">Naziv</label>
+							<input type = "text" name = "${field.name}" id = "${field.id}"/>
+						#{/}
+					</p>
+				
+					<p>
+						#{field 'poslovniPartner.mesto'}
+					      	<label for = "${field.id}">Mesto</label>
+							<input type="text" name="${field.name}" id="${field.id}"/>
+						#{/}
+					</p>
+					
+					
+					<p>
+						#{field 'poslovniPartner.adresa'}
+					      	<label for = "${field.id}">Adresa</label>
+							<input type="text" name="${field.name}" id="${field.id}"/>
+						#{/}
+					</p>
+					
+					
+					<p>
+						#{field 'poslovniPartner.vrsta'}
+					      	<label for = "${field.id}">Vrsta</label>
+							<input type="text" name="${field.name}" id="${field.id}"/>
+						#{/}
+					</p>
+					
+						<p>
+						#{field 'poslovniPartner.telefon'}
+					      	<label for = "${field.id}">Telefon</label>
+							<input type="text" name="${field.name}" id="${field.id}"/>
+						#{/}
+					</p>
+					
+					
+						<p>
+						#{field 'poslovniPartner.pib'}
+					      	<label for = "${field.id}">PIB</label>
+							<input type="text" name="${field.name}" id="${field.id}"/>
+						#{/}
+					</p>
+					
+					
+						<p>
+						#{field 'poslovniPartner.tekuciRacun'}
+					      	<label for = "${field.id}">Tekuci racun</label>
+							<input type="text" name="${field.name}" id="${field.id}"/>
+						#{/}
+					</p>
+					
+					
+						<p>
+						#{field 'preduzece'} <label for="${field.id}">Preduzece</label>
+						&nbsp &nbsp &nbsp <select name="${field.name}" id="${field.id}">
+							#{list items:preduzeca, as:'preduzece'}
+							<option value="${preduzece.id}">${preduzece.naziv}</option>
+							#{/list}
+						</select>
+
+						<button id="zoomBtn" type="button" class="btn btn-info btn-sm"
+							data-toggle="modal" data-target="#preduzeceModal">...</button>
+						#{/}
+
+						<script>SelectElement()</script>
+					</p>
+					
+					
+					<div id = "formActions">
+						<input type = "submit" value = "Potvrda" style="margin-left:6em"/>
+						<a href = "@{PoslovniPartneri.changeMode("edit")}" style="margin-left:1em">Rollback</a>
+					</div>				
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+<p class="status_line">Trenutni reÅ¾im: ${session.mode}</p>
+
+<button onclick="topFunction()" id="myBtn" title="Idi na vrh">
+	<img src="@{'/public/images/back_top.png'}" alt=""
+		class="rounded-circle" width="40" height="40">
+</button>
+
+<div class="modal fade" id="nextFormModal" role="dialog">
+	<div class="modal-dialog">
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">Izaberite sledeÄ‡u formu</div>
+
+			<div class="modal-body">
+				<table style="padding: 2em">
+					<tr class="header">
+						<th>Forma</th>
+					</tr>
+
+					#{list items:povezaneForme, as:'forma'}
+					<tr>
+						<td class = "naziv_forme">${forma}</td>
+					</tr>
+					#{/list}
+				</table>
+
+				<div class="modal-footer">
+					<input id="nextFormPickup" type="button" value="izbor" />
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="preduzecaModal" role="dialog">
+	<div class="modal-dialog">
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">Preduzeca</div>
+
+			<div class="modal-body">
+				<table style="padding: 2em">
+					<tr class="header">
+						<th>Preduzeca</th>
+
+					</tr>
+
+					#{list items:preduzeca, as:'preduzece'}
+					<tr #{if preduzece.id== idd} class="highlighted"#{/if}>
+						<td class="naziv">${preduzece.naziv}</td>
+
+						<td style="visibility: hidden; max-width: 0px" class="p_id">${preduzece.id}</td>
+					</tr>
+					#{/list}
+				</table>
+
+				<div class="modal-footer">
+					<input id="preduzecePickup" type="button" value="izbor" />
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
