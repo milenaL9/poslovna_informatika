@@ -3,6 +3,7 @@ package models;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -24,19 +25,19 @@ import play.db.jpa.Model;
 @Entity
 public class Faktura extends Model {
 
-
-	@Temporal(TemporalType.DATE)
-	public Date datumFakture;
+	@Required
+	@Column(columnDefinition = "varchar(10)")
+	public String datumFakture;
 	
 	@Required
 	public int brojFakture;
 	
-
-	@Temporal(TemporalType.DATE)
-	public Date datumValute;
+	@Required
+	@Column(columnDefinition = "varchar(10)")
+	public String datumValute;
 	
 	@Required
-	public int ukupnoOsnovica;
+	public double ukupnoOsnovica;
 	
 	@Required
 	public float ukupnoPDV;
@@ -58,8 +59,8 @@ public class Faktura extends Model {
 	public Preduzece preduzece;
 	
 
-
-	public Faktura(Date datumFakture, int brojFakture, Date datumValute, int ukupnoOsnovica, float ukupnoPDV,
+	public Faktura(String datumFakture, int brojFakture, String datumValute, double ukupnoOsnovica, 
+			float ukupnoPDV,
 			float ukupnoZaPlacanje) {
 		super();
 		this.datumFakture = datumFakture;

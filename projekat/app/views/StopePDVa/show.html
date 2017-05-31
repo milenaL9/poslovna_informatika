@@ -124,7 +124,7 @@
 					<th>Vrsta PDVa</th>
 				</tr>
 				#{list items:stopePDVa, as:'stopaPDVa'}
-				<tr #{if stopaPDVa.id== idd} class="highlighted"#{/if}>
+				<tr #{if stopaPDVa.id== idd} class="highlighted"#{/if} class="tableRow">
 					<td class="s_datumKreiranja">${stopaPDVa.datumKreiranja}</td>
 					<td class="s_procenatPDVa">${stopaPDVa.procenatPDVa}</td>
 					<td class="vrstaPDVa">${stopaPDVa.vrstaPDVa.nazivVrstePDva}</td>

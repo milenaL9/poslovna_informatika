@@ -24,6 +24,7 @@ public class VrstaPDVa extends Model {
 	@OneToMany(mappedBy = "vrstaPDVa")
 	public List<Grupa> grupe;
 	
+	
 	public VrstaPDVa(String nazivVrstePDva) {
 		super();
 		this.nazivVrstePDva = nazivVrstePDva;

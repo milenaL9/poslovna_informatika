@@ -10,22 +10,16 @@ import models.VrstaPDVa;
 import play.cache.Cache;
 import play.mvc.Controller;
 
-/**
- * Obrati paznju na VrstuPDVa unutar StopePDVa
- * 
- * 
- */
 
 public class StopePDVa extends Controller {
 
 	public static void show() {
 		validation.clear();
 		clearSession();
-		session.put("idVrstePDVa", "null");
-
-		String mode = "edit";
-
-		session.put("mode", mode);
+	
+		session.put("idVrstePDVa", "null"); // ManyToOne u klasi  VrstaPDVa
+		session.put("mode", "edit");
+		String mode = session.get("mode");
 
 		List<VrstaPDVa> vrstePDVa = VrstePDVa.checkCache();
 		List<StopaPDVa> stopePDVa = checkCache();
@@ -46,11 +40,12 @@ public class StopePDVa extends Controller {
 		renderTemplate("StopePDVa/show.html", vrstePDVa, stopePDVa, mode);
 	}
 
-
 	public static void edit(StopaPDVa stopaPDVa, Long vrstaPDVa) {
 		validation.clear();
-		validation.valid(stopaPDVa);
 		clearSession();
+		
+		validation.valid(stopaPDVa);
+	
 		session.put("mode", "edit");
 		String mode = session.get("mode");
 
@@ -88,7 +83,7 @@ public class StopePDVa extends Controller {
 			validation.keep();
 			stopePDVa = fillList();
 
-			session.put("idStopePDVa", stopaPDVa.id);
+			session.put("idSP", stopaPDVa.id);
 			session.put("datumKreiranja", stopaPDVa.datumKreiranja);
 			session.put("procenatPDVa", stopaPDVa.procenatPDVa);
 
@@ -128,10 +123,12 @@ public class StopePDVa extends Controller {
 			Cache.set("stopePDVa", stopePDVa);
 
 			Long idd = stopaPDVa.id;
-
-			validation.clear();
+			
+			stopePDVa.clear();
 			stopePDVa = fillList();
 			validation.clear();
+			
+			
 
 			renderTemplate("StopePDVa/show.html", stopePDVa, vrstePDVa, idd, mode);
 		} else
@@ -140,11 +137,10 @@ public class StopePDVa extends Controller {
 			validation.keep();
 
 			stopePDVa = fillList();
-			// session.put("editNazivVrstePDVa", stopaPDVa.nazivVrstePDva);
-			// session.put("editNaziv", vrstaPDVa.naziv);
+		
 			session.put("datumKreiranja", stopaPDVa.datumKreiranja);
 			session.put("procenatPDVa", stopaPDVa.procenatPDVa);
-			// session.put("vrstaPDVa", stopaPDVa.vrstaPDVa);
+		
 			renderTemplate("StopePDVa/show.html", stopePDVa, vrstePDVa,  mode);
 		}
 	}
@@ -152,21 +148,14 @@ public class StopePDVa extends Controller {
 
 	public static void filter(StopaPDVa stopaPDVa) {
 		
-		//Integer broj = Integer.parseInt(stopaPDVa.procenatPDVa);
-		List<StopaPDVa> stopePDVa = StopaPDVa
-				//.find("byProcenatPDVaLike",  "%" + stopaPDVa.procenatPDVa + "%")
-				//.fetch();
-				.find("procenatPDVa = ?", stopaPDVa.procenatPDVa).fetch();
-
-	
-	
-		//Long.parseLong(session.get("idVrstePDVa"))
+		List<StopaPDVa> stopePDVa = StopaPDVa.find("byProcenatPDVa", stopaPDVa.procenatPDVa).fetch();
+	    //List<StopaPDVa> stopePDVa = StopaPDVa.find("procenatPDVa = ?", stopaPDVa.procenatPDVa).fetch();
+		List<VrstaPDVa> vrstePDVa = VrstePDVa.checkCache();
 		session.put("mode", "edit");
 		String mode = session.get("mode");
 
-		//List<String> povezaneForme = getForeignKeysFields();
-
-		renderTemplate("StopePDVa/show.html", stopePDVa, mode);
+		
+		renderTemplate("StopePDVa/show.html", stopePDVa, vrstePDVa, mode);
 	}
 
 	public static void delete(Long id) {
@@ -195,19 +184,6 @@ public class StopePDVa extends Controller {
 
 	}
 
-	// public static void nextForm(Long id) {
-	// List<VrstaPDVa> vrstePDVa = checkCache();
-	//
-	// List<NaseljenoMesto> naseljenaMesta = findNaseljenaMesta(id);
-	// session.put("idDrzave", id);
-	// session.put("id", null);
-	// session.put("oznaka", null);
-	// session.put("naziv", null);
-	// session.put("postanskiBroj", null);
-	//
-	// renderTemplate("NaseljenaMesta/show.html", naseljenaMesta, drzave);
-	// }
-
 	public static void refresh() {
 		List<StopaPDVa> stopePDVa = checkCache();
 		List<VrstaPDVa> vrstePDVa = VrstePDVa.checkCache();
@@ -231,7 +207,7 @@ public class StopePDVa extends Controller {
 	}
 
 	private static boolean clearSession() {
-		session.put("idStopePDVa", null);
+		session.put("idSP", null);
 		session.put("datumKreiranja", null);
 		session.put("procenatPDVa", null);
 		
@@ -252,19 +228,5 @@ public class StopePDVa extends Controller {
 	}
 	
 	
-	
-
-	// public static List<NaseljenoMesto> findNaseljenaMesta(Long idDrzave) {
-	// List<NaseljenoMesto> naseeljenaMestaAll = NaseljenoMesto.findAll();
-	// List<NaseljenoMesto> naseljenaMesta = new ArrayList<>();
-	//
-	// for (NaseljenoMesto nm : naseeljenaMestaAll) {
-	// if (nm.drzava.id == idDrzave) {
-	// naseljenaMesta.add(nm);
-	// }
-	// }
-	//
-	// return naseljenaMesta;
-	// }
 
 }

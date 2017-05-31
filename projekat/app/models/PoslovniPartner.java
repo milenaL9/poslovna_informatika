@@ -35,12 +35,11 @@ public class PoslovniPartner extends Model {
 	public String naziv;
 	
 	
-//	@MinSize(2)
-//	@MaxSize(40)
-//	@Column(columnDefinition="varchar(40)")
-//	public String mesto;
+	@MinSize(2)
+	@MaxSize(40)
+	@Column(columnDefinition="varchar(40)")
+	public String mesto;
 	
-	public NaseljenoMesto mesto;
 	
 	@Required
 	@MinSize(2)
@@ -54,7 +53,7 @@ public class PoslovniPartner extends Model {
 	@Column(columnDefinition="varchar(2)")
 	public String vrsta;
 	
-	public int telefon;
+	public String telefon;
 	
 	@Required
 	@MinSize(8)
@@ -77,7 +76,7 @@ public class PoslovniPartner extends Model {
 	@ManyToOne
 	public Preduzece preduzece;
 	
-	public PoslovniPartner(String naziv, NaseljenoMesto mesto, String adresa, String vrsta, int telefon, int pib,
+	public PoslovniPartner(String naziv, String mesto, String adresa, String vrsta, String telefon, int pib,
 			String tekuciRacun) {
 		super();
 		this.naziv = naziv;

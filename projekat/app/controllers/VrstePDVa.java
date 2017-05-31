@@ -1,10 +1,19 @@
 package controllers;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.OneToMany;
+
+import models.Cenovnik;
+import models.Grupa;
+import models.KatalogRobeIUsluga;
 import models.NaseljenoMesto;
 import models.PoslovnaGodina;
+import models.Preduzece;
+import models.StavkaCenovnika;
 import models.StopaPDVa;
 import models.VrstaPDVa;
 import play.cache.Cache;
@@ -14,6 +23,8 @@ public class VrstePDVa extends Controller {
 
 	public static void show(String mode) {
 		validation.clear();
+
+		// potrebno za nextForm mehanizam
 		session.put("idVrstePDVa", "null");
 
 		if (mode == null || mode.equals("")) {
@@ -22,15 +33,19 @@ public class VrstePDVa extends Controller {
 		session.put("mode", mode);
 
 		List<VrstaPDVa> vrstePDVa = checkCache();
+		List<String> povezaneForme = getForeignKeysFields();
 
-		render(vrstePDVa, mode);
+		render(vrstePDVa, povezaneForme, mode);
 	}
 
 	public static void edit(VrstaPDVa vrstaPDVa) {
 		validation.clear();
 		validation.valid(vrstaPDVa);
 		clearSession();
+
 		session.put("mode", "edit");
+		String mode = session.get("mode");
+		List<String> povezaneForme = getForeignKeysFields();
 
 		List<VrstaPDVa> vrstePDVa = null;
 
@@ -39,7 +54,6 @@ public class VrstePDVa extends Controller {
 
 			for (VrstaPDVa tmp : vrstePDVa) {
 				if (tmp.id == vrstaPDVa.id) {
-
 					tmp.nazivVrstePDva = vrstaPDVa.nazivVrstePDva;
 					tmp.save();
 					break;
@@ -55,12 +69,11 @@ public class VrstePDVa extends Controller {
 
 			validation.keep();
 
-			session.put("idVrstePDVa", vrstaPDVa.id);
-			// session.put("editOznaka", drzava.oznaka);
-			session.put("editNazivVrstePDva", vrstaPDVa.nazivVrstePDva);
+			session.put("idVr", vrstaPDVa.id);
+			session.put("nazivVrstePDva", vrstaPDVa.nazivVrstePDva);
 		}
 
-		renderTemplate("vrstePDVa/show.html", vrstePDVa);
+		renderTemplate("vrstePDVa/show.html", vrstePDVa, povezaneForme, mode);
 	}
 
 	public static void create(VrstaPDVa vrstaPDVa) {
@@ -68,6 +81,9 @@ public class VrstePDVa extends Controller {
 		validation.valid(vrstaPDVa);
 
 		session.put("mode", "add");
+		String mode = session.get("mode");
+
+		List<String> povezaneForme = getForeignKeysFields();
 
 		List<VrstaPDVa> vrstePDVa = checkCache();
 
@@ -76,32 +92,41 @@ public class VrstePDVa extends Controller {
 			vrstePDVa.add(vrstaPDVa);
 			Cache.set("vrstePDVa", vrstePDVa);
 
+			// potrebno da bi se selektovao dodati red na view delu
 			Long idd = vrstaPDVa.id;
 
 			validation.clear();
 			clearSession();
 
-			renderTemplate("vrstePDVa/show.html", vrstePDVa, idd);
+			renderTemplate("vrstePDVa/show.html", vrstePDVa, povezaneForme, idd, mode);
 		} else {
 			validation.keep();
 
-			session.put("editNazivVrstePDVa", vrstaPDVa.nazivVrstePDva);
-			// session.put("editNaziv", vrstaPDVa.naziv);
+			// potrebno da bi se ispisla greska
+			session.put("nazivVrstePDVa", vrstaPDVa.nazivVrstePDva);
 
-			renderTemplate("vrstePDVa/show.html", vrstePDVa);
+			renderTemplate("vrstePDVa/show.html", vrstePDVa, povezaneForme, mode);
 		}
 	}
 
-	 public static void filter(VrstaPDVa vrstaPDVa) {
-	 List<VrstaPDVa> vrstePDVa = VrstaPDVa
-	 .find("byNazivVrstePDvaLike", "%" + vrstaPDVa.nazivVrstePDva).fetch();
-	 session.put("mode", "edit");
-	 renderTemplate("vrstePDVa/show.html", vrstePDVa);
-	 }
+	public static void filter(VrstaPDVa vrstaPDVa) {
+		List<VrstaPDVa> vrstePDVa = VrstaPDVa.find("byNazivVrstePDvaLike", "%" + vrstaPDVa.nazivVrstePDva).fetch();
+		session.put("mode", "edit");
+		String mode = session.get("mode");
+
+		List<String> povezaneForme = getForeignKeysFields();
+
+		renderTemplate("vrstePDVa/show.html", vrstePDVa, povezaneForme, mode);
+	}
 
 	public static void delete(Long id) {
+		
+		String mode = session.get("mode");
+		
 		List<VrstaPDVa> vrstePDVa = checkCache();
+		List<String> povezaneForme = getForeignKeysFields();
 
+		
 		VrstaPDVa vrstaPDVa = VrstaPDVa.findById(id);
 		Long idd = null;
 
@@ -116,27 +141,42 @@ public class VrstePDVa extends Controller {
 		vrstePDVa = VrstaPDVa.findAll();
 		Cache.set("vrstePDVa", vrstePDVa);
 
-		renderTemplate("vrstePDVa/show.html", vrstePDVa, idd);
+		renderTemplate("vrstePDVa/show.html", vrstePDVa, idd, povezaneForme, mode);
 
 	}
 
-//	public static void nextForm(Long id) {
-//		List<VrstaPDVa> vrstePDVa = checkCache();
-//
-//		List<NaseljenoMesto> naseljenaMesta = findNaseljenaMesta(id);
-//		session.put("idDrzave", id);
-//		session.put("id", null);
-//		session.put("oznaka", null);
-//		session.put("naziv", null);
-//		session.put("postanskiBroj", null);
-//
-//		renderTemplate("NaseljenaMesta/show.html", naseljenaMesta, drzave);
-//	}
+	
+	// imam listu stopa i listu grupa
+	 public static void nextForm(Long id, String forma) {
+		 session.put("idVrstePDVa", id);
+		 session.put("idPreduzeca", "null");   // jer ima ManyToOne u Grupa
+		 clearSession();
+		 
+		 if(forma.equals("stopePDVa")) {
+			 List<VrstaPDVa> vrstePDVa = checkCache();	
+			 List<StopaPDVa> stopePDVa = findStopePDVa(id);
+			 renderTemplate("StopePDVa/show.html", stopePDVa, vrstePDVa);
+		 
+		 }
+		 
+		 if(forma.equals("grupe")) {
+			 List<VrstaPDVa> vrstePDVa = checkCache();	
+			 List<Grupa> grupe = findGrupe(id);
+			 List<Preduzece> preduzeca = Preduzeca.checkCache();
+
+			 renderTemplate("Grupe/show.html", grupe, vrstePDVa, preduzeca);
+		 
+		 }
+		 
+	 }
 
 	public static void refresh() {
+		
+		String mode = session.get("mode");
 		List<VrstaPDVa> vrstePDVa = checkCache();
+		List<String> povezaneForme = getForeignKeysFields();
 
-		renderTemplate("vrstePDVa/show.html", vrstePDVa);
+		renderTemplate("vrstePDVa/show.html", vrstePDVa, povezaneForme, mode);
 	}
 
 	/**
@@ -154,37 +194,61 @@ public class VrstePDVa extends Controller {
 	}
 
 	private static boolean clearSession() {
-		session.put("idVrstePDVa", null);
-		session.put("editNazivVrstePDva", null);
-		//session.put("editNaziv", null);
+		session.put("idVr", null);
+		session.put("nazivVrstePDva", null);
 
 		return true;
 	}
 
+	
 	public static List<StopaPDVa> findStopePDVa(Long idVrstePDVa) {
 		List<StopaPDVa> stopePDVaAll = StopaPDVa.findAll();
 		List<StopaPDVa> stopePDVa = new ArrayList<>();
 
-		for (StopaPDVa s : stopePDVaAll) {
-			if (s.vrstaPDVa.id == idVrstePDVa) {
-				stopePDVa.add(s);
+		for (StopaPDVa sp : stopePDVaAll) {
+			if (sp.vrstaPDVa.id == idVrstePDVa) {
+				stopePDVa.add(sp);
 			}
 		}
 
 		return stopePDVa;
 	}
+	
+	
+	
+	public static List<Grupa> findGrupe(Long idVrstePDVa) {
+		List<Grupa> grupeAll = Grupa.findAll();
+		List<Grupa> grupe = new ArrayList<>();
+		
+		for(Grupa gr : grupeAll) {
+			if(gr.vrstaPDVa.id == idVrstePDVa) {
+				grupe.add(gr);
+			}
+		}
+		return grupe;
+	}
 
-	// public static List<NaseljenoMesto> findNaseljenaMesta(Long idDrzave) {
-	// List<NaseljenoMesto> naseeljenaMestaAll = NaseljenoMesto.findAll();
-	// List<NaseljenoMesto> naseljenaMesta = new ArrayList<>();
-	//
-	// for (NaseljenoMesto nm : naseeljenaMestaAll) {
-	// if (nm.drzava.id == idDrzave) {
-	// naseljenaMesta.add(nm);
-	// }
-	// }
-	//
-	// return naseljenaMesta;
-	// }
+	/**
+	 * Pomocna metoda koja vraca listu povezanih formi.
+	 * 
+	 * @see <a href=
+	 *      "http://tutorials.jenkov.com/java-reflection/annotations.html"> Java
+	 *      Reflection - Annotations</a>
+	 */
+	public static List<String> getForeignKeysFields() {
+		Class vrstaPDVaClass = VrstaPDVa.class;
+		Field[] fields = vrstaPDVaClass.getFields();
+
+		List<String> povezaneForme = new ArrayList<String>();
+
+		for (int i = 0; i < fields.length; i++) {
+			Annotation annotation = fields[i].getAnnotation(OneToMany.class);
+			if (annotation instanceof OneToMany) {
+				povezaneForme.add(fields[i].getName());
+			}
+		}
+
+		return povezaneForme;
+	}
 
 }

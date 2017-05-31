@@ -15,6 +15,8 @@ import models.NaseljenoMesto;
 import models.PoslovnaGodina;
 import models.PoslovniPartner;
 import models.Preduzece;
+import models.StavkaCenovnika;
+import models.StopaPDVa;
 import play.cache.Cache;
 import play.mvc.Controller;
 import play.mvc.With;
@@ -280,5 +282,21 @@ public class Preduzeca extends Controller {
 
 		return povezaneForme;
 	}
+	
+	
+	public static List<PoslovniPartner> findPoslovniPartneri(Long idPreduzeca) {
+		List<PoslovniPartner> poslovniPartneriAll = PoslovniPartner.findAll();
+		List<PoslovniPartner> poslovniPartneri = new ArrayList<>();
+
+		for (PoslovniPartner sp : poslovniPartneriAll) {
+			if (sp.preduzece.id == idPreduzeca) {
+				poslovniPartneri.add(sp);
+			}
+		}
+
+		return poslovniPartneri;
+	}
+	
+	
 
 }
