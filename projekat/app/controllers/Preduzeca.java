@@ -296,6 +296,20 @@ public class Preduzeca extends Controller {
 
 		return poslovniPartneri;
 	}
+
+	public static List<Faktura> findFakture(Long idPreduzeca) {
+		List<Faktura> faktureAll = Faktura.findAll();
+		List<Faktura> fakture = new ArrayList<>();
+		
+		for(Faktura f : faktureAll) {
+			if(f.preduzece.id == idPreduzeca) {
+				fakture.add(f);
+			}
+		}
+		
+		
+		return fakture;
+	}
 	
 	
 

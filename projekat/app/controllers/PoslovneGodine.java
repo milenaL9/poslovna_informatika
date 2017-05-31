@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import models.Drzava;
+import models.Faktura;
 import models.NaseljenoMesto;
 import models.PoslovnaGodina;
 import models.Preduzece;
@@ -239,5 +240,18 @@ public class PoslovneGodine extends Controller {
 		}
 
 		return poslovneGodine;
+	}
+
+	public static List<Faktura> findFakture(Long idPoslovneGodine) {
+		List<Faktura> faktureAll = Faktura.findAll();
+		List<Faktura> fakture = new ArrayList<>();
+
+		for (Faktura sc : faktureAll) {
+			if (sc.poslovniPartner.id == idPoslovneGodine) {
+				fakture.add(sc);
+			}
+		}
+
+		return fakture;
 	}
 }
