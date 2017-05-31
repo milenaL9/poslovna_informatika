@@ -11,6 +11,7 @@ import models.Cenovnik;
 import models.KatalogRobeIUsluga;
 import models.Podgrupa;
 import models.StavkaCenovnika;
+import models.StavkaFakture;
 import play.cache.Cache;
 import play.mvc.Controller;
 import play.mvc.With;
@@ -333,5 +334,18 @@ public class KataloziRobeIUsluga extends Controller {
 		}
 
 		return stavkeCenovnika;
+	}
+
+	public static List<StavkaFakture> findStavkeFakture(Long idFakture) {
+		List<StavkaFakture> stavkeFaktureAll = StavkaFakture.findAll();
+		List<StavkaFakture> stavkeFakture= new ArrayList<>();
+
+		for (StavkaFakture sc : stavkeFaktureAll) {
+			if (sc.faktura.id == idFakture) {
+				stavkeFakture.add(sc);
+			}
+		}
+
+		return stavkeFakture;
 	}
 }
