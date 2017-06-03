@@ -56,6 +56,10 @@
 			$('#nextFormModal').modal('show');
 		}	
 	}
+	
+	function cancel_modal(){
+   		$('#nextFormModal').modal('toggle');
+	}
 
 	function refresh_page(){
 		$(location).attr('href', '/Preduzeca/refresh');
@@ -76,10 +80,6 @@
 			
 			<a href="@{Preduzeca.show("edit")}" id = "refresh">
 				<img src="@{'/public/images/refresh.gif'}"/>
-			</a>
-			
-			<a href="#" id = "pickup">
-				<img src="@{'/public/images/zoom-pickup.gif'}"/>
 			</a>
 			
 			<a href="#" id = "help">
@@ -213,8 +213,10 @@
 					</p>
 					
 					<div id = "formActions">
-						<input type = "submit" value = "Potvrda" style="margin-left:6em"/>
-						<a href = "@{Preduzeca.show("edit")}" style="margin-left:1em">Rollback</a>
+						<input type = "submit" value = "Potvrda" style="margin-left:6em" class="btn btn-success"/>
+						<a href = "@{Preduzeca.show("edit")}" style="margin-left:1em">
+							<button type="button" class="btn btn-danger">Otkaži</button>
+						</a>
 					</div>				
 				</form>
 			</div>
@@ -249,7 +251,8 @@
 				</table>
 
 				<div class="modal-footer">
-					<input id="nextFormPickup" type="button" value="izbor" />
+					<input id="nextFormPickup" type="button" value="Izbor" class="btn btn-success"/>
+					<button type="button" class="btn btn-danger" onclick="cancel_modal()">Otkaži</button>
 				</div>
 			</div>
 		</div>

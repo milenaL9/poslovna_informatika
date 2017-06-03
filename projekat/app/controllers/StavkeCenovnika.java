@@ -1,6 +1,12 @@
 package controllers;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import models.Cenovnik;
 import models.KatalogRobeIUsluga;
@@ -30,8 +36,9 @@ public class StavkeCenovnika extends Controller {
 		List<KatalogRobeIUsluga> kataloziRobeIUsluga = KataloziRobeIUsluga.checkCache();
 		List<Cenovnik> cenovnici = Cenovnici.checkCache();
 		List<StavkaCenovnika> stavkeCenovnika = checkCache();
+		List<String> nadredjeneForme = getForeignKeysFields();
 
-		render(kataloziRobeIUsluga, cenovnici, stavkeCenovnika, mode);
+		render(kataloziRobeIUsluga, cenovnici, stavkeCenovnika, nadredjeneForme, mode);
 
 	}
 
@@ -51,8 +58,10 @@ public class StavkeCenovnika extends Controller {
 		List<KatalogRobeIUsluga> kataloziRobeIUsluga = KataloziRobeIUsluga.checkCache();
 		List<Cenovnik> cenovnici = Cenovnici.checkCache();
 		List<StavkaCenovnika> stavkeCenovnika = fillList();
+		List<String> nadredjeneForme = getForeignKeysFields();
 
-		renderTemplate("StavkeCenovnika/show.html", kataloziRobeIUsluga, cenovnici, stavkeCenovnika, mode);
+		renderTemplate("StavkeCenovnika/show.html", kataloziRobeIUsluga, cenovnici, stavkeCenovnika, nadredjeneForme,
+				mode);
 
 	}
 
@@ -68,6 +77,7 @@ public class StavkeCenovnika extends Controller {
 		List<StavkaCenovnika> stavkeCenovnika = null;
 		List<Cenovnik> cenovnici = Cenovnici.checkCache();
 		List<KatalogRobeIUsluga> kataloziRobeIUsluga = KataloziRobeIUsluga.checkCache();
+		List<String> nadredjeneForme = getForeignKeysFields();
 
 		if (!validation.hasErrors()) {
 			stavkeCenovnika = StavkaCenovnika.findAll();
@@ -103,7 +113,8 @@ public class StavkeCenovnika extends Controller {
 
 			validation.clear();
 
-			renderTemplate("StavkeCenovnika/show.html", stavkeCenovnika, cenovnici, kataloziRobeIUsluga, idd, mode);
+			renderTemplate("StavkeCenovnika/show.html", stavkeCenovnika, cenovnici, kataloziRobeIUsluga,
+					nadredjeneForme, idd, mode);
 		} else {
 			validation.keep();
 
@@ -111,7 +122,8 @@ public class StavkeCenovnika extends Controller {
 
 			session.put("cena", null);
 
-			renderTemplate("StavkeCenovnika/show.html", stavkeCenovnika, cenovnici, kataloziRobeIUsluga, mode);
+			renderTemplate("StavkeCenovnika/show.html", stavkeCenovnika, cenovnici, kataloziRobeIUsluga,
+					nadredjeneForme, mode);
 		}
 
 	}
@@ -128,6 +140,7 @@ public class StavkeCenovnika extends Controller {
 		List<StavkaCenovnika> stavkeCenovnika = null;
 		List<Cenovnik> cenovnici = Cenovnici.checkCache();
 		List<KatalogRobeIUsluga> kataloziRobeIUsluga = KataloziRobeIUsluga.checkCache();
+		List<String> nadredjeneForme = getForeignKeysFields();
 
 		if (!validation.hasErrors()) {
 			stavkeCenovnika = StavkaCenovnika.findAll();
@@ -177,7 +190,8 @@ public class StavkeCenovnika extends Controller {
 			session.put("cena", null);
 		}
 
-		renderTemplate("StavkeCenovnika/show.html", stavkeCenovnika, cenovnici, kataloziRobeIUsluga, mode);
+		renderTemplate("StavkeCenovnika/show.html", stavkeCenovnika, cenovnici, kataloziRobeIUsluga, nadredjeneForme,
+				mode);
 	}
 
 	public static void filter(StavkaCenovnika stavkaCenovnika) {
@@ -185,11 +199,13 @@ public class StavkeCenovnika extends Controller {
 
 		List<Cenovnik> cenovnici = Cenovnici.checkCache();
 		List<KatalogRobeIUsluga> kataloziRobeIUsluga = KataloziRobeIUsluga.checkCache();
+		List<String> nadredjeneForme = getForeignKeysFields();
 
 		session.put("mode", "edit");
 		String mode = session.get("mode");
 
-		renderTemplate("StavkeCenovnika/show.html", stavkeCenovnika, cenovnici, kataloziRobeIUsluga, mode);
+		renderTemplate("StavkeCenovnika/show.html", stavkeCenovnika, cenovnici, kataloziRobeIUsluga, nadredjeneForme,
+				mode);
 	}
 
 	public static void delete(Long id) {
@@ -198,6 +214,7 @@ public class StavkeCenovnika extends Controller {
 		List<StavkaCenovnika> stavkeCenovnika = checkCache();
 		List<Cenovnik> cenovnici = Cenovnici.checkCache();
 		List<KatalogRobeIUsluga> kataloziRobeIUsluga = KataloziRobeIUsluga.checkCache();
+		List<String> nadredjeneForme = getForeignKeysFields();
 
 		StavkaCenovnika stavkaCenovnika = StavkaCenovnika.findById(id);
 		Long idd = null;
@@ -215,21 +232,29 @@ public class StavkeCenovnika extends Controller {
 		stavkeCenovnika.clear();
 		stavkeCenovnika = fillList();
 
-		renderTemplate("StavkeCenovnika/show.html", stavkeCenovnika, cenovnici, kataloziRobeIUsluga, idd, mode);
+		renderTemplate("StavkeCenovnika/show.html", stavkeCenovnika, cenovnici, kataloziRobeIUsluga, nadredjeneForme,
+				idd, mode);
 	}
 
-	public static void nextForm() {
-
+	/** Prelazak na nadredjenu formu */
+	public static void pickup(String forma) {
+		if (forma.equals("cenovnik")) {
+			Cenovnici.show("edit");
+		} else if (forma.equals("katalogRobeIUsluga")) {
+			KataloziRobeIUsluga.show();
+		}
 	}
 
 	public static void refresh() {
 		List<Cenovnik> cenovnici = Cenovnici.checkCache();
 		List<KatalogRobeIUsluga> kataloziRobeIUsluga = KataloziRobeIUsluga.checkCache();
 		List<StavkaCenovnika> stavkeCenovnika = fillList();
+		List<String> nadredjeneForme = getForeignKeysFields();
 
 		String mode = session.get("mode");
 
-		renderTemplate("StavkeCenovnika/show.html", stavkeCenovnika, cenovnici, kataloziRobeIUsluga, mode);
+		renderTemplate("StavkeCenovnika/show.html", stavkeCenovnika, cenovnici, kataloziRobeIUsluga, nadredjeneForme,
+				mode);
 	}
 
 	/** Pomocna metoda za brisanje podataka iz sesije. */
@@ -274,6 +299,29 @@ public class StavkeCenovnika extends Controller {
 		}
 
 		return stavkeCenovnika;
+	}
+
+	/**
+	 * Pomocna metoda koja vraca listu povezanih formi.
+	 * 
+	 * @see <a href=
+	 *      "http://tutorials.jenkov.com/java-reflection/annotations.html"> Java
+	 *      Reflection - Annotations</a>
+	 */
+	public static List<String> getForeignKeysFields() {
+		Class stavkaCenovnikaClass = StavkaCenovnika.class;
+		Field[] fields = stavkaCenovnikaClass.getFields();
+
+		List<String> povezaneForme = new ArrayList<String>();
+
+		for (int i = 0; i < fields.length; i++) {
+			Annotation annotation = fields[i].getAnnotation(ManyToOne.class);
+			if (annotation instanceof ManyToOne) {
+				povezaneForme.add(fields[i].getName());
+			}
+		}
+
+		return povezaneForme;
 	}
 
 }

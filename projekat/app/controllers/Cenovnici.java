@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.OneToMany;
+import javax.swing.plaf.synth.SynthStyleFactory;
 
 import models.Cenovnik;
 import models.KatalogRobeIUsluga;
@@ -164,6 +165,7 @@ public class Cenovnici extends Controller {
 
 		if (forma.equals("stavkeCenovnika")) {
 			List<Cenovnik> cenovnici = checkCache();
+
 			List<StavkaCenovnika> stavkeCenovnika = findStavkeCenovnika(id);
 			List<KatalogRobeIUsluga> kataloziRobeIUsluga = KataloziRobeIUsluga.checkCache();
 
@@ -176,8 +178,74 @@ public class Cenovnici extends Controller {
 
 		List<Cenovnik> cenovnici = checkCache();
 		List<String> povezaneForme = getForeignKeysFields();
+		List<KatalogRobeIUsluga> kataloziRobeIUsluga = KataloziRobeIUsluga.checkCache();
 
-		renderTemplate("cenovnici/show.html", cenovnici, povezaneForme, mode);
+		renderTemplate("cenovnici/show.html", cenovnici, povezaneForme, kataloziRobeIUsluga, mode);
+	}
+
+	/**
+	 * Metoda pomocu koje se vrsi kopiranje cenovnika.
+	 * 
+	 * @param id
+	 *            ID odabranog cenovnika koji kopiramo
+	 * @param datumVazenja
+	 *            datum vazenja kopije cenovnika
+	 * @param procenat
+	 *            procenat za koliko ce se vrsiti povecanje/ smanjenje cene
+	 *            stavke cenovnika
+	 * @param promena
+	 *            P - poveacnje/ S - smanjenje cene stavke cenovnika
+	 */
+	public static void copy(Long id, String datumVazenja, String procenat, String promena) {
+		List<StavkaCenovnika> stavkeCenovnika = StavkeCenovnika.checkCache();
+
+		Cenovnik stariCenovnik = Cenovnik.findById(id);
+		Cenovnik noviCenovnik = new Cenovnik(stariCenovnik.naziv + "_kopija", datumVazenja);
+		noviCenovnik.stavkeCenovnika = new ArrayList<>();
+		noviCenovnik.save();
+
+		List<StavkaCenovnika> stavkeStarogCenovnika = Cenovnici.findStavkeCenovnika(id);
+
+		double procenatD = Double.parseDouble(procenat);
+		for (int i = 0; i < stavkeStarogCenovnika.size(); i++) {
+			double novaCena = racun(promena, procenatD, stavkeStarogCenovnika.get(i).cena);
+
+			StavkaCenovnika novaStavkaCenovnika = new StavkaCenovnika(novaCena);
+			novaStavkaCenovnika.cenovnik = noviCenovnik;
+			novaStavkaCenovnika.katalogRobeIUsluga = stavkeStarogCenovnika.get(i).katalogRobeIUsluga;
+
+			novaStavkaCenovnika.save();
+			stavkeCenovnika.add(novaStavkaCenovnika);
+			Cache.set("stavkeCenovnika", stavkeCenovnika);
+
+			noviCenovnik.stavkeCenovnika.add(novaStavkaCenovnika);
+		}
+		noviCenovnik.save();
+
+		List<Cenovnik> cenovnici = checkCache();
+		cenovnici.add(noviCenovnik);
+		Cache.set("cenovnici", cenovnici);
+
+		String mode = session.get("mode");
+
+		show(mode);
+	}
+
+	/**
+	 * Pomocna metoda moja vrsi izracunavanje.
+	 *
+	 */
+	private static double racun(String promena, double procenat, double staraCena) {
+		double novaCena = 0;
+		if (promena.equals("P")) {
+			// povecanje
+			novaCena = staraCena * (1 + (procenat) / 100);
+		} else if (promena.equals("S")) {
+			// smanjenje
+			novaCena = staraCena * (1 - (procenat) / 100);
+		}
+
+		return novaCena;
 	}
 
 	/**
@@ -235,14 +303,10 @@ public class Cenovnici extends Controller {
 	 *            ID izabranog cenovnika
 	 */
 	public static List<StavkaCenovnika> findStavkeCenovnika(Long idCenovnika) {
-		List<StavkaCenovnika> stavkeCenovnikaAll = StavkaCenovnika.findAll();
 		List<StavkaCenovnika> stavkeCenovnika = new ArrayList<>();
+		Cenovnik cenovnik = Cenovnik.findById(idCenovnika);
 
-		for (StavkaCenovnika sc : stavkeCenovnikaAll) {
-			if (sc.cenovnik.id == idCenovnika) {
-				stavkeCenovnika.add(sc);
-			}
-		}
+		stavkeCenovnika = cenovnik.stavkeCenovnika;
 
 		return stavkeCenovnika;
 	}
