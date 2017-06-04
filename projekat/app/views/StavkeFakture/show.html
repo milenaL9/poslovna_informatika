@@ -112,9 +112,9 @@
 
 	function remove(id){  <!-- ne znam koji je uanpred selektovani red , ovde se vrsi redirekcija -->
 		if(id == null){
-			alert("OznaÄ�ite red u tabeli!");
+			alert("OznaÃ„ï¿½ite red u tabeli!");
 		}else{
-			var r  = confirm("Da li Å¾elite da obriÅ¡te slog?");
+			var r  = confirm("Da li Ã…Â¾elite da obriÃ…Â¡te slog?");
 			if(r == true) {
 		    	$(location).attr('href', '/StavkeFakture/delete?id='+id);
 			}
@@ -240,28 +240,31 @@
 
 			<table>
 				<tr class = "header">
-	   				<th>Cena</th> 
+					<th>Naziv stavke</th>
 	   				<th>Kolicina</th>
 	   				<th>Rabat</th>
-	   				<th>Osnovica za PDV</th>
 	   				<th>Stopa PDVa</th>
+	   				<th>Osnovica za PDV</th>
+	   				
 	   				<th>Iznos PDVa</th>
+	   				<th>Cena</th> 
 	   				<th>Ukupno</th>
 	   				<th>Faktura</th>
-	   				<th>Katalog robe i usluga</th>
+	   				
 				</tr>
 				#{list items:stavkeFakture, as:'stavkaFakture'}
 					<tr #{if stavkaFakture.id== idd} class="highlighted"#{/if} class="tableRow">
-						<td class="sf_cena">${stavkaFakture.cena}</td>
+						<td class="katalogRobeIUsluga">${stavkaFakture.katalogRobeIUsluga.nazivStavkeKataloga}</td>
 						<td class="kolicina">${stavkaFakture.kolicina}</td>
 						<td class="rabat">${stavkaFakture.rabat}</td>
-						<td class="osnovicaZaPDV">${stavkaFakture.osnovicaZaPDV}</td>
-						<td class="stopaPDVa">${stavkaFakture.stopaPDVa}</td>
-						<td class="iznosPDVa">${stavkaFakture.iznosPDVa}</td>
-						<td class="ukupno">${stavkaFakture.ukupno}</td>
 						
+						<td class="stopaPDVa">${stavkaFakture.stopaPDVa.procenatPDVa} % </td>
+						<td class="osnovicaZaPDV">${stavkaFakture.osnovicaZaPDV}</td>
+						<td class="iznosPDVa">${stavkaFakture.iznosPDVa}</td>
+						<td class="sf_cena">${stavkaFakture.cena}</td>
+						<td class="ukupno">${stavkaFakture.ukupno}</td>
 						<td class="faktura">${stavkaFakture.faktura.brojFakture}</td>
-						<td class="katalogRobeIUsluga">${stavkaFakture.katalogRobeIUsluga.nazivStavkeKataloga}</td>
+					
 						<td style="visibility: hidden; max-width: 0px" class="id">${stavkaFakture.id}</td>
 					</tr>
 				#{/list}
@@ -289,18 +292,36 @@
 							#{/}
 						</p>
 						
+<!-- 						<p> -->
+<!-- 							#{field 'stavkaFakture.cena'}  -->
+<!-- 								<label for="${field.id}">Cena</label> -->
+<!-- 								<input type="text" name="${field.name}" id="${field.id}" value="${session.cena}" />  -->
+<!-- 								<span>#{error field.name /}</span> -->
+<!-- 							#{/} -->
+<!-- 						</p> -->
+						
+						
+						
 						<p>
-							#{field 'stavkaFakture.cena'} 
-								<label for="${field.id}">Cena</label>
-								<input type="text" name="${field.name}" id="${field.id}" value="${session.cena}" /> 
-								<span>#{error field.name /}</span>
+							#{field 'katalogRobeIUsluga'}
+								<label for = "${field.id}">Naziv stavke</label>
+								&nbsp &nbsp &nbsp
+								<select name = "${field.name}" id = "${field.id}">
+									#{list items:kataloziRobeIUsluga, as:'katalogRobeIUsluga'}
+										<option value = "${katalogRobeIUsluga.id}">${katalogRobeIUsluga.nazivStavkeKataloga}</option>
+									#{/list}
+								</select>
+								
+								<button id = "zoomBtn" type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#modalDialog">...	</button>
 							#{/}
+							
+							<script>SelectElement()</script>
 						</p>
 						
 						
 						<p>
 							#{field 'stavkaFakture.kolicina'} 
-								<label for="${field.id}">KoliÄ�ina</label>
+								<label for="${field.id}">Količina</label>
 								<input type="text" name="${field.name}" id="${field.id}" value="${session.cena}" /> 
 								<span>#{error field.name /}</span>
 							#{/}
@@ -319,13 +340,13 @@
 						
 						
 						
-						<p>
-							#{field 'stavkaFakture.osnovicaZaPDV'} 
-								<label for="${field.id}">Osnovica za PDV</label>
-								<input type="text" name="${field.name}" id="${field.id}" value="${session.cena}" /> 
-								<span>#{error field.name /}</span>
-							#{/}
-						</p>
+<!-- 						<p> -->
+<!-- 							#{field 'stavkaFakture.osnovicaZaPDV'}  -->
+<!-- 								<label for="${field.id}">Osnovica za PDV</label> -->
+<!-- 								<input type="text" name="${field.name}" id="${field.id}" value="${session.cena}" />  -->
+<!-- 								<span>#{error field.name /}</span> -->
+<!-- 							#{/} -->
+<!-- 						</p> -->
 						
 						
 						<p>
@@ -334,8 +355,8 @@
 								&nbsp &nbsp &nbsp
 								<select name = "${field.name}" id = "${field.id}">
 									#{list items:stopePDVa, as:'stopaPDVa'}
-										<option value = "${stopaPDVa.id}">${stopaPDVa.datumKreiranja}</option>
-									#{/list}
+										<option value = "${stopaPDVa.id}">${stopaPDVa.procenatPDVa} %</option>
+									#{/list} 
 								</select>
 								
 								<button id = "zoomBtnStopaPDVa" type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#modalDialogStopaPDVa">...	</button>
@@ -344,22 +365,22 @@
 							<script>SelectElementStopaPDVa()</script>
 						</p>
 						
-						<p>
-							#{field 'stavkaFakture.iznosPDVa'} 
-								<label for="${field.id}">Iznos PDVa</label>
-								<input type="text" name="${field.name}" id="${field.id}" value="${session.cena}" /> 
-								<span>#{error field.name /}</span>
-							#{/}
-						</p>
+<!-- 						<p> -->
+<!-- 							#{field 'stavkaFakture.iznosPDVa'}  -->
+<!-- 								<label for="${field.id}">Iznos PDVa</label> -->
+<!-- 								<input type="text" name="${field.name}" id="${field.id}" value="${session.cena}" />  -->
+<!-- 								<span>#{error field.name /}</span> -->
+<!-- 							#{/} -->
+<!-- 						</p> -->
 						
 						
-						<p>
-							#{field 'stavkaFakture.ukupno'} 
-								<label for="${field.id}">Ukupno</label>
-								<input type="text" name="${field.name}" id="${field.id}" value="${session.cena}" /> 
-								<span>#{error field.name /}</span>
-							#{/}
-						</p>
+<!-- 						<p> -->
+<!-- 							#{field 'stavkaFakture.ukupno'}  -->
+<!-- 								<label for="${field.id}">Ukupno</label> -->
+<!-- 								<input type="text" name="${field.name}" id="${field.id}" value="${session.cena}" />  -->
+<!-- 								<span>#{error field.name /}</span> -->
+<!-- 							#{/} -->
+<!-- 						</p> -->
 
 						<p>
 							#{field 'faktura'} 
@@ -377,26 +398,12 @@
 							<script>SelectElementFaktura()</script>
 						</p>
 						
-						<p>
-							#{field 'katalogRobeIUsluga'}
-								<label for = "${field.id}">Katalog robe i usluga</label>
-								&nbsp &nbsp &nbsp
-								<select name = "${field.name}" id = "${field.id}">
-									#{list items:kataloziRobeIUsluga, as:'katalogRobeIUsluga'}
-										<option value = "${katalogRobeIUsluga.id}">${katalogRobeIUsluga.nazivStavkeKataloga}</option>
-									#{/list}
-								</select>
-								
-								<button id = "zoomBtn" type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#modalDialog">...	</button>
-							#{/}
-							
-							<script>SelectElement()</script>
-						</p>
+						
 						
 						<div id = "formActions">
 							<input type = "submit" value = "Potvrda" style="margin-left:6em" class="btn btn-success"/>
 							<a href = "@{StavkeFakture.changeMode("edit")}" style="margin-left:1em">
-								<button type="button" class="btn btn-danger">OtkaÅ¾i</button>
+								<button type="button" class="btn btn-danger">OtkaÃ…Â¾i</button>
 							</a>
 						</div>				
 				</form>
@@ -405,7 +412,7 @@
 	</div>
 </div>
 
-<p class="status_line">Trenutni reÅ¾im: ${session.mode}</p>
+<p class="status_line">Trenutni reÃ…Â¾im: ${session.mode}</p>
 
 <button onclick="topFunction()" id="myBtn" title="Idi na vrh">
 	<img src="@{'/public/images/back_top.png'}" alt=""
@@ -441,7 +448,7 @@
 				
 				<div class="modal-footer">
 					<input id = "izborPickupStopaPDVa" type = "button" value = "Izbor" class="btn btn-success"/>
-					<button type="button" class="btn btn-danger" onclick="cancel_stopaPDVaModal()">OtkaÅ¾i</button>
+					<button type="button" class="btn btn-danger" onclick="cancel_stopaPDVaModal()">OtkaÃ…Â¾i</button>
 				</div>
 			</div>
 		</div>
@@ -466,7 +473,7 @@
 		   				<th>Ukupno osnovica</th>
 		   				<th>Ukupno PDV</th>
 		   				<th>Ukupno za placanje</th>
-		   				<th>PreduzeÄ‡e</th>
+		   				<th>PreduzeÃ„â€¡e</th>
 					</tr>
 					
 					#{list fakture, as:'faktura'}
@@ -485,7 +492,7 @@
 				
 				<div class="modal-footer">
 					<input id = "izborPickupFaktura" type = "button" value = "Izbor" class="btn btn-success"/>
-					<button type="button" class="btn btn-danger" onclick="cancel_fakturaModal()">OtkaÅ¾i</button>
+					<button type="button" class="btn btn-danger" onclick="cancel_fakturaModal()">OtkaÃ…Â¾i</button>
 				</div>
 			</div>
 		</div>
@@ -521,7 +528,7 @@
 				
 				<div class="modal-footer">
 					<input id = "izborPickup" type = "button" value = "Izbor" class="btn btn-success"/>
-					<button type="button" class="btn btn-danger" onclick="cancel_katalogModal()">OtkaÅ¾i</button>
+					<button type="button" class="btn btn-danger" onclick="cancel_katalogModal()">OtkaÃ…Â¾i</button>
 				</div>
 			</div>
 		</div>
@@ -533,7 +540,7 @@
 	<div class="modal-dialog">
 		<!-- Modal content-->
 		<div class="modal-content">
-			<div class="modal-header">Izaberite nadreÄ‘enu formu</div>
+			<div class="modal-header">Izaberite nadreÃ„â€˜enu formu</div>
 
 			<div class="modal-body">
 				<table style="padding: 2em">
@@ -550,7 +557,7 @@
 
 				<div class="modal-footer">
 					<input id="pickupPickup" type="button" value="Izbor" class="btn btn-success" />
-					<button type="button" class="btn btn-danger" onclick="cancel_pickupModal()">OtkaÅ¾i</button>
+					<button type="button" class="btn btn-danger" onclick="cancel_pickupModal()">OtkaÃ…Â¾i</button>
 				</div>
 			</div>
 		</div>

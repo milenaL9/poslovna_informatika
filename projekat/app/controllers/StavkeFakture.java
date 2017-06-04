@@ -102,12 +102,34 @@ public class StavkeFakture extends Controller {
 			} else {
 				findStopaPDVa = StopaPDVa.findById(stopaPDVa);
 			}
+			
+			
 
 			stavkaFakture.faktura = findFaktura;
 			stavkaFakture.katalogRobeIUsluga = findKatalog;
 			stavkaFakture.stopaPDVa = findStopaPDVa;
 
+			
+			List<StavkaCenovnika> stavkeCenovnika = stavkaFakture.katalogRobeIUsluga.stavkeCenovnika;
+			for(StavkaCenovnika sc : stavkeCenovnika) {
+				if(sc.katalogRobeIUsluga == stavkaFakture.katalogRobeIUsluga) {
+					stavkaFakture.cena = (float) sc.cena;
+				}
+			}
+			
+
+			stavkaFakture.osnovicaZaPDV = stavkaFakture.cena;
+			
+			
+			
 			stavkaFakture.save();
+			stavkaFakture.iznosPDVa = (stavkaFakture.osnovicaZaPDV) * stavkaFakture.stopaPDVa.procenatPDVa / 100 ;	
+			stavkaFakture.cena = (float) (stavkaFakture.cena + stavkaFakture.iznosPDVa);
+			
+			stavkaFakture.save();
+			stavkaFakture.ukupno = ((stavkaFakture.cena) * (stavkaFakture.kolicina)) - stavkaFakture.rabat;
+			stavkaFakture.save();
+			
 			stavkeFakture.add(stavkaFakture);
 			Cache.set("stavkeFakture", stavkeFakture);
 
@@ -137,6 +159,11 @@ public class StavkeFakture extends Controller {
 		}
 
 	}
+	
+	
+	
+
+	
 
 	public static void edit(StavkaFakture stavkaFakture, Long faktura, Long katalogRobeIUsluga, Long stopaPDVa) {
 		validation.clear();
