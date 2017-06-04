@@ -1,5 +1,6 @@
 eclipse.preferences.version=1
 encoding//app/views/Cenovnici/show.html=UTF-8
+encoding//app/views/KataloziRobeIUsluga/show.html=UTF-8
 encoding//app/views/PoslovneGodine/show.html=UTF-8
 encoding//app/views/Preduzeca/show.html=UTF-8
 encoding//app/views/StavkeCenovnika/show.html=UTF-8

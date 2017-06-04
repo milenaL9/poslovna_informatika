@@ -6,11 +6,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import models.Drzava;
 import models.Faktura;
 import models.NaseljenoMesto;
 import models.PoslovnaGodina;
+import models.PoslovniPartner;
 import models.Preduzece;
 import models.StavkaCenovnika;
 import play.cache.Cache;
@@ -32,9 +34,10 @@ public class PoslovneGodine extends Controller {
 		session.put("mode", "edit");
 		List<Preduzece> preduzeca = Preduzeca.checkCache();
 		List<PoslovnaGodina> poslovneGodine = checkCache();
-		List<String> nadredjeneForme = getForeignKeysFields();
+		List<String> nadredjeneForme = getForeignKeysFieldsManyToOne();
+		List<String> povezaneForme = getForeignKeysFields();
 
-		render(preduzeca, poslovneGodine, nadredjeneForme, mode);
+		render(preduzeca, poslovneGodine, nadredjeneForme, povezaneForme, mode);
 	}
 
 	/**
@@ -52,9 +55,10 @@ public class PoslovneGodine extends Controller {
 
 		List<Preduzece> preduzeca = Preduzeca.checkCache();
 		List<PoslovnaGodina> poslovneGodine = fillList();
-		List<String> nadredjeneForme = getForeignKeysFields();
+		List<String> nadredjeneForme = getForeignKeysFieldsManyToOne();
+		List<String> povezaneForme = getForeignKeysFields();
 
-		renderTemplate("PoslovneGodine/show.html", preduzeca, poslovneGodine, nadredjeneForme, mode);
+		renderTemplate("PoslovneGodine/show.html", preduzeca, poslovneGodine, nadredjeneForme, povezaneForme, mode);
 	}
 
 	public static void edit(PoslovnaGodina poslovnaGodina, Long preduzece) {
@@ -68,7 +72,8 @@ public class PoslovneGodine extends Controller {
 
 		List<PoslovnaGodina> poslovneGodine = null;
 		List<Preduzece> preduzeca = Preduzeca.checkCache();
-		List<String> nadredjeneForme = getForeignKeysFields();
+		List<String> nadredjeneForme = getForeignKeysFieldsManyToOne();
+		List<String> povezaneForme = getForeignKeysFields();
 
 		if (!validation.hasErrors()) {
 			poslovneGodine = PoslovnaGodina.findAll();
@@ -109,7 +114,7 @@ public class PoslovneGodine extends Controller {
 			session.put("aktivna", poslovnaGodina.aktivna);
 
 		}
-		renderTemplate("PoslovneGodine/show.html", poslovneGodine, preduzeca, nadredjeneForme, mode);
+		renderTemplate("PoslovneGodine/show.html", poslovneGodine, preduzeca, nadredjeneForme, povezaneForme, mode);
 	}
 
 	public static void create(PoslovnaGodina poslovnaGodina, Long preduzece) {
@@ -123,7 +128,8 @@ public class PoslovneGodine extends Controller {
 
 		List<PoslovnaGodina> poslovneGodine = null;
 		List<Preduzece> preduzeca = Preduzeca.checkCache();
-		List<String> nadredjeneForme = getForeignKeysFields();
+		List<String> nadredjeneForme = getForeignKeysFieldsManyToOne();
+		List<String> povezaneForme = getForeignKeysFields();
 
 		if (!validation.hasErrors()) {
 			poslovneGodine = PoslovnaGodina.findAll();
@@ -150,7 +156,8 @@ public class PoslovneGodine extends Controller {
 
 			validation.clear();
 
-			renderTemplate("PoslovneGodine/show.html", poslovneGodine, preduzeca, nadredjeneForme, idd, mode);
+			renderTemplate("PoslovneGodine/show.html", poslovneGodine, preduzeca, nadredjeneForme, povezaneForme, idd,
+					mode);
 		} else {
 			validation.keep();
 
@@ -159,7 +166,7 @@ public class PoslovneGodine extends Controller {
 			session.put("brojGodine", poslovnaGodina.brojGodine);
 			session.put("aktivna", poslovnaGodina.aktivna);
 
-			renderTemplate("PoslovneGodine/show.html", poslovneGodine, preduzeca, nadredjeneForme, mode);
+			renderTemplate("PoslovneGodine/show.html", poslovneGodine, preduzeca, nadredjeneForme, povezaneForme, mode);
 		}
 	}
 
@@ -168,7 +175,8 @@ public class PoslovneGodine extends Controller {
 
 		List<PoslovnaGodina> poslovneGodine = checkCache();
 		List<Preduzece> preduzeca = Preduzeca.checkCache();
-		List<String> nadredjeneForme = getForeignKeysFields();
+		List<String> nadredjeneForme = getForeignKeysFieldsManyToOne();
+		List<String> povezaneForme = getForeignKeysFields();
 
 		PoslovnaGodina poslovnaGodina = PoslovnaGodina.findById(id);
 		Long idd = null;
@@ -186,7 +194,8 @@ public class PoslovneGodine extends Controller {
 		poslovneGodine.clear();
 		poslovneGodine = fillList();
 
-		renderTemplate("PoslovneGodine/show.html", poslovneGodine, preduzeca, nadredjeneForme, idd, mode);
+		renderTemplate("PoslovneGodine/show.html", poslovneGodine, preduzeca, nadredjeneForme, povezaneForme, idd,
+				mode);
 	}
 
 	public static void filter(PoslovnaGodina poslovnaGodina) {
@@ -195,25 +204,32 @@ public class PoslovneGodine extends Controller {
 				.fetch();
 
 		List<Preduzece> preduzeca = Preduzeca.checkCache();
-		List<String> nadredjeneForme = getForeignKeysFields();
+		List<String> nadredjeneForme = getForeignKeysFieldsManyToOne();
+		List<String> povezaneForme = getForeignKeysFields();
 
 		session.put("mode", "edit");
 		String mode = session.get("mode");
 
-		renderTemplate("PoslovneGodine/show.html", poslovneGodine, preduzeca, nadredjeneForme, mode);
+		renderTemplate("PoslovneGodine/show.html", poslovneGodine, preduzeca, nadredjeneForme, povezaneForme, mode);
 	}
 
 	public static void refresh() {
 		List<Preduzece> preduzeca = Preduzeca.checkCache();
 		List<PoslovnaGodina> poslovneGodine = fillList();
-		List<String> nadredjeneForme = getForeignKeysFields();
+		List<String> nadredjeneForme = getForeignKeysFieldsManyToOne();
+		List<String> povezaneForme = getForeignKeysFields();
 
 		String mode = session.get("mode");
 
-		renderTemplate("PoslovneGodine/show.html", preduzeca, poslovneGodine, nadredjeneForme, mode);
+		renderTemplate("PoslovneGodine/show.html", preduzeca, poslovneGodine, nadredjeneForme, povezaneForme, mode);
 	}
 
-	/** Prelazak na nadredjenu formu */
+	/**
+	 * Prelazak na nadredjenu formu
+	 * 
+	 * @param forma
+	 *            Izabrana forma na koju se prelazi
+	 */
 	public static void pickup(String forma) {
 		if (forma.equals("preduzece")) {
 			Preduzeca.show("edit");
@@ -234,9 +250,12 @@ public class PoslovneGodine extends Controller {
 		clearSession();
 
 		if (forma.equals("fakture")) {
+			List<Preduzece> preduzeca = Preduzeca.checkCache();
 			List<PoslovnaGodina> poslovneGodine = checkCache();
+			List<PoslovniPartner> poslovniParneri = PoslovniPartneri.checkCache();
+
 			List<Faktura> fakture = findFakture(id);
-			renderTemplate("Fakture/show.html", poslovneGodine, fakture);
+			renderTemplate("Fakture/show.html", poslovneGodine, preduzeca, fakture, poslovniParneri);
 		}
 	}
 
@@ -302,6 +321,29 @@ public class PoslovneGodine extends Controller {
 	 *      Reflection - Annotations</a>
 	 */
 	public static List<String> getForeignKeysFields() {
+		Class poslovnaGodinaClass = PoslovnaGodina.class;
+		Field[] fields = poslovnaGodinaClass.getFields();
+
+		List<String> povezaneForme = new ArrayList<String>();
+
+		for (int i = 0; i < fields.length; i++) {
+			Annotation annotation = fields[i].getAnnotation(OneToMany.class);
+			if (annotation instanceof OneToMany) {
+				povezaneForme.add(fields[i].getName());
+			}
+		}
+
+		return povezaneForme;
+	}
+
+	/**
+	 * Pomocna metoda koja vraca listu nadredjenih formi.
+	 * 
+	 * @see <a href=
+	 *      "http://tutorials.jenkov.com/java-reflection/annotations.html"> Java
+	 *      Reflection - Annotations</a>
+	 */
+	public static List<String> getForeignKeysFieldsManyToOne() {
 		Class poslovnaGodinaClass = PoslovnaGodina.class;
 		Field[] fields = poslovnaGodinaClass.getFields();
 

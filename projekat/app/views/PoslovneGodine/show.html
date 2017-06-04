@@ -63,30 +63,43 @@
 		$(location).attr('href', '/PoslovneGodine/refresh');
 	}
 	
+	// izbor preduzeca
+	$(document).ready(function(){
+		$("#izborPickup").click(function(){
+			id = $(".highlighted").find(".izbor_id").html();
+			$("select").val(id);
+			$('#modalDialog').modal('toggle');
+		});
+	});
+	
+	function cancel_preduzece_modal(){
+		$('#modalDialog').modal('toggle');
+	}
+	
 	// nextForm
 	function nextform_func(id){
 		if(id==null){
 			alert("Označite red u tabeli!");
 		}else{
 			sessionStorage.setItem("selektovaniID",id);
-			$('#fakturaModal').modal('show');
+			$('#nextFormModal').modal('show');
 		}	
 	}
 	
 	$(document).ready(function(){
-		$("#fakturaPickup").click(function(){
+		$("#nextFormPickup").click(function(){
 			nazivForme = $(".highlighted").find(".naziv_forme").html();
 			
 			var idFakture = sessionStorage.getItem("selektovaniID");
 			
-			$('#fakturaModal').modal('toggle');
+			$('#nextFormModal').modal('toggle');
 			
 			$(location).attr('href', '/PoslovneGodine/nextForm?id='+idFakture+'&forma='+nazivForme);
 		});
 	});
 	
 	function cancel_modal(){
-		$('#fakturaModal').modal('toggle');
+		$('#nextFormModal').modal('toggle');
 	}
 	
 	// povratak na nadredjenu formu
@@ -227,7 +240,7 @@
 									#{/list}
 								</select>
 								
-								<button id = "zoomBtn" type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#preduzecaModal">...	</button>
+								<button id = "zoomBtn" type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#modalDialog">...	</button>
 							#{/}
 							
 							<script>SelectElement()</script>
@@ -252,42 +265,102 @@
 		class="rounded-circle" width="40" height="40">
 </button>
 
- <!-- Modal -->
-<div class="modal fade" id="fakturaModal" role="dialog">
+<!-- Modal PREDUZECE -->
+<div class="modal fade" id="modalDialog" role="dialog">
 	<div class="modal-dialog">
 		<!-- Modal content-->
 		<div class="modal-content">
 			<div class="modal-header">
-				Fakture
+				Preduzeća
 			</div>
 			
       		<div class="modal-body">
 	    		<table style = "padding:2em">
 					<tr class = "header">
-		   				<th>Datum fakture</th>
-	   					<th>Broj fakture</th>
-	   					<th>Datum valute</th>
-	   					<th>Ukupno osnovica</th>
-	   					<th>Ukupno PDV</th>
-	   					<th>Ukupno za plaćanje</th>
+		   				<th>Naziv</th>
+	   					<th>PIB</th>
+	   					<th>Mesto</th>
+	   					<th>Adresa</th>
+	   					<th>Telefon</th>
+	   					<th>Matični broj</th>
+	   					<th width="20%">Tekući račun</th>
 					</tr>
 					
-					#{list items:fakture, as:'faktura'}
-						<tr #{if faktura.id == idd} class = "highlighted" #{/if}>
-							<td class = "datumFakture">${faktura.datumFakture}</td>
-							<td class = "brojFakture">${faktura.brojFakture}</td>
-							<td class = "datumValute">${faktura.datumValute}</td>
-							<td class = "ukupnoOsnovica">${faktura.ukupnoOsnovica}</td>
-							<td class = "ukupnoPDV">${faktura.ukupnoPDV}</td>
-							<td class = "ukupnoZaPlacanje">${faktura.ukupnoZaPlacanje}</td>
-							<td style = "visibility: hidden; max-width: 0px" class = "f_id">${faktura.id}</td>
+					#{list preduzeca, as:'preduzece'}
+						<tr #{if preduzece.id == idd} class = "highlighted" #{/if}>
+							<td class = "naziv">${preduzece.naziv}</td>
+							<td class = "pib">${preduzece.pib}</td>
+							<td class = "mesto">${preduzece.mesto}</td>
+							<td class = "adresa">${preduzece.adresa}</td>
+							<td class = "telefon">${preduzece.telefon}</td>
+							<td class = "maticniBroj">${preduzece.maticniBroj}</td>
+							<td class = "tekuciRacun">${preduzece.tekuciRacun}</td>
+							<td style = "visibility: hidden; max-width: 0px" class = "izbor_id">${preduzece.id}</td>
 						</tr>
 					#{/list}
 				</table>
 				
 				<div class="modal-footer">
-					<input id = "fakturaPickup" type = "button" value = "Izbor" class="btn btn-success"/>
+					<input id = "izborPickup" type = "button" value = "Izbor" class="btn btn-success"/>
+					<button type="button" class="btn btn-danger" onclick="cancel_preduzece_modal()">Otkaži</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+ <!-- Modal NextForm -->
+<div class="modal fade" id="nextFormModal" role="dialog">
+	<div class="modal-dialog">
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">Izaberite sledeću formu</div>
+
+			<div class="modal-body">
+				<table style="padding: 2em">
+					<tr class="header">
+						<th>Forma</th>
+					</tr>
+
+					#{list items:povezaneForme, as:'forma'}
+					<tr>
+						<td class = "naziv_forme">${forma}</td>
+					</tr>
+					#{/list}
+				</table>
+
+				<div class="modal-footer">
+					<input id="nextFormPickup" type="button" value="Izbor" class="btn btn-success"/>
 					<button type="button" class="btn btn-danger" onclick="cancel_modal()">Otkaži</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--Povratak na nadredjenu formu modal-->
+<div class="modal fade" id="pickupModal" role="dialog">
+	<div class="modal-dialog">
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">Izaberite nadređenu formu</div>
+
+			<div class="modal-body">
+				<table style="padding: 2em">
+					<tr class="header">
+						<th>Forma</th>
+					</tr>
+
+					#{list items:nadredjeneForme, as:'forma'}
+					<tr>
+						<td class = "naziv_forme">${forma}</td>
+					</tr>
+					#{/list}
+				</table>
+
+				<div class="modal-footer">
+					<input id="pickupPickup" type="button" value="Izbor" class="btn btn-success" />
+					<button type="button" class="btn btn-danger" onclick="cancel_pickupModal()">Otkaži</button>
 				</div>
 			</div>
 		</div>

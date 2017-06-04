@@ -36,7 +36,7 @@ public class StavkeCenovnika extends Controller {
 		List<KatalogRobeIUsluga> kataloziRobeIUsluga = KataloziRobeIUsluga.checkCache();
 		List<Cenovnik> cenovnici = Cenovnici.checkCache();
 		List<StavkaCenovnika> stavkeCenovnika = checkCache();
-		List<String> nadredjeneForme = getForeignKeysFields();
+		List<String> nadredjeneForme = getForeignKeysFieldsManyToOne();
 
 		render(kataloziRobeIUsluga, cenovnici, stavkeCenovnika, nadredjeneForme, mode);
 
@@ -58,7 +58,7 @@ public class StavkeCenovnika extends Controller {
 		List<KatalogRobeIUsluga> kataloziRobeIUsluga = KataloziRobeIUsluga.checkCache();
 		List<Cenovnik> cenovnici = Cenovnici.checkCache();
 		List<StavkaCenovnika> stavkeCenovnika = fillList();
-		List<String> nadredjeneForme = getForeignKeysFields();
+		List<String> nadredjeneForme = getForeignKeysFieldsManyToOne();
 
 		renderTemplate("StavkeCenovnika/show.html", kataloziRobeIUsluga, cenovnici, stavkeCenovnika, nadredjeneForme,
 				mode);
@@ -77,7 +77,7 @@ public class StavkeCenovnika extends Controller {
 		List<StavkaCenovnika> stavkeCenovnika = null;
 		List<Cenovnik> cenovnici = Cenovnici.checkCache();
 		List<KatalogRobeIUsluga> kataloziRobeIUsluga = KataloziRobeIUsluga.checkCache();
-		List<String> nadredjeneForme = getForeignKeysFields();
+		List<String> nadredjeneForme = getForeignKeysFieldsManyToOne();
 
 		if (!validation.hasErrors()) {
 			stavkeCenovnika = StavkaCenovnika.findAll();
@@ -140,7 +140,7 @@ public class StavkeCenovnika extends Controller {
 		List<StavkaCenovnika> stavkeCenovnika = null;
 		List<Cenovnik> cenovnici = Cenovnici.checkCache();
 		List<KatalogRobeIUsluga> kataloziRobeIUsluga = KataloziRobeIUsluga.checkCache();
-		List<String> nadredjeneForme = getForeignKeysFields();
+		List<String> nadredjeneForme = getForeignKeysFieldsManyToOne();
 
 		if (!validation.hasErrors()) {
 			stavkeCenovnika = StavkaCenovnika.findAll();
@@ -199,7 +199,7 @@ public class StavkeCenovnika extends Controller {
 
 		List<Cenovnik> cenovnici = Cenovnici.checkCache();
 		List<KatalogRobeIUsluga> kataloziRobeIUsluga = KataloziRobeIUsluga.checkCache();
-		List<String> nadredjeneForme = getForeignKeysFields();
+		List<String> nadredjeneForme = getForeignKeysFieldsManyToOne();
 
 		session.put("mode", "edit");
 		String mode = session.get("mode");
@@ -214,7 +214,7 @@ public class StavkeCenovnika extends Controller {
 		List<StavkaCenovnika> stavkeCenovnika = checkCache();
 		List<Cenovnik> cenovnici = Cenovnici.checkCache();
 		List<KatalogRobeIUsluga> kataloziRobeIUsluga = KataloziRobeIUsluga.checkCache();
-		List<String> nadredjeneForme = getForeignKeysFields();
+		List<String> nadredjeneForme = getForeignKeysFieldsManyToOne();
 
 		StavkaCenovnika stavkaCenovnika = StavkaCenovnika.findById(id);
 		Long idd = null;
@@ -249,7 +249,7 @@ public class StavkeCenovnika extends Controller {
 		List<Cenovnik> cenovnici = Cenovnici.checkCache();
 		List<KatalogRobeIUsluga> kataloziRobeIUsluga = KataloziRobeIUsluga.checkCache();
 		List<StavkaCenovnika> stavkeCenovnika = fillList();
-		List<String> nadredjeneForme = getForeignKeysFields();
+		List<String> nadredjeneForme = getForeignKeysFieldsManyToOne();
 
 		String mode = session.get("mode");
 
@@ -302,13 +302,13 @@ public class StavkeCenovnika extends Controller {
 	}
 
 	/**
-	 * Pomocna metoda koja vraca listu povezanih formi.
+	 * Pomocna metoda koja vraca listu nadredjenih formi.
 	 * 
 	 * @see <a href=
 	 *      "http://tutorials.jenkov.com/java-reflection/annotations.html"> Java
 	 *      Reflection - Annotations</a>
 	 */
-	public static List<String> getForeignKeysFields() {
+	public static List<String> getForeignKeysFieldsManyToOne() {
 		Class stavkaCenovnikaClass = StavkaCenovnika.class;
 		Field[] fields = stavkaCenovnikaClass.getFields();
 

@@ -5,6 +5,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import models.Faktura;
@@ -356,6 +357,29 @@ public class Fakture extends Controller {
 		for (int i = 0; i < fields.length; i++) {
 			Annotation annotation = fields[i].getAnnotation(OneToMany.class);
 			if (annotation instanceof OneToMany) {
+				povezaneForme.add(fields[i].getName());
+			}
+		}
+
+		return povezaneForme;
+	}
+
+	/**
+	 * Pomocna metoda koja vraca listu nadredjenih formi.
+	 * 
+	 * @see <a href=
+	 *      "http://tutorials.jenkov.com/java-reflection/annotations.html"> Java
+	 *      Reflection - Annotations</a>
+	 */
+	public static List<String> getForeignKeysFieldsManyToOne() {
+		Class faktureClass = Faktura.class;
+		Field[] fields = faktureClass.getFields();
+
+		List<String> povezaneForme = new ArrayList<String>();
+
+		for (int i = 0; i < fields.length; i++) {
+			Annotation annotation = fields[i].getAnnotation(ManyToOne.class);
+			if (annotation instanceof ManyToOne) {
 				povezaneForme.add(fields[i].getName());
 			}
 		}

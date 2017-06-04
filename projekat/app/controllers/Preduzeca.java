@@ -190,14 +190,27 @@ public class Preduzeca extends Controller {
 		/** TODO: Dodati prelazak na ostale forme. */
 		if (forma.equals("poslovneGodine")) {
 			List<Preduzece> preduzeca = checkCache();
+
 			List<PoslovnaGodina> poslovneGodine = findPoslovneGodine(id);
-			renderTemplate("PoslovneGodine/show.html", poslovneGodine, preduzeca);
+			List<String> nadredjeneForme = PoslovneGodine.getForeignKeysFieldsManyToOne();
+
+			renderTemplate("PoslovneGodine/show.html", poslovneGodine, preduzeca, nadredjeneForme);
 		} else if (forma.equals("grupe")) {
 
 		} else if (forma.equals("poslovniPartneri")) {
+			List<Preduzece> preduzeca = checkCache();
+			List<String> nadredjeneForme = Fakture.getForeignKeysFieldsManyToOne();
 
+			renderTemplate("PoslovniPartneri/show.html", preduzeca, nadredjeneForme);
 		} else if (forma.equals("fakture")) {
+			List<Preduzece> preduzeca = checkCache();
+			List<PoslovnaGodina> poslovneGodine = PoslovneGodine.checkCache();
+			List<PoslovniPartner> poslovniPartneri = PoslovniPartneri.checkCache();
 
+			List<Faktura> fakture = findFakture(id);
+			List<String> nadredjeneForme = Fakture.getForeignKeysFieldsManyToOne();
+
+			renderTemplate("Fakture/show.html", fakture, preduzeca, nadredjeneForme, poslovneGodine, poslovniPartneri);
 		}
 
 	}
@@ -282,8 +295,7 @@ public class Preduzeca extends Controller {
 
 		return povezaneForme;
 	}
-	
-	
+
 	public static List<PoslovniPartner> findPoslovniPartneri(Long idPreduzeca) {
 		List<PoslovniPartner> poslovniPartneriAll = PoslovniPartner.findAll();
 		List<PoslovniPartner> poslovniPartneri = new ArrayList<>();
@@ -300,17 +312,14 @@ public class Preduzeca extends Controller {
 	public static List<Faktura> findFakture(Long idPreduzeca) {
 		List<Faktura> faktureAll = Faktura.findAll();
 		List<Faktura> fakture = new ArrayList<>();
-		
-		for(Faktura f : faktureAll) {
-			if(f.preduzece.id == idPreduzeca) {
+
+		for (Faktura f : faktureAll) {
+			if (f.preduzece.id == idPreduzeca) {
 				fakture.add(f);
 			}
 		}
-		
-		
+
 		return fakture;
 	}
-	
-	
 
 }

@@ -1,11 +1,15 @@
 package controllers;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.ManyToOne;
 
 import models.Faktura;
 import models.KatalogRobeIUsluga;
-
+import models.StavkaCenovnika;
 import models.StavkaFakture;
 import models.StopaPDVa;
 import play.cache.Cache;
@@ -16,12 +20,11 @@ import play.mvc.With;
 @Check("administrator")
 public class StavkeFakture extends Controller {
 
-	
 	public static void show() {
 		validation.clear();
 		clearSession();
 
-		session.put("idKataloga", "null");  //ManytoOne
+		session.put("idKataloga", "null"); // ManytoOne
 		session.put("idFakture", "null");
 		session.put("idStopePDVa", "null");
 
@@ -37,7 +40,6 @@ public class StavkeFakture extends Controller {
 
 	}
 
-	
 	public static void changeMode(String mode) {
 		if (mode == null || mode.equals("")) {
 			mode = "edit";
@@ -48,7 +50,7 @@ public class StavkeFakture extends Controller {
 		List<Faktura> fakture = Fakture.checkCache();
 		List<StavkaFakture> stavkeFakture = fillList();
 		List<StopaPDVa> stopePDVa = StopePDVa.checkCache();
-		
+
 		renderTemplate("StavkeFakture/show.html", kataloziRobeIUsluga, stopePDVa, fakture, stavkeFakture, mode);
 
 	}
@@ -66,7 +68,7 @@ public class StavkeFakture extends Controller {
 		List<Faktura> fakture = Fakture.checkCache();
 		List<KatalogRobeIUsluga> kataloziRobeIUsluga = KataloziRobeIUsluga.checkCache();
 		List<StopaPDVa> stopePDVa = StopePDVa.checkCache();
-		
+
 		if (!validation.hasErrors()) {
 			stavkeFakture = StavkaFakture.findAll();
 
@@ -86,9 +88,9 @@ public class StavkeFakture extends Controller {
 			} else {
 				findKatalog = KatalogRobeIUsluga.findById(katalogRobeIUsluga);
 			}
-			
-			StopaPDVa findStopaPDVa= null;
-			if (stopaPDVa== null) {
+
+			StopaPDVa findStopaPDVa = null;
+			if (stopaPDVa == null) {
 				Long id = Long.parseLong(session.get("idStopePDVa"));
 				findStopaPDVa = StopaPDVa.findById(id);
 			} else {
@@ -110,7 +112,8 @@ public class StavkeFakture extends Controller {
 
 			validation.clear();
 
-			renderTemplate("StavkeFakture/show.html", stopePDVa, stavkeFakture, fakture, kataloziRobeIUsluga, idd, mode);
+			renderTemplate("StavkeFakture/show.html", stopePDVa, stavkeFakture, fakture, kataloziRobeIUsluga, idd,
+					mode);
 		} else {
 			validation.keep();
 
@@ -122,7 +125,7 @@ public class StavkeFakture extends Controller {
 			session.put("ukupnoOsnovica", null);
 			session.put("ukupnoPDV", null);
 			session.put("ukupnoZaPlacanje", null);
-			
+
 			renderTemplate("StavkeFakture/show.html", stavkeFakture, stopePDVa, fakture, kataloziRobeIUsluga, mode);
 		}
 
@@ -162,17 +165,14 @@ public class StavkeFakture extends Controller {
 				findKatalog = KatalogRobeIUsluga.findById(katalogRobeIUsluga);
 			}
 
-			
-			
-			StopaPDVa findStopaPDVa= null;
-			if (stopaPDVa== null) {
+			StopaPDVa findStopaPDVa = null;
+			if (stopaPDVa == null) {
 				Long id = Long.parseLong(session.get("idStopePDVa"));
 				findStopaPDVa = StopaPDVa.findById(id);
 			} else {
 				findStopaPDVa = StopaPDVa.findById(stopaPDVa);
 			}
-			
-			
+
 			stavkaFakture.faktura = findFaktura;
 			stavkaFakture.katalogRobeIUsluga = findKatalog;
 
@@ -185,7 +185,7 @@ public class StavkeFakture extends Controller {
 					tmp.rabat = stavkaFakture.rabat;
 					tmp.stopaPDVa = stavkaFakture.stopaPDVa;
 					tmp.ukupno = stavkaFakture.ukupno;
-			
+
 					tmp.save();
 					break;
 				}
@@ -209,7 +209,7 @@ public class StavkeFakture extends Controller {
 			session.put("ukupnoOsnovica", null);
 			session.put("ukupnoPDV", null);
 			session.put("ukupnoZaPlacanje", null);
-			
+
 		}
 
 		renderTemplate("StavkeFakture/show.html", stavkeFakture, stopePDVa, fakture, kataloziRobeIUsluga, mode);
@@ -221,7 +221,7 @@ public class StavkeFakture extends Controller {
 		List<Faktura> fakture = Fakture.checkCache();
 		List<KatalogRobeIUsluga> kataloziRobeIUsluga = KataloziRobeIUsluga.checkCache();
 		List<StopaPDVa> stopePDVa = StopePDVa.checkCache();
-		
+
 		session.put("mode", "edit");
 		String mode = session.get("mode");
 
@@ -231,11 +231,11 @@ public class StavkeFakture extends Controller {
 	public static void delete(Long id) {
 		String mode = session.get("mode");
 
-		List<StavkaFakture> stavkeFakture= checkCache();
+		List<StavkaFakture> stavkeFakture = checkCache();
 		List<Faktura> fakture = Fakture.checkCache();
 		List<KatalogRobeIUsluga> kataloziRobeIUsluga = KataloziRobeIUsluga.checkCache();
 		List<StopaPDVa> stopePDVa = StopePDVa.checkCache();
-		
+
 		StavkaFakture stavkaFakture = StavkaFakture.findById(id);
 		Long idd = null;
 
@@ -264,7 +264,7 @@ public class StavkeFakture extends Controller {
 		List<KatalogRobeIUsluga> kataloziRobeIUsluga = KataloziRobeIUsluga.checkCache();
 		List<StavkaFakture> stavkeFakture = fillList();
 		List<StopaPDVa> stopePDVa = StopePDVa.checkCache();
-		
+
 		String mode = session.get("mode");
 
 		renderTemplate("StavkeFakture/show.html", stavkeFakture, stopePDVa, fakture, kataloziRobeIUsluga, mode);
@@ -278,10 +278,9 @@ public class StavkeFakture extends Controller {
 		session.put("ukupnoOsnovica", null);
 		session.put("ukupnoPDV", null);
 		session.put("ukupnoZaPlacanje", null);
-		
+
 		return true;
 	}
-
 
 	public static List<StavkaFakture> checkCache() {
 		List<StavkaFakture> stavkeFakture = (List<StavkaFakture>) Cache.get("stavkeFakture");
@@ -293,7 +292,6 @@ public class StavkeFakture extends Controller {
 
 		return stavkeFakture;
 	}
-
 
 	public static List<StavkaFakture> fillList() {
 		List<StavkaFakture> stavkeFakture = null;
@@ -309,6 +307,29 @@ public class StavkeFakture extends Controller {
 		}
 
 		return stavkeFakture;
+	}
+
+	/**
+	 * Pomocna metoda koja vraca listu nadredjenih formi.
+	 * 
+	 * @see <a href=
+	 *      "http://tutorials.jenkov.com/java-reflection/annotations.html"> Java
+	 *      Reflection - Annotations</a>
+	 */
+	public static List<String> getForeignKeysFieldsManyToOne() {
+		Class stavkaFaktureClass = StavkaFakture.class;
+		Field[] fields = stavkaFaktureClass.getFields();
+
+		List<String> povezaneForme = new ArrayList<String>();
+
+		for (int i = 0; i < fields.length; i++) {
+			Annotation annotation = fields[i].getAnnotation(ManyToOne.class);
+			if (annotation instanceof ManyToOne) {
+				povezaneForme.add(fields[i].getName());
+			}
+		}
+
+		return povezaneForme;
 	}
 
 }

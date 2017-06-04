@@ -5,13 +5,17 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import models.Cenovnik;
+import models.Faktura;
 import models.KatalogRobeIUsluga;
 import models.Podgrupa;
+import models.PoslovnaGodina;
 import models.StavkaCenovnika;
 import models.StavkaFakture;
+import models.StopaPDVa;
 import play.cache.Cache;
 import play.mvc.Controller;
 import play.mvc.With;
@@ -40,8 +44,9 @@ public class KataloziRobeIUsluga extends Controller {
 		List<KatalogRobeIUsluga> kataloziRobeIUsluga = checkCache();
 
 		List<String> povezaneForme = getForeignKeysFields();
+		List<String> nadredjeneForme = getForeignKeysFieldsManyToOne();
 
-		render(kataloziRobeIUsluga, podgrupe, povezaneForme, mode);
+		render(kataloziRobeIUsluga, podgrupe, povezaneForme, nadredjeneForme, mode);
 	}
 
 	/**
@@ -60,8 +65,10 @@ public class KataloziRobeIUsluga extends Controller {
 		List<Podgrupa> podgrupe = Podgrupe.checkCache();
 		List<KatalogRobeIUsluga> kataloziRobeIUsluga = fillList();
 		List<String> povezaneForme = getForeignKeysFields();
+		List<String> nadredjeneForme = getForeignKeysFieldsManyToOne();
 
-		renderTemplate("KataloziRobeIUsluga/show.html", podgrupe, povezaneForme, kataloziRobeIUsluga, mode);
+		renderTemplate("KataloziRobeIUsluga/show.html", podgrupe, povezaneForme, kataloziRobeIUsluga, nadredjeneForme,
+				mode);
 	}
 
 	public static void create(KatalogRobeIUsluga katalogRobeIUsluga, Long podgrupa) {
@@ -73,6 +80,7 @@ public class KataloziRobeIUsluga extends Controller {
 		session.put("mode", "add");
 		String mode = session.get("mode");
 		List<String> povezaneForme = getForeignKeysFields();
+		List<String> nadredjeneForme = getForeignKeysFieldsManyToOne();
 
 		List<KatalogRobeIUsluga> kataloziRobeIUsluga = null;
 		List<Podgrupa> podgrupe = Podgrupe.checkCache();
@@ -102,7 +110,8 @@ public class KataloziRobeIUsluga extends Controller {
 
 			validation.clear();
 
-			renderTemplate("KataloziRobeIUsluga/show.html", kataloziRobeIUsluga, podgrupe, idd, povezaneForme, mode);
+			renderTemplate("KataloziRobeIUsluga/show.html", kataloziRobeIUsluga, podgrupe, idd, nadredjeneForme,
+					povezaneForme, mode);
 		} else {
 			validation.keep();
 
@@ -111,7 +120,8 @@ public class KataloziRobeIUsluga extends Controller {
 			session.put("nazivStavkeKataloga", katalogRobeIUsluga.nazivStavkeKataloga);
 			session.put("opisStavkeKataloga", katalogRobeIUsluga.opisStavkeKataloga);
 
-			renderTemplate("KataloziRobeIUsluga/show.html", kataloziRobeIUsluga, podgrupe, povezaneForme, mode);
+			renderTemplate("KataloziRobeIUsluga/show.html", kataloziRobeIUsluga, podgrupe, povezaneForme,
+					nadredjeneForme, mode);
 		}
 	}
 
@@ -124,6 +134,7 @@ public class KataloziRobeIUsluga extends Controller {
 		session.put("mode", "edit");
 		String mode = session.get("mode");
 		List<String> povezaneForme = getForeignKeysFields();
+		List<String> nadredjeneForme = getForeignKeysFieldsManyToOne();
 
 		List<KatalogRobeIUsluga> kataloziRobeIUsluga = null;
 		List<Podgrupa> podgrupe = Podgrupe.checkCache();
@@ -167,7 +178,8 @@ public class KataloziRobeIUsluga extends Controller {
 
 		}
 
-		renderTemplate("KataloziRobeIUsluga/show.html", kataloziRobeIUsluga, podgrupe, povezaneForme, mode);
+		renderTemplate("KataloziRobeIUsluga/show.html", kataloziRobeIUsluga, podgrupe, povezaneForme, nadredjeneForme,
+				mode);
 	}
 
 	public static void filter(KatalogRobeIUsluga katalogRobeIUsluga) {
@@ -183,18 +195,22 @@ public class KataloziRobeIUsluga extends Controller {
 		String mode = session.get("mode");
 
 		List<String> povezaneForme = getForeignKeysFields();
+		List<String> nadredjeneForme = getForeignKeysFieldsManyToOne();
 
-		renderTemplate("KataloziRobeIUsluga/show.html", kataloziRobeIUsluga, podgrupe, povezaneForme, mode);
+		renderTemplate("KataloziRobeIUsluga/show.html", kataloziRobeIUsluga, podgrupe, povezaneForme, nadredjeneForme,
+				mode);
 	}
 
 	public static void refresh() {
 		List<Podgrupa> podgrupe = Podgrupe.checkCache();
 		List<KatalogRobeIUsluga> kataloziRobeIUsluga = fillList();
 		List<String> povezaneForme = getForeignKeysFields();
+		List<String> nadredjeneForme = getForeignKeysFieldsManyToOne();
 
 		String mode = session.get("mode");
 
-		renderTemplate("KataloziRobeIUsluga/show.html", kataloziRobeIUsluga, podgrupe, povezaneForme, mode);
+		renderTemplate("KataloziRobeIUsluga/show.html", kataloziRobeIUsluga, podgrupe, povezaneForme, nadredjeneForme,
+				mode);
 
 	}
 
@@ -216,12 +232,21 @@ public class KataloziRobeIUsluga extends Controller {
 		if (forma.equals("stavkeCenovnika")) {
 			List<KatalogRobeIUsluga> kataloziRobeIUsluga = checkCache();
 			List<Cenovnik> cenovnici = Cenovnici.checkCache();
-			List<StavkaCenovnika> stavkeCenovnika = findStavkeCenovnika(id);
 
-			renderTemplate("StavkeCenovnika/show.html", kataloziRobeIUsluga, cenovnici, stavkeCenovnika);
+			List<StavkaCenovnika> stavkeCenovnika = findStavkeCenovnika(id);
+			List<String> nadredjeneForme = StavkeCenovnika.getForeignKeysFieldsManyToOne();
+
+			renderTemplate("StavkeCenovnika/show.html", kataloziRobeIUsluga, cenovnici, stavkeCenovnika,
+					nadredjeneForme);
 
 		} else if (forma.equals("stavkeFakture")) {
+			List<StopaPDVa> stopePDVa = StopePDVa.checkCache();
+			List<Faktura> fakture = Fakture.checkCache();
+			List<KatalogRobeIUsluga> kataloziRobeIUsluga = KataloziRobeIUsluga.checkCache();
 
+			List<String> nadredjeneForme = StavkeFakture.getForeignKeysFieldsManyToOne();
+
+			renderTemplate("StavkeFakture/show.html", stopePDVa, fakture, kataloziRobeIUsluga, nadredjeneForme);
 		}
 	}
 
@@ -231,6 +256,7 @@ public class KataloziRobeIUsluga extends Controller {
 		List<KatalogRobeIUsluga> kataloziRobeIUsluga = checkCache();
 		List<Podgrupa> podgrupe = Podgrupe.checkCache();
 		List<String> povezaneForme = getForeignKeysFields();
+		List<String> nadredjeneForme = getForeignKeysFieldsManyToOne();
 
 		KatalogRobeIUsluga katalogRobeIUsluga = KatalogRobeIUsluga.findById(id);
 		Long idd = null;
@@ -248,8 +274,22 @@ public class KataloziRobeIUsluga extends Controller {
 		kataloziRobeIUsluga.clear();
 		kataloziRobeIUsluga = fillList();
 
-		renderTemplate("KataloziRobeIUsluga/show.html", kataloziRobeIUsluga, podgrupe, idd, povezaneForme, mode);
+		renderTemplate("KataloziRobeIUsluga/show.html", kataloziRobeIUsluga, podgrupe, idd, povezaneForme,
+				nadredjeneForme, mode);
 
+	}
+
+	/**
+	 * Prelazak na nadredjenu formu
+	 * 
+	 * @param forma
+	 *            Izabrana forma na koju se prelazi
+	 */
+	public static void pickup(String forma) {
+		/** TODO: Dodati prelazak na nadredjene forme */
+		if (forma.equals("podgrupa")) {
+			// Podgrupe.show("edit");
+		}
 	}
 
 	/** Pomocna metoda za brisanje podataka iz sesije. */
@@ -299,6 +339,29 @@ public class KataloziRobeIUsluga extends Controller {
 	}
 
 	/**
+	 * Pomocna metoda koja vraca listu nadredjenih formi.
+	 * 
+	 * @see <a href=
+	 *      "http://tutorials.jenkov.com/java-reflection/annotations.html"> Java
+	 *      Reflection - Annotations</a>
+	 */
+	private static List<String> getForeignKeysFieldsManyToOne() {
+		Class katalogClass = KatalogRobeIUsluga.class;
+		Field[] fields = katalogClass.getFields();
+
+		List<String> povezaneForme = new ArrayList<String>();
+
+		for (int i = 0; i < fields.length; i++) {
+			Annotation annotation = fields[i].getAnnotation(ManyToOne.class);
+			if (annotation instanceof ManyToOne) {
+				povezaneForme.add(fields[i].getName());
+			}
+		}
+
+		return povezaneForme;
+	}
+
+	/**
 	 * Pomocna metoda koja popunjava listu kataloga roba i usluga. Vrsi se
 	 * provera da li se radi nextForm mehanizam ili normalno ucitavanje
 	 * stranice. Ukoliko se radi nextForm, potrebno je vratiti samo one kataloge
@@ -338,7 +401,7 @@ public class KataloziRobeIUsluga extends Controller {
 
 	public static List<StavkaFakture> findStavkeFakture(Long idFakture) {
 		List<StavkaFakture> stavkeFaktureAll = StavkaFakture.findAll();
-		List<StavkaFakture> stavkeFakture= new ArrayList<>();
+		List<StavkaFakture> stavkeFakture = new ArrayList<>();
 
 		for (StavkaFakture sc : stavkeFaktureAll) {
 			if (sc.faktura.id == idFakture) {

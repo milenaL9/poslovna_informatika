@@ -168,8 +168,10 @@ public class Cenovnici extends Controller {
 
 			List<StavkaCenovnika> stavkeCenovnika = findStavkeCenovnika(id);
 			List<KatalogRobeIUsluga> kataloziRobeIUsluga = KataloziRobeIUsluga.checkCache();
+			List<String> nadredjeneForme = StavkeCenovnika.getForeignKeysFieldsManyToOne();
 
-			renderTemplate("StavkeCenovnika/show.html", stavkeCenovnika, kataloziRobeIUsluga, cenovnici);
+			renderTemplate("StavkeCenovnika/show.html", stavkeCenovnika, kataloziRobeIUsluga, nadredjeneForme,
+					cenovnici);
 		}
 	}
 
