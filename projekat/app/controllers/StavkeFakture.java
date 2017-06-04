@@ -107,6 +107,16 @@ public class StavkeFakture extends Controller {
 			stavkaFakture.katalogRobeIUsluga = findKatalog;
 			stavkaFakture.stopaPDVa = findStopaPDVa;
 
+			System.out.println("kolicina: " + stavkaFakture.kolicina);
+			System.out.println("cena: " + stavkaFakture.cena);
+			System.out.println("rabat: " + stavkaFakture.rabat);
+			System.out.println("osnovica za PDV: " + stavkaFakture.osnovicaZaPDV);
+			System.out.println("stopaPDVa: " + stavkaFakture.stopaPDVa);
+			System.out.println("iznosPDVa: " + stavkaFakture.iznosPDVa);
+			System.out.println("ukupno:" + stavkaFakture.ukupno);
+			System.out.println("faktura: " + stavkaFakture.faktura);
+			System.out.println("katalogRobeIUsluga: " + stavkaFakture.katalogRobeIUsluga);
+
 			stavkaFakture.save();
 			stavkeFakture.add(stavkaFakture);
 			Cache.set("stavkaFakture", stavkaFakture);
