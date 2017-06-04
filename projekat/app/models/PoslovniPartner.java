@@ -24,58 +24,49 @@ import play.db.jpa.Model;
  * 
  * */
 
-
 @Entity
 public class PoslovniPartner extends Model {
-	
+
 	@Required
 	@MinSize(2)
 	@MaxSize(40)
-	@Column(columnDefinition="varchar(40)")
+	@Column(columnDefinition = "varchar(40)")
 	public String naziv;
-	
-	
+
 	@MinSize(2)
 	@MaxSize(40)
-	@Column(columnDefinition="varchar(40)")
+	@Column(columnDefinition = "varchar(40)")
 	public String mesto;
-	
-	
+
 	@Required
 	@MinSize(2)
 	@MaxSize(40)
-	@Column(columnDefinition="varchar(40)")
+	@Column(columnDefinition = "varchar(40)")
 	public String adresa;
-	
-	@Required
-	@MinSize(1)
-	@MaxSize(2)
-	@Column(columnDefinition="varchar(2)")
+
+	@Column(columnDefinition = "varchar(2)")
 	public String vrsta;
-	
+
 	public String telefon;
-	
+
 	@Required
 	@MinSize(8)
 	@MaxSize(8)
 	public int pib;
-	
+
 	@Required
-	@Column(columnDefinition="char(18)")
+	@Column(columnDefinition = "char(18)")
 	public String tekuciRacun;
 
-	
-//	@OneToMany(mappedBy = "poslovniPartner")
-//	public List<Narudzba> narudzbe;
-	
-	
+	// @OneToMany(mappedBy = "poslovniPartner")
+	// public List<Narudzba> narudzbe;
+
 	@OneToMany(mappedBy = "poslovniPartner")
 	public List<Faktura> fakture;
-	
-	
+
 	@ManyToOne
 	public Preduzece preduzece;
-	
+
 	public PoslovniPartner(String naziv, String mesto, String adresa, String vrsta, String telefon, int pib,
 			String tekuciRacun) {
 		super();
@@ -87,13 +78,5 @@ public class PoslovniPartner extends Model {
 		this.pib = pib;
 		this.tekuciRacun = tekuciRacun;
 	}
-	
-	
-	
-	
-
-	
-	
-	
 
 }
