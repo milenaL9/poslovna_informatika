@@ -5,10 +5,10 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import org.apache.ivy.plugins.resolver.util.FileURLLister;
-
 
 import models.Faktura;
 import models.KatalogRobeIUsluga;
@@ -40,7 +40,7 @@ public class PoslovniPartneri extends Controller {
 		session.put("idPreduzeca", "null"); // ManyToOne
 		session.put("mode", "edit");
 		String mode = session.get("mode");
-		
+
 		if (mode == null || mode.equals("")) {
 			mode = "edit";
 		}
@@ -50,8 +50,10 @@ public class PoslovniPartneri extends Controller {
 		List<PoslovniPartner> poslovniPartneri = checkCache();
 		List<String> povezaneForme = getForeignKeysFields();
 		List<Preduzece> preduzeca = Preduzeca.checkCache();
-		
-		render(poslovniPartneri, povezaneForme, mode, preduzeca);
+
+		List<String> nadredjeneForme = getForeignKeysFieldsManyToOne();
+
+		render(poslovniPartneri, povezaneForme, mode, preduzeca, nadredjeneForme);
 	}
 
 	public static void changeMode(String mode) {
@@ -64,8 +66,10 @@ public class PoslovniPartneri extends Controller {
 		List<Preduzece> preduzeca = Preduzeca.checkCache();
 		List<PoslovniPartner> poslovniPartneri = fillList();
 		List<String> povezaneForme = getForeignKeysFields();
-		
-		renderTemplate("PoslovniPartneri/show.html", preduzeca, povezaneForme, poslovniPartneri, mode);
+
+		List<String> nadredjeneForme = getForeignKeysFieldsManyToOne();
+
+		renderTemplate("PoslovniPartneri/show.html", preduzeca, povezaneForme, poslovniPartneri, nadredjeneForme, mode);
 	}
 
 	public static List<String> getForeignKeysFields() {
@@ -87,7 +91,7 @@ public class PoslovniPartneri extends Controller {
 	public static List<PoslovniPartner> checkCache() {
 		List<PoslovniPartner> poslovniPartneri = (List<PoslovniPartner>) Cache.get("poslovniPartneri");
 
-		if ((poslovniPartneri == null) || (poslovniPartneri.size() == 0) ) {
+		if ((poslovniPartneri == null) || (poslovniPartneri.size() == 0)) {
 			poslovniPartneri = PoslovniPartner.findAll();
 			Cache.set("poslovniPartneri", poslovniPartneri);
 		}
@@ -106,6 +110,8 @@ public class PoslovniPartneri extends Controller {
 		List<String> povezaneForme = getForeignKeysFields();
 
 		List<Preduzece> preduzeca = Preduzeca.checkCache();
+
+		List<String> nadredjeneForme = getForeignKeysFieldsManyToOne();
 
 		List<PoslovniPartner> poslovniPartneri = null;
 		if (!validation.hasErrors()) {
@@ -157,7 +163,7 @@ public class PoslovniPartneri extends Controller {
 
 		}
 
-		renderTemplate("poslovniPartneri/show.html", poslovniPartneri, povezaneForme, preduzeca, mode);
+		renderTemplate("poslovniPartneri/show.html", poslovniPartneri, povezaneForme, nadredjeneForme, preduzeca, mode);
 	}
 
 	public static void create(PoslovniPartner poslovniPartner, Long preduzece) {
@@ -168,6 +174,8 @@ public class PoslovniPartneri extends Controller {
 		session.put("mode", "add");
 		String mode = session.get("mode");
 		List<String> povezaneForme = getForeignKeysFields();
+
+		List<String> nadredjeneForme = getForeignKeysFieldsManyToOne();
 
 		List<PoslovniPartner> poslovniPartneri = null;
 		List<Preduzece> preduzeca = Preduzeca.checkCache();
@@ -198,7 +206,8 @@ public class PoslovniPartneri extends Controller {
 			validation.clear();
 			clearSession();
 
-			renderTemplate("poslovniPartneri/show.html", poslovniPartneri, povezaneForme, preduzeca, idd, mode);
+			renderTemplate("poslovniPartneri/show.html", poslovniPartneri, povezaneForme, nadredjeneForme, preduzeca,
+					idd, mode);
 		} else {
 			validation.keep();
 
@@ -213,7 +222,8 @@ public class PoslovniPartneri extends Controller {
 			session.put("telefon", poslovniPartner.telefon);
 			session.put("vrsta", poslovniPartner.vrsta);
 
-			renderTemplate("poslovniPartneri/show.html", poslovniPartneri, povezaneForme, preduzeca, mode);
+			renderTemplate("poslovniPartneri/show.html", poslovniPartneri, povezaneForme, nadredjeneForme, preduzeca,
+					mode);
 		}
 	}
 
@@ -227,8 +237,9 @@ public class PoslovniPartneri extends Controller {
 
 		List<Preduzece> preduzeca = Preduzeca.checkCache();
 		List<String> povezaneForme = getForeignKeysFields();
+		List<String> nadredjeneForme = getForeignKeysFieldsManyToOne();
 
-		renderTemplate("poslovniPartneri/show.html", poslovniPartneri, preduzeca, povezaneForme, mode);
+		renderTemplate("poslovniPartneri/show.html", poslovniPartneri, preduzeca, povezaneForme, nadredjeneForme, mode);
 	}
 
 	public static boolean clearSession() {
@@ -270,7 +281,9 @@ public class PoslovniPartneri extends Controller {
 			List<Preduzece> preduzeca = Preduzeca.checkCache();
 			List<PoslovnaGodina> poslovneGodine = PoslovneGodine.checkCache();
 
-			renderTemplate("Fakture/show.html", poslovniPartneri, fakture, preduzeca, poslovneGodine);
+			List<String> nadredjeneForme = Fakture.getForeignKeysFieldsManyToOne();
+
+			renderTemplate("Fakture/show.html", poslovniPartneri, fakture, preduzeca, poslovneGodine, nadredjeneForme);
 		}
 
 		// DODATI ZA NARUDZBU
@@ -296,6 +309,8 @@ public class PoslovniPartneri extends Controller {
 		List<String> povezaneForme = getForeignKeysFields();
 		List<Preduzece> preduzeca = Preduzeca.checkCache();
 
+		List<String> nadredjeneForme = getForeignKeysFieldsManyToOne();
+
 		PoslovniPartner poslovniPartner = PoslovniPartner.findById(id);
 		Long idd = null;
 
@@ -310,7 +325,8 @@ public class PoslovniPartneri extends Controller {
 		poslovniPartneri = PoslovniPartner.findAll();
 		Cache.set("poslovniPartneri", poslovniPartneri);
 
-		renderTemplate("poslovniPartneri/show.html", poslovniPartneri, preduzeca, idd, povezaneForme, mode);
+		renderTemplate("poslovniPartneri/show.html", poslovniPartneri, preduzeca, idd, povezaneForme, nadredjeneForme,
+				mode);
 	}
 
 	public static void refresh() {
@@ -319,7 +335,44 @@ public class PoslovniPartneri extends Controller {
 		List<PoslovniPartner> poslovniPartneri = checkCache();
 		List<String> povezaneForme = getForeignKeysFields();
 		List<Preduzece> preduzeca = Preduzeca.checkCache();
-		
-		renderTemplate("poslovniPartneri/show.html", preduzeca, poslovniPartneri, povezaneForme, mode);
+
+		List<String> nadredjeneForme = getForeignKeysFieldsManyToOne();
+
+		renderTemplate("poslovniPartneri/show.html", preduzeca, poslovniPartneri, povezaneForme, nadredjeneForme, mode);
+	}
+
+	/**
+	 * Prelazak na nadredjenu formu
+	 * 
+	 * @param forma
+	 *            Izabrana forma na koju se prelazi
+	 */
+	public static void pickup(String forma) {
+		if (forma.equals("preduzece")) {
+			Preduzeca.show("edit");
+		}
+	}
+
+	/**
+	 * Pomocna metoda koja vraca listu nadredjenih formi.
+	 * 
+	 * @see <a href=
+	 *      "http://tutorials.jenkov.com/java-reflection/annotations.html"> Java
+	 *      Reflection - Annotations</a>
+	 */
+	public static List<String> getForeignKeysFieldsManyToOne() {
+		Class klasa = PoslovniPartner.class;
+		Field[] fields = klasa.getFields();
+
+		List<String> povezaneForme = new ArrayList<String>();
+
+		for (int i = 0; i < fields.length; i++) {
+			Annotation annotation = fields[i].getAnnotation(ManyToOne.class);
+			if (annotation instanceof ManyToOne) {
+				povezaneForme.add(fields[i].getName());
+			}
+		}
+
+		return povezaneForme;
 	}
 }

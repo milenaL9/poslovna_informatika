@@ -36,7 +36,9 @@ public class StavkeFakture extends Controller {
 		List<StavkaFakture> stavkeFakture = checkCache();
 		List<StopaPDVa> stopePDVa = StopePDVa.checkCache();
 
-		render(kataloziRobeIUsluga, fakture, stopePDVa, stavkeFakture, mode);
+		List<String> nadredjeneForme = getForeignKeysFieldsManyToOne();
+
+		render(kataloziRobeIUsluga, fakture, stopePDVa, stavkeFakture, mode, nadredjeneForme);
 
 	}
 
@@ -51,7 +53,10 @@ public class StavkeFakture extends Controller {
 		List<StavkaFakture> stavkeFakture = fillList();
 		List<StopaPDVa> stopePDVa = StopePDVa.checkCache();
 
-		renderTemplate("StavkeFakture/show.html", kataloziRobeIUsluga, stopePDVa, fakture, stavkeFakture, mode);
+		List<String> nadredjeneForme = getForeignKeysFieldsManyToOne();
+
+		renderTemplate("StavkeFakture/show.html", kataloziRobeIUsluga, stopePDVa, fakture, nadredjeneForme,
+				stavkeFakture, mode);
 
 	}
 
@@ -68,6 +73,7 @@ public class StavkeFakture extends Controller {
 		List<Faktura> fakture = Fakture.checkCache();
 		List<KatalogRobeIUsluga> kataloziRobeIUsluga = KataloziRobeIUsluga.checkCache();
 		List<StopaPDVa> stopePDVa = StopePDVa.checkCache();
+		List<String> nadredjeneForme = getForeignKeysFieldsManyToOne();
 
 		if (!validation.hasErrors()) {
 			stavkeFakture = StavkaFakture.findAll();
@@ -112,8 +118,8 @@ public class StavkeFakture extends Controller {
 
 			validation.clear();
 
-			renderTemplate("StavkeFakture/show.html", stopePDVa, stavkeFakture, fakture, kataloziRobeIUsluga, idd,
-					mode);
+			renderTemplate("StavkeFakture/show.html", stopePDVa, stavkeFakture, nadredjeneForme, fakture,
+					kataloziRobeIUsluga, idd, mode);
 		} else {
 			validation.keep();
 
@@ -126,7 +132,8 @@ public class StavkeFakture extends Controller {
 			session.put("ukupnoPDV", null);
 			session.put("ukupnoZaPlacanje", null);
 
-			renderTemplate("StavkeFakture/show.html", stavkeFakture, stopePDVa, fakture, kataloziRobeIUsluga, mode);
+			renderTemplate("StavkeFakture/show.html", stavkeFakture, stopePDVa, fakture, nadredjeneForme,
+					kataloziRobeIUsluga, mode);
 		}
 
 	}
@@ -144,6 +151,8 @@ public class StavkeFakture extends Controller {
 		List<Faktura> fakture = Fakture.checkCache();
 		List<KatalogRobeIUsluga> kataloziRobeIUsluga = KataloziRobeIUsluga.checkCache();
 		List<StopaPDVa> stopePDVa = StopePDVa.checkCache();
+
+		List<String> nadredjeneForme = getForeignKeysFieldsManyToOne();
 
 		if (!validation.hasErrors()) {
 			stavkeFakture = StavkaFakture.findAll();
@@ -212,7 +221,8 @@ public class StavkeFakture extends Controller {
 
 		}
 
-		renderTemplate("StavkeFakture/show.html", stavkeFakture, stopePDVa, fakture, kataloziRobeIUsluga, mode);
+		renderTemplate("StavkeFakture/show.html", stavkeFakture, stopePDVa, fakture, nadredjeneForme,
+				kataloziRobeIUsluga, mode);
 	}
 
 	public static void filter(StavkaFakture stavkaFakture) {
@@ -222,10 +232,13 @@ public class StavkeFakture extends Controller {
 		List<KatalogRobeIUsluga> kataloziRobeIUsluga = KataloziRobeIUsluga.checkCache();
 		List<StopaPDVa> stopePDVa = StopePDVa.checkCache();
 
+		List<String> nadredjeneForme = getForeignKeysFieldsManyToOne();
+
 		session.put("mode", "edit");
 		String mode = session.get("mode");
 
-		renderTemplate("StavkeFakture/show.html", stopePDVa, stavkeFakture, fakture, kataloziRobeIUsluga, mode);
+		renderTemplate("StavkeFakture/show.html", stopePDVa, stavkeFakture, fakture, nadredjeneForme,
+				kataloziRobeIUsluga, mode);
 	}
 
 	public static void delete(Long id) {
@@ -235,6 +248,8 @@ public class StavkeFakture extends Controller {
 		List<Faktura> fakture = Fakture.checkCache();
 		List<KatalogRobeIUsluga> kataloziRobeIUsluga = KataloziRobeIUsluga.checkCache();
 		List<StopaPDVa> stopePDVa = StopePDVa.checkCache();
+
+		List<String> nadredjeneForme = getForeignKeysFieldsManyToOne();
 
 		StavkaFakture stavkaFakture = StavkaFakture.findById(id);
 		Long idd = null;
@@ -252,7 +267,8 @@ public class StavkeFakture extends Controller {
 		stavkeFakture.clear();
 		stavkeFakture = fillList();
 
-		renderTemplate("StavkeFakture/show.html", stavkeFakture, stopePDVa, fakture, kataloziRobeIUsluga, idd, mode);
+		renderTemplate("StavkeFakture/show.html", stavkeFakture, stopePDVa, fakture, nadredjeneForme,
+				kataloziRobeIUsluga, idd, mode);
 	}
 
 	public static void nextForm() {
@@ -265,9 +281,21 @@ public class StavkeFakture extends Controller {
 		List<StavkaFakture> stavkeFakture = fillList();
 		List<StopaPDVa> stopePDVa = StopePDVa.checkCache();
 
+		List<String> nadredjeneForme = getForeignKeysFieldsManyToOne();
+
 		String mode = session.get("mode");
 
-		renderTemplate("StavkeFakture/show.html", stavkeFakture, stopePDVa, fakture, kataloziRobeIUsluga, mode);
+		renderTemplate("StavkeFakture/show.html", stavkeFakture, stopePDVa, fakture, nadredjeneForme,
+				kataloziRobeIUsluga, mode);
+	}
+
+	/** Prelazak na nadredjenu formu */
+	public static void pickup(String forma) {
+		if (forma.equals("faktura")) {
+			Fakture.show();
+		} else if (forma.equals("katalogRobeIUsluga")) {
+			KataloziRobeIUsluga.show();
+		}
 	}
 
 	public static boolean clearSession() {

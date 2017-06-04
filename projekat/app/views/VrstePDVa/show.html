@@ -1,22 +1,7 @@
 #{extends 'standardForm.html' /}
-#{set title:'VrstePDVa' /}
+#{set title:'Vrste PDVa' /}
 
 <script>
-
-
-	$(document).ready(function(){
-		$("#nextFormPickup").click(function(){
-			nazivForme = $(".highlighted").find(".naziv_forme").html();
-			
-			var idVrstePDVa = sessionStorage.getItem("selektovaniID");
-			
-			$('#nextFormModal').modal('toggle');
-			
-			$(location).attr('href', '/VrstePDVa/nextForm?id='+idVrstePDVa+'&forma='+nazivForme);
-		});
-	});
-
-
 	function sync(item){
 		if ("${session.mode}" == "edit"){
 			nazivVrstePDva = item.find(".nazivVrstePDva").html()
@@ -28,9 +13,9 @@
 
 	function remove(id){  <!-- ne znam koji je uanpred selektovani red , ovde se vrsi redirekcija -->
 		if(id == null){
-			alert("OznaÃ„ï¿½ite red u tabeli!");
+			alert("Označite red u tabeli!");
 		}else{
-			var r  = confirm("Da li Ã…Â¾elite da obriÃ…Â¡ete slog?");
+			var r  = confirm("Da li želite da obrišete slog?");
 			if(r==true) {
 	    		$(location).attr('href', '/VrstePDVa/delete?id='+id);
 			}else{
@@ -38,19 +23,36 @@
 			}
 		}
 	}
+	
+	function refresh_page(){
+		$(location).attr('href', '/VrstaPDVa/refresh');
+	}
 
+	// nextForm
 	function nextform_func(id){
 		if(id==null){
-			alert("OznaÄ�ite red u tabeli!");
+			alert("Označite red u tabeli!");
 		}else{
 			sessionStorage.setItem("selektovaniID",id);
 			$('#nextFormModal').modal('show');
 			//$(location).attr('href', '/VrstePDVa/nextForm?id='+id);
 		}	
 	}
-
-	function refresh_page(){
-		$(location).attr('href', '/VrstaPDVa/refresh');
+	
+	$(document).ready(function(){
+		$("#nextFormPickup").click(function(){
+			nazivForme = $(".highlighted").find(".naziv_forme").html();
+			
+			var idVrstePDVa = sessionStorage.getItem("selektovaniID");
+			
+			$('#nextFormModal').modal('toggle');
+			
+			$(location).attr('href', '/VrstePDVa/nextForm?id='+idVrstePDVa+'&forma='+nazivForme);
+		});
+	});
+	
+	function cancel_nextFormModal(){
+		$('#nextFormModal').modal('toggle');
 	}
 	
 </script>
@@ -68,10 +70,6 @@
 			
 			<a href="@{VrstePDVa.show("edit")}" id = "refresh">
 				<img src="@{'/public/images/refresh.gif'}"/>
-			</a>
-			
-			<a href="#" id = "pickup">
-				<img src="@{'/public/images/zoom-pickup.gif'}"/>
 			</a>
 			
 			<a href="#" id = "help">
@@ -151,8 +149,10 @@
 					</p>
 					
 					<div id = "formActions">
-						<input type = "submit" value = "Potvrda" style="margin-left:6em"/>
-						<a href = "@{VrstePDVa.show("edit")}" style="margin-left:1em">Rollback</a>
+						<input type = "submit" value = "Potvrda" style="margin-left:6em" class="btn btn-success"/>
+						<a href = "@{VrstePDVa.show("edit")}" style="margin-left:1em">
+							<button type="button" class="btn btn-danger">Otkaži</button>
+						</a>
 					</div>				
 				</form>
 			</div>
@@ -160,18 +160,19 @@
 	</div>
 </div>
 
-<p class="status_line">Trenutni reÃ…Â¾im: ${session.mode}</p>
+<p class="status_line">Trenutni režim: ${session.mode}</p>
 
 <button onclick="topFunction()" id="myBtn" title="Idi na vrh">
 	<img src="@{'/public/images/back_top.png'}" alt=""
 		class="rounded-circle" width="40" height="40">
 </button>
 
+<!--NextForm-->
 <div class="modal fade" id="nextFormModal" role="dialog">
 	<div class="modal-dialog">
 		<!-- Modal content-->
 		<div class="modal-content">
-			<div class="modal-header">Izaberite sledeÄ‡u formu</div>
+			<div class="modal-header">Izaberite sledeću formu</div>
 
 			<div class="modal-body">
 				<table style="padding: 2em">
@@ -187,7 +188,8 @@
 				</table>
 
 				<div class="modal-footer">
-					<input id="nextFormPickup" type="button" value="izbor" />
+					<input id="nextFormPickup" type="button" value="Izbor" class="btn btn-success"/>
+					<button type="button" class="btn btn-danger" onclick="cancel_nextFormModal()">Otkaži</button>
 				</div>
 			</div>
 		</div>

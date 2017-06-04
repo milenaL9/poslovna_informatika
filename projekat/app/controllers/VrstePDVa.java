@@ -120,13 +120,12 @@ public class VrstePDVa extends Controller {
 	}
 
 	public static void delete(Long id) {
-		
+
 		String mode = session.get("mode");
-		
+
 		List<VrstaPDVa> vrstePDVa = checkCache();
 		List<String> povezaneForme = getForeignKeysFields();
 
-		
 		VrstaPDVa vrstaPDVa = VrstaPDVa.findById(id);
 		Long idd = null;
 
@@ -145,33 +144,35 @@ public class VrstePDVa extends Controller {
 
 	}
 
-	
 	// imam listu stopa i listu grupa
-	 public static void nextForm(Long id, String forma) {
-		 session.put("idVrstePDVa", id);
-		 session.put("idPreduzeca", "null");   // jer ima ManyToOne u Grupa
-		 clearSession();
-		 
-		 if(forma.equals("stopePDVa")) {
-			 List<VrstaPDVa> vrstePDVa = checkCache();	
-			 List<StopaPDVa> stopePDVa = findStopePDVa(id);
-			 renderTemplate("StopePDVa/show.html", stopePDVa, vrstePDVa);
-		 
-		 }
-		 
-		 if(forma.equals("grupe")) {
-			 List<VrstaPDVa> vrstePDVa = checkCache();	
-			 List<Grupa> grupe = findGrupe(id);
-			 List<Preduzece> preduzeca = Preduzeca.checkCache();
+	public static void nextForm(Long id, String forma) {
+		session.put("idVrstePDVa", id);
+		session.put("idPreduzeca", "null"); // jer ima ManyToOne u Grupa
+		clearSession();
 
-			 renderTemplate("Grupe/show.html", grupe, vrstePDVa, preduzeca);
-		 
-		 }
-		 
-	 }
+		if (forma.equals("stopePDVa")) {
+			List<VrstaPDVa> vrstePDVa = checkCache();
+			List<StopaPDVa> stopePDVa = findStopePDVa(id);
+
+			List<String> nadredjeneForme = StopePDVa.getForeignKeysFieldsManyToOne();
+
+			renderTemplate("StopePDVa/show.html", stopePDVa, vrstePDVa, nadredjeneForme);
+
+		}
+
+		if (forma.equals("grupe")) {
+			List<VrstaPDVa> vrstePDVa = checkCache();
+			List<Grupa> grupe = findGrupe(id);
+			List<Preduzece> preduzeca = Preduzeca.checkCache();
+
+			renderTemplate("Grupe/show.html", grupe, vrstePDVa, preduzeca);
+
+		}
+
+	}
 
 	public static void refresh() {
-		
+
 		String mode = session.get("mode");
 		List<VrstaPDVa> vrstePDVa = checkCache();
 		List<String> povezaneForme = getForeignKeysFields();
@@ -200,7 +201,6 @@ public class VrstePDVa extends Controller {
 		return true;
 	}
 
-	
 	public static List<StopaPDVa> findStopePDVa(Long idVrstePDVa) {
 		List<StopaPDVa> stopePDVaAll = StopaPDVa.findAll();
 		List<StopaPDVa> stopePDVa = new ArrayList<>();
@@ -213,15 +213,13 @@ public class VrstePDVa extends Controller {
 
 		return stopePDVa;
 	}
-	
-	
-	
+
 	public static List<Grupa> findGrupe(Long idVrstePDVa) {
 		List<Grupa> grupeAll = Grupa.findAll();
 		List<Grupa> grupe = new ArrayList<>();
-		
-		for(Grupa gr : grupeAll) {
-			if(gr.vrstaPDVa.id == idVrstePDVa) {
+
+		for (Grupa gr : grupeAll) {
+			if (gr.vrstaPDVa.id == idVrstePDVa) {
 				grupe.add(gr);
 			}
 		}

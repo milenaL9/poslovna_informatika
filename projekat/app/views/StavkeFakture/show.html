@@ -112,9 +112,9 @@
 
 	function remove(id){  <!-- ne znam koji je uanpred selektovani red , ovde se vrsi redirekcija -->
 		if(id == null){
-			alert("OznaÄ�ite red u tabeli!");
+			alert("Označite red u tabeli!");
 		}else{
-			var r  = confirm("Da li Å¾elite da obriÅ¡te slog?");
+			var r  = confirm("Da li želite da obrište slog?");
 			if(r == true) {
 		    	$(location).attr('href', '/StavkeFakture/delete?id='+id);
 			}
@@ -128,6 +128,7 @@
 		$(location).attr('href', '/StavkeFakture/refresh');
 	}
 	
+	// modal Katalog robe i usluga
 	$(document).ready(function(){
 		$("#izborPickup").click(function(){
 			id = $(".highlighted").find(".izbor_id").html();
@@ -136,6 +137,11 @@
 		});
 	});
 	
+	function cancel_katalogModal(){
+		$('#modalDialog').modal('toggle');
+	}
+	
+	// modal Faktura
 	$(document).ready(function(){
 		$("#izborPickupFaktura").click(function(){
 			id = $(".highlighted").find(".izbor_id").html();
@@ -144,13 +150,39 @@
 		});
 	});
 	
+	function cancel_fakturaModal(){
+		$('#modalDialogFaktura').modal('toggle');
+	}
 	
 	
+	// modal StopaPDVa
 	$(document).ready(function(){
 		$("#izborPickupStopaPDVa").click(function(){
 			id = $(".highlighted").find(".izbor_id").html();
 			$("select").val(id);
 			$('#modalDialogStopaPDVa').modal('toggle');
+		});
+	});
+	
+	function cancel_stopaPDVaModal(){
+		$('#modalDialogStopaPDVa').modal('toggle');
+	}
+	
+	// povratak na nadredjenu formu
+	function pickup(){
+		$('#pickupModal').modal('show');
+	}
+	
+	function cancel_pickupModal(){
+		$('#pickupModal').modal('toggle');
+	}
+	
+	$(document).ready(function(){
+		$("#pickupPickup").click(function(){
+			nazivForme = $(".highlighted").find(".naziv_forme").html();
+			$('#pickupModal').modal('toggle');
+			
+			$(location).attr('href', '/StavkeFakture/pickup?forma='+nazivForme);
 		});
 	});
 	
@@ -171,7 +203,7 @@
 				<img src="@{'/public/images/refresh.gif'}" />
 			</a> 
 			
-			<a href="#" id="pickup"> 
+			<a href="#" onclick="pickup()"> 
 				<img src="@{'/public/images/zoom-pickup.gif'}" />
 			</a> 
 			
@@ -202,10 +234,6 @@
 			<a href="#" id="remove"> 
 				<img src="@{'/public/images/remove.gif'}" />
 			</a> 
-			
-			<a href="#" id="nextform"> 
-				<img src="@{'/public/images/nextform.gif'}" />
-			</a>
 		</div>
 
 		<div class = "container-fluid">
@@ -370,8 +398,10 @@
 						</p>
 						
 						<div id = "formActions">
-							<input type = "submit" value = "Potvrda" style="margin-left:6em"/>
-							<a href = "@{StavkeFakture.changeMode("edit")}" style="margin-left:1em">Rollback</a>
+							<input type = "submit" value = "Potvrda" style="margin-left:6em" class="btn btn-success"/>
+							<a href = "@{StavkeFakture.changeMode("edit")}" style="margin-left:1em">
+								<button type="button" class="btn btn-danger">Otkaži</button>
+							</a>
 						</div>				
 				</form>
 			</div>
@@ -379,14 +409,14 @@
 	</div>
 </div>
 
-<p class="status_line">Trenutni reÅ¾im: ${session.mode}</p>
+<p class="status_line">Trenutni režim: ${session.mode}</p>
 
 <button onclick="topFunction()" id="myBtn" title="Idi na vrh">
 	<img src="@{'/public/images/back_top.png'}" alt=""
 		class="rounded-circle" width="40" height="40">
 </button>
 
-<!-- Modal -->
+<!-- Modal Katalog Robe i Usluga -->
 <div class="modal fade" id="modalDialog" role="dialog">
 	<div class="modal-dialog">
 		<!-- Modal content-->
@@ -414,7 +444,8 @@
 				</table>
 				
 				<div class="modal-footer">
-					<input id = "izborPickup" type = "button" value = "izbor"/>
+					<input id = "izborPickup" type = "button" value = "Izbor" class="btn btn-success"/>
+					<button type="button" class="btn btn-danger" onclick="cancel_katalogModal()">Otkaži</button>
 				</div>
 			</div>
 		</div>
@@ -434,7 +465,7 @@
 	    		<table style = "padding:2em">
 					<tr class = "header">
 		   				<th>Broj fakture</th>
-	   					<th>Datum vaÅ¾enja</th>
+	   					<th>Datum važenja</th>
 	   					<th>Datum valute</th>
 					</tr>
 					
@@ -449,7 +480,8 @@
 				</table>
 				
 				<div class="modal-footer">
-					<input id = "izborPickupFaktura" type = "button" value = "izbor"/>
+					<input id = "izborPickupFaktura" type = "button" value = "Izbor" class="btn btn-success"/>
+					<button type="button" class="btn btn-danger" onclick="cancel_fakturaModal()">Otkaži</button>
 				</div>
 			</div>
 		</div>
@@ -484,10 +516,39 @@
 				</table>
 				
 				<div class="modal-footer">
-					<input id = "izborPickupStopaPDVa" type = "button" value = "izbor"/>
+					<input id = "izborPickupStopaPDVa" type = "button" value = "Izbor" class="btn btn-success"/>
+					<button type="button" class="btn btn-danger" onclick="cancel_stopaPDVaModal()">Otkaži</button>
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
 
+<!--Povratak na nadredjenu formu modal-->
+<div class="modal fade" id="pickupModal" role="dialog">
+	<div class="modal-dialog">
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">Izaberite nadređenu formu</div>
+
+			<div class="modal-body">
+				<table style="padding: 2em">
+					<tr class="header">
+						<th>Forma</th>
+					</tr>
+
+					#{list items:nadredjeneForme, as:'forma'}
+					<tr>
+						<td class = "naziv_forme">${forma}</td>
+					</tr>
+					#{/list}
+				</table>
+
+				<div class="modal-footer">
+					<input id="pickupPickup" type="button" value="Izbor" class="btn btn-success" />
+					<button type="button" class="btn btn-danger" onclick="cancel_pickupModal()">Otkaži</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

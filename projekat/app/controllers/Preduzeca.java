@@ -198,8 +198,9 @@ public class Preduzeca extends Controller {
 		} else if (forma.equals("grupe")) {
 
 		} else if (forma.equals("poslovniPartneri")) {
+
 			List<Preduzece> preduzeca = checkCache();
-			List<String> nadredjeneForme = Fakture.getForeignKeysFieldsManyToOne();
+			List<String> nadredjeneForme = PoslovniPartneri.getForeignKeysFieldsManyToOne();
 
 			renderTemplate("PoslovniPartneri/show.html", preduzeca, nadredjeneForme);
 		} else if (forma.equals("fakture")) {
