@@ -282,8 +282,10 @@ public class PoslovniPartneri extends Controller {
 			List<PoslovnaGodina> poslovneGodine = PoslovneGodine.checkCache();
 
 			List<String> nadredjeneForme = Fakture.getForeignKeysFieldsManyToOne();
+			List<String> povezaneForme = Fakture.getForeignKeysFields();
 
-			renderTemplate("Fakture/show.html", poslovniPartneri, fakture, preduzeca, poslovneGodine, nadredjeneForme);
+			renderTemplate("Fakture/show.html", poslovniPartneri, fakture, preduzeca, poslovneGodine, povezaneForme,
+					nadredjeneForme);
 		}
 
 		// DODATI ZA NARUDZBU

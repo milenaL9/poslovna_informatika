@@ -52,6 +52,24 @@
 			}	
     	}
 	}
+	
+	function SelectElement(){
+		if(${session.idPreduzeca} != null){
+			var options = document.getElementById("preduzece").children;
+			for (i = 0; i < options.length; i++) {
+    			if(options[i].value == ${session.idPreduzeca}){
+    				document.getElementById("preduzece").selectedIndex = i;
+    				break;
+    			}
+			}
+
+			document.getElementById("preduzece").disabled = true;
+			document.getElementById("zoomBtnPreduzece").disabled = true;
+		}else{
+			document.getElementById("preduzece").disabled = false;
+			document.getElementById("zoomBtnPreduzece").disabled = false;
+		}
+	}
 
 	function SelectElement2() {
 		if(${session.idPoslovneGodine} != null){
@@ -64,10 +82,10 @@
 			}
 
 			document.getElementById("poslovnaGodina").disabled = true;
-			document.getElementById("zoomBtn").disabled = true;
+			document.getElementById("zoomBtnPoslovnaGodina").disabled = true;
 		}else{
 			document.getElementById("poslovnaGodina").disabled = false;
-			document.getElementById("zoomBtn").disabled = false;
+			document.getElementById("zoomBtnPoslovnaGodina").disabled = false;
 		}
 	}
 	
@@ -83,33 +101,13 @@
 			}
 
 			document.getElementById("poslovniPartner").disabled = true;
-			document.getElementById("zoomBtn").disabled = true;
+			document.getElementById("zoomBtnPoslovniPartner").disabled = true;
 		}else{
 			document.getElementById("poslovniPartner").disabled = false;
-			document.getElementById("zoomBtn").disabled = false;
+			document.getElementById("zoomBtnPoslovniPartner").disabled = false;
 		}
 	}
-	
-	
-	
-	function SelectElement(){
-		if(${session.idPreduzeca} != null){
-			var options = document.getElementById("preduzece").children;
-			for (i = 0; i < options.length; i++) {
-    			if(options[i].value == ${session.idPreduzeca}){
-    				document.getElementById("preduzece").selectedIndex = i;
-    				break;
-    			}
-			}
 
-			document.getElementById("preduzece").disabled = true;
-			document.getElementById("zoomBtn").disabled = true;
-		}else{
-			document.getElementById("preduzece").disabled = false;
-			document.getElementById("zoomBtn").disabled = false;
-		}
-	}
-	
 	function remove(id){  <!-- ne znam koji je uanpred selektovani red , ovde se vrsi redirekcija -->
 		if(id == null){
 			alert("Označite red u tabeli!");
@@ -163,20 +161,20 @@
 		$('#nextFormModal').modal('toggle');
 	}
 	
-	// modal PoslovniPartneri
+	// izbor Preduzeca
 	$(document).ready(function(){
-		$("#poslovniPartnerPickup").click(function(){
-			id = $(".highlighted").find(".pp_id").html();
+		$("#preduzecePickup").click(function(){
+			id = $(".highlighted").find(".p_id").html();
 			$("select").val(id);
-			$('#poslovniPartnerModal').modal('toggle');
+			$('#preduzeceModal').modal('toggle');
 		});
 	});
 	
-	function cancel_poslovniPartneriModal(){
-		$('#poslovniPartnerModal').modal('toggle');
+	function cancel_preduzeceModal(){
+		$('#preduzeceModal').modal('toggle');
 	}
 	
-	// modal PoslovnaGodina
+	// izbor PoslovneGodine
 	$(document).ready(function(){
 		$("#poslovnaGodinaPickup").click(function(){
 			id = $(".highlighted").find(".pg_id").html();
@@ -189,17 +187,17 @@
 		$('#poslovnaGodinaModal').modal('toggle');
 	}
 	
-	// modal Preduzece
+	// modal PoslovniPartneri
 	$(document).ready(function(){
-		$("#preduzecePickup").click(function(){
-			id = $(".highlighted").find(".p_id").html();
+		$("#poslovniPartnerPickup").click(function(){
+			id = $(".highlighted").find(".pp_id").html();
 			$("select").val(id);
-			$('#preduzeceModal').modal('toggle');
+			$('#poslovniPartnerModal').modal('toggle');
 		});
 	});
 	
-	function cancel_preduzeceModal(){
-		$('#preduzeceModal').modal('toggle');
+	function cancel_poslovniPartneriModal(){
+		$('#poslovniPartnerModal').modal('toggle');
 	}
 	
 	// povratak na nadredjenu formu
@@ -284,7 +282,7 @@
 	   				<th>Ukupno osnovica</th>
 	   				<th>Ukupno PDV</th>
 	   				<th>Ukupno za placanje</th>
-	   				<th>Preduzece</th>
+	   				<th>Preduzeće</th>
 	   				<th>Poslovna godina</th>
 	   				<th>Poslovni partner</th>
 	   			</tr>
@@ -374,14 +372,14 @@
 					
 					
 					<p>
-						#{field 'preduzece'} <label for="${field.id}">Preduzece</label>
+						#{field 'preduzece'} <label for="${field.id}">Preduzeće</label>
 						&nbsp &nbsp &nbsp <select name="${field.name}" id="${field.id}">
 							#{list items:preduzeca, as:'preduzece'}
 							<option value="${preduzece.id}">${preduzece.naziv}</option>
 							#{/list}
 						</select>
 
-						<button id="zoomBtn" type="button" class="btn btn-info btn-sm"
+						<button id="zoomBtnPreduzece" type="button" class="btn btn-info btn-sm"
 							data-toggle="modal" data-target="#preduzeceModal">...</button>
 						#{/}
 
@@ -397,7 +395,7 @@
 							#{/list}
 						</select>
 
-						<button id="zoomBtn" type="button" class="btn btn-info btn-sm"
+						<button id="zoomBtnPoslovnaGodina" type="button" class="btn btn-info btn-sm"
 							data-toggle="modal" data-target="#poslovnaGodinaModal">...</button>
 						#{/}
 
@@ -414,15 +412,12 @@
 							#{/list}
 						</select>
 
-						<button id="zoomBtn" type="button" class="btn btn-info btn-sm"
+						<button id="zoomBtnPoslovniPartner" type="button" class="btn btn-info btn-sm"
 							data-toggle="modal" data-target="#poslovniPartnerModal">...</button>
 						#{/}
 
 						<script>SelectElement3()</script>
 					</p>
-					
-					
-					
 					
 					<div id = "formActions">
 						<input type = "submit" value = "Potvrda" style="margin-left:6em" class="btn btn-success"/>
@@ -473,23 +468,33 @@
 </div>
 
 <!-- Preduzeca Modal -->
-<div class="modal fade" id="preduzecaModal" role="dialog">
+<div class="modal fade" id="preduzeceModal" role="dialog">
 	<div class="modal-dialog">
 		<!-- Modal content-->
 		<div class="modal-content">
-			<div class="modal-header">Preduzeca</div>
+			<div class="modal-header">Preduzeća</div>
 
 			<div class="modal-body">
 				<table style="padding: 2em">
 					<tr class="header">
-						<th>Preduzeca</th>
-
+						<th>Naziv</th>
+		   				<th>PIB</th>
+		   				<th>Mesto</th>
+		   				<th>Adresa</th>
+		   				<th>Telefon</th>
+		   				<th>Matični broj</th>
+		   				<th>Tekući račun</th>
 					</tr>
 
 					#{list items:preduzeca, as:'preduzece'}
 					<tr #{if preduzece.id== idd} class="highlighted"#{/if}>
-						<td class="naziv">${preduzece.naziv}</td>
-
+						<td class = "naziv">${preduzece.naziv}</td>
+						<td class = "pib">${preduzece.pib}</td>
+						<td class = "mesto">${preduzece.mesto}</td>
+						<td class = "adresa">${preduzece.adresa}</td>
+						<td class = "telefon">${preduzece.telefon}</td>
+						<td class = "maticniBroj">${preduzece.maticniBroj}</td>
+						<td class = "tekuciRacun">${preduzece.tekuciRacun}</td>
 						<td style="visibility: hidden; max-width: 0px" class="p_id">${preduzece.id}</td>
 					</tr>
 					#{/list}
@@ -507,7 +512,7 @@
 
 
 <!-- PoslovneGodine Modal -->
-<div class="modal fade" id="poslovneGodineModal" role="dialog">
+<div class="modal fade" id="poslovnaGodinaModal" role="dialog">
 	<div class="modal-dialog">
 		<!-- Modal content-->
 		<div class="modal-content">
@@ -516,15 +521,17 @@
 			<div class="modal-body">
 				<table style="padding: 2em">
 					<tr class="header">
-						<th>Poslovne godine</th>
-
+						<th>Broj godine</th> 
+		   				<th>Aktivna</th>
+		   				<th>Preduzeće</th>
 					</tr>
 
 					#{list items:poslovneGodine, as:'poslovnaGodina'}
 					<tr #{if poslovnaGodina.id== idd} class="highlighted"#{/if}>
-						<td class="brojGodine">${poslovnaGodina.brojGodine}</td>
-
-						<td style="visibility: hidden; max-width: 0px" class="p_id">${poslovnaGodina.id}</td>
+						<td class="pg_brojGodine">${poslovnaGodina.brojGodine}</td>
+						<td class="pg_aktivna">${poslovnaGodina.aktivna}</td>
+						<td class="preduzece">${poslovnaGodina.preduzece.naziv}</td>
+						<td style="visibility: hidden; max-width: 0px" class="pg_id">${poslovnaGodina.id}</td>
 					</tr>
 					#{/list}
 				</table>
@@ -541,7 +548,7 @@
 
 
 <!-- PoslovniPartneri Modal -->
-<div class="modal fade" id="poslovneGodineModal" role="dialog">
+<div class="modal fade" id="poslovniPartnerModal" role="dialog">
 	<div class="modal-dialog">
 		<!-- Modal content-->
 		<div class="modal-content">
@@ -550,15 +557,27 @@
 			<div class="modal-body">
 				<table style="padding: 2em">
 					<tr class="header">
-						<th>Poslovni partneri</th>
-
+						<th>Naziv</th>
+	   					<th>Mesto</th>
+	   					<th>Adresa</th>
+	   					<th>Vrsta</th>
+	   					<th>Telefon</th>
+	   					<th>PIB</th>
+	   					<th>Tekući račun</th>
+	   					<th>Preduzeće</th>
 					</tr>
 
 					#{list items:poslovniPartneri, as:'poslovniPartner'}
 					<tr #{if poslovniPartner.id== idd} class="highlighted"#{/if}>
-						<td class="naziv">${poslovniPartner.naziv}</td>
-
-						<td style="visibility: hidden; max-width: 0px" class="p_id">${poslovniPartner.id}</td>
+						<td class = "naziv">${poslovniPartner.naziv}</td>
+						<td class = "mesto">${poslovniPartner.mesto}</td>
+						<td class = "adresa">${poslovniPartner.adresa}</td>
+						<td class = "vrsta">${poslovniPartner.vrsta}</td>
+						<td class = "telefon">${poslovniPartner.telefon}</td>
+						<td class = "pib">${poslovniPartner.pib}</td>
+						<td class = "tekuciRacun">${poslovniPartner.tekuciRacun}</td>
+						<td class="preduzece">${poslovniPartner.preduzece.naziv}</td>
+						<td style="visibility: hidden; max-width: 0px" class="pp_id">${poslovniPartner.id}</td>
 					</tr>
 					#{/list}
 				</table>

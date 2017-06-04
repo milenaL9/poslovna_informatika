@@ -255,9 +255,11 @@ public class PoslovneGodine extends Controller {
 			List<PoslovniPartner> poslovniParneri = PoslovniPartneri.checkCache();
 
 			List<String> nadredjeneForme = Fakture.getForeignKeysFieldsManyToOne();
+			List<String> povezaneForme = Fakture.getForeignKeysFields();
 
 			List<Faktura> fakture = findFakture(id);
-			renderTemplate("Fakture/show.html", poslovneGodine, preduzeca, fakture, poslovniParneri, nadredjeneForme);
+			renderTemplate("Fakture/show.html", poslovneGodine, preduzeca, fakture, povezaneForme, poslovniParneri,
+					nadredjeneForme);
 		}
 	}
 

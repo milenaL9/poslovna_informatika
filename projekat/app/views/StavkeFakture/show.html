@@ -128,17 +128,17 @@
 		$(location).attr('href', '/StavkeFakture/refresh');
 	}
 	
-	// modal Katalog robe i usluga
+	// modal StopaPDVa
 	$(document).ready(function(){
-		$("#izborPickup").click(function(){
+		$("#izborPickupStopaPDVa").click(function(){
 			id = $(".highlighted").find(".izbor_id").html();
 			$("select").val(id);
-			$('#modalDialog').modal('toggle');
+			$('#modalDialogStopaPDVa').modal('toggle');
 		});
 	});
 	
-	function cancel_katalogModal(){
-		$('#modalDialog').modal('toggle');
+	function cancel_stopaPDVaModal(){
+		$('#modalDialogStopaPDVa').modal('toggle');
 	}
 	
 	// modal Faktura
@@ -154,18 +154,17 @@
 		$('#modalDialogFaktura').modal('toggle');
 	}
 	
-	
-	// modal StopaPDVa
+	// modal Katalog robe i usluga
 	$(document).ready(function(){
-		$("#izborPickupStopaPDVa").click(function(){
+		$("#izborPickup").click(function(){
 			id = $(".highlighted").find(".izbor_id").html();
 			$("select").val(id);
-			$('#modalDialogStopaPDVa').modal('toggle');
+			$('#modalDialog').modal('toggle');
 		});
 	});
 	
-	function cancel_stopaPDVaModal(){
-		$('#modalDialogStopaPDVa').modal('toggle');
+	function cancel_katalogModal(){
+		$('#modalDialog').modal('toggle');
 	}
 	
 	// povratak na nadredjenu formu
@@ -301,7 +300,7 @@
 						
 						<p>
 							#{field 'stavkaFakture.kolicina'} 
-								<label for="${field.id}">Kolicina</label>
+								<label for="${field.id}">Količina</label>
 								<input type="text" name="${field.name}" id="${field.id}" value="${session.cena}" /> 
 								<span>#{error field.name /}</span>
 							#{/}
@@ -322,14 +321,14 @@
 						
 						<p>
 							#{field 'stavkaFakture.osnovicaZaPDV'} 
-								<label for="${field.id}">OsnovicaZaPDV</label>
+								<label for="${field.id}">Osnovica za PDV</label>
 								<input type="text" name="${field.name}" id="${field.id}" value="${session.cena}" /> 
 								<span>#{error field.name /}</span>
 							#{/}
 						</p>
 						
 						
-					<p>
+						<p>
 							#{field 'stopaPDVa'} 
 								<label for="${field.id}">Stopa PDVa</label>
 								&nbsp &nbsp &nbsp
@@ -347,7 +346,7 @@
 						
 						<p>
 							#{field 'stavkaFakture.iznosPDVa'} 
-								<label for="${field.id}">IznosPDVa</label>
+								<label for="${field.id}">Iznos PDVa</label>
 								<input type="text" name="${field.name}" id="${field.id}" value="${session.cena}" /> 
 								<span>#{error field.name /}</span>
 							#{/}
@@ -361,10 +360,7 @@
 								<span>#{error field.name /}</span>
 							#{/}
 						</p>
-						
-						
-						
-						
+
 						<p>
 							#{field 'faktura'} 
 								<label for="${field.id}">Faktura</label>
@@ -416,6 +412,86 @@
 		class="rounded-circle" width="40" height="40">
 </button>
 
+<!-- Modal StopaPDVa-->
+<div class="modal fade" id="modalDialogStopaPDVa" role="dialog">
+	<div class="modal-dialog">
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">
+				StopaPDVa
+			</div>
+			
+      		<div class="modal-body">
+	    		<table style = "padding:2em">
+					<tr class = "header">
+	   					<th>Datum kreiranja</th>
+						<th>Procenat PDVa</th>
+						<th>Vrsta PDVa</th>
+					</tr>
+					
+					#{list stopePDVa, as:'stopaPDVa'}
+						<tr #{if faktura.id == idd} class = "highlighted" #{/if}>
+							<td class="s_datumKreiranja">${stopaPDVa.datumKreiranja}</td>
+							<td class="s_procenatPDVa">${stopaPDVa.procenatPDVa}</td>
+							<td class="vrstaPDVa">${stopaPDVa.vrstaPDVa.nazivVrstePDva}</td>
+							<td style = "visibility: hidden; max-width: 0px" class = "izbor_id">${stopaPDVa.id}</td>
+						</tr>
+					#{/list}
+				</table>
+				
+				<div class="modal-footer">
+					<input id = "izborPickupStopaPDVa" type = "button" value = "Izbor" class="btn btn-success"/>
+					<button type="button" class="btn btn-danger" onclick="cancel_stopaPDVaModal()">Otkaži</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Modal Faktura -->
+<div class="modal fade" id="modalDialogFaktura" role="dialog">
+	<div class="modal-dialog">
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">
+				Fakture
+			</div>
+			
+      		<div class="modal-body">
+	    		<table style = "padding:2em">
+					<tr class = "header">
+		   				<th>Datum fakture</th>
+		   				<th>Broj fakture</th>
+		   				<th>Datum valute</th>
+		   				<th>Ukupno osnovica</th>
+		   				<th>Ukupno PDV</th>
+		   				<th>Ukupno za placanje</th>
+		   				<th>Preduzeće</th>
+					</tr>
+					
+					#{list fakture, as:'faktura'}
+						<tr #{if faktura.id == idd} class = "highlighted" #{/if}>
+							<td class = "datumFakture">${faktura.datumFakture}</td>
+							<td class = "brojFakture">${faktura.brojFakture}</td>
+							<td class = "datumValute">${faktura.datumValute}</td>
+							<td class = "ukupnoOsnovica">${faktura.ukupnoOsnovica}</td>
+							<td class = "ukupnoPDV">${faktura.ukupnoPDV}</td>
+							<td class = "ukupnoZaPlacanje">${faktura.ukupnoZaPlacanje}</td>
+							<td class="preduzece">${faktura.preduzece.naziv}</td>
+							<td style = "visibility: hidden; max-width: 0px" class = "izbor_id">${faktura.id}</td>
+						</tr>
+					#{/list}
+				</table>
+				
+				<div class="modal-footer">
+					<input id = "izborPickupFaktura" type = "button" value = "Izbor" class="btn btn-success"/>
+					<button type="button" class="btn btn-danger" onclick="cancel_fakturaModal()">Otkaži</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
 <!-- Modal Katalog Robe i Usluga -->
 <div class="modal fade" id="modalDialog" role="dialog">
 	<div class="modal-dialog">
@@ -428,9 +504,9 @@
       		<div class="modal-body">
 	    		<table style = "padding:2em">
 					<tr class = "header">
-		   				<th>Naziv stavke kataloga</th>
-	   					<th>Opis stavke kataloga</th>
-	   					<th>Podgrupa</th>
+		   				<th>Naziv stavke kataloga</th> 
+		   				<th>Opis stavke kataloga</th>
+		   				<th>Podgrupa</th>
 					</tr>
 					
 					#{list kataloziRobeIUsluga, as:'katalogRobeIUsluga'}
@@ -446,78 +522,6 @@
 				<div class="modal-footer">
 					<input id = "izborPickup" type = "button" value = "Izbor" class="btn btn-success"/>
 					<button type="button" class="btn btn-danger" onclick="cancel_katalogModal()">Otkaži</button>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-
-<!-- Modal Faktura -->
-<div class="modal fade" id="modalDialogCenovnik" role="dialog">
-	<div class="modal-dialog">
-		<!-- Modal content-->
-		<div class="modal-content">
-			<div class="modal-header">
-				Fakture
-			</div>
-			
-      		<div class="modal-body">
-	    		<table style = "padding:2em">
-					<tr class = "header">
-		   				<th>Broj fakture</th>
-	   					<th>Datum važenja</th>
-	   					<th>Datum valute</th>
-					</tr>
-					
-					#{list fakture, as:'faktura'}
-						<tr #{if faktura.id == idd} class = "highlighted" #{/if}>
-							<td class = "brojFakture">${faktura.brojFakture}</td>
-							<td class = "datumFakture">${faktura.datumFakture}</td>
-							<td class = "datumValute">${faktura.datumValute}</td>
-							<td style = "visibility: hidden; max-width: 0px" class = "izbor_id">${faktura.id}</td>
-						</tr>
-					#{/list}
-				</table>
-				
-				<div class="modal-footer">
-					<input id = "izborPickupFaktura" type = "button" value = "Izbor" class="btn btn-success"/>
-					<button type="button" class="btn btn-danger" onclick="cancel_fakturaModal()">Otkaži</button>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-
-
-<!-- Modal StopaPDVa-->
-<div class="modal fade" id="modalDialogStopaPDVa" role="dialog">
-	<div class="modal-dialog">
-		<!-- Modal content-->
-		<div class="modal-content">
-			<div class="modal-header">
-				StopaPDVa
-			</div>
-			
-      		<div class="modal-body">
-	    		<table style = "padding:2em">
-					<tr class = "header">
-	   					<th>Datum kreiranja</th>
-	   					<th>ProcenatPDVa</th>
-					</tr>
-					
-					#{list stopePDVa, as:'stopaPDVa'}
-						<tr #{if faktura.id == idd} class = "highlighted" #{/if}>
-							<td class = "datumKreiranja">${stopaPDVa.datumKreiranja}</td>
-							<td class = "procenatPDVa">${stopaPDVa.procenatPDVa}</td>
-							
-							<td style = "visibility: hidden; max-width: 0px" class = "izbor_id">${stopaPDVa.id}</td>
-						</tr>
-					#{/list}
-				</table>
-				
-				<div class="modal-footer">
-					<input id = "izborPickupStopaPDVa" type = "button" value = "Izbor" class="btn btn-success"/>
-					<button type="button" class="btn btn-danger" onclick="cancel_stopaPDVaModal()">Otkaži</button>
 				</div>
 			</div>
 		</div>

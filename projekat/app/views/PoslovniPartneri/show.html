@@ -90,6 +90,7 @@
 		});
 	});
 	
+	// nextForm
 	function nextform_func(id){
 		if(id==null){
 			alert("Označite red u tabeli!");
@@ -240,14 +241,14 @@
 					<p>
 						#{field 'poslovniPartner.naziv'} 
 							<label for = "${field.id}">Naziv</label>
-							<input type = "text" name = "${field.name}" id = "${field.id}"/>
+							<input type = "text" name = "${field.name}" id = "${field.id}" maxlength="40" size="40"/>
 						#{/}
 					</p>
 				
 					<p>
 						#{field 'poslovniPartner.mesto'}
 					      	<label for = "${field.id}">Mesto</label>
-							<input type="text" name="${field.name}" id="${field.id}"/>
+							<input type="text" name="${field.name}" id="${field.id}" maxlength="40" size="40"/>
 						#{/}
 					</p>
 					
@@ -255,7 +256,7 @@
 					<p>
 						#{field 'poslovniPartner.adresa'}
 					      	<label for = "${field.id}">Adresa</label>
-							<input type="text" name="${field.name}" id="${field.id}"/>
+							<input type="text" name="${field.name}" id="${field.id}" maxlength="40" size="40"/>
 						#{/}
 					</p>
 					
@@ -263,7 +264,7 @@
 					<p>
 						#{field 'poslovniPartner.vrsta'}
 					      	<label for = "${field.id}">Vrsta</label>
-							<input type="text" name="${field.name}" id="${field.id}"/>
+							<input type="text" name="${field.name}" id="${field.id}" maxlength="2" size="2"/>
 						#{/}
 					</p>
 					
@@ -278,7 +279,7 @@
 						<p>
 						#{field 'poslovniPartner.pib'}
 					      	<label for = "${field.id}">PIB</label>
-							<input type="text" name="${field.name}" id="${field.id}"/>
+							<input type="text" name="${field.name}" id="${field.id}" maxlength="8" size="8"/>
 						#{/}
 					</p>
 					
@@ -286,7 +287,7 @@
 						<p>
 						#{field 'poslovniPartner.tekuciRacun'}
 					      	<label for = "${field.id}">Tekuci račun</label>
-							<input type="text" name="${field.name}" id="${field.id}"/>
+							<input type="text" name="${field.name}" id="${field.id}" maxlength="18" size="18"/>
 						#{/}
 					</p>
 					
@@ -356,7 +357,7 @@
 </div>
 
 <!-- Preduzece Modal -->
-<div class="modal fade" id="preduzecaModal" role="dialog">
+<div class="modal fade" id="preduzeceModal" role="dialog">
 	<div class="modal-dialog">
 		<!-- Modal content-->
 		<div class="modal-content">
@@ -365,14 +366,22 @@
 			<div class="modal-body">
 				<table style="padding: 2em">
 					<tr class="header">
-						<th>Preduzeća</th>
-
+						<th>Naziv</th>
+		   				<th>PIB</th>
+		   				<th>Mesto</th>
+		   				<th>Adresa</th>
+		   				<th>Matični broj</th>
+		   				<th>Tekući račun</th>
 					</tr>
 
 					#{list items:preduzeca, as:'preduzece'}
 					<tr #{if preduzece.id== idd} class="highlighted"#{/if}>
-						<td class="naziv">${preduzece.naziv}</td>
-
+						<td class = "naziv">${preduzece.naziv}</td>
+						<td class = "pib">${preduzece.pib}</td>
+						<td class = "mesto">${preduzece.mesto}</td>
+						<td class = "adresa">${preduzece.adresa}</td>
+						<td class = "maticniBroj">${preduzece.maticniBroj}</td>
+						<td class = "tekuciRacun">${preduzece.tekuciRacun}</td>
 						<td style="visibility: hidden; max-width: 0px" class="p_id">${preduzece.id}</td>
 					</tr>
 					#{/list}

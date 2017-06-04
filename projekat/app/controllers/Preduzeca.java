@@ -193,16 +193,18 @@ public class Preduzeca extends Controller {
 
 			List<PoslovnaGodina> poslovneGodine = findPoslovneGodine(id);
 			List<String> nadredjeneForme = PoslovneGodine.getForeignKeysFieldsManyToOne();
+			List<String> povezaneForme = PoslovneGodine.getForeignKeysFields();
 
-			renderTemplate("PoslovneGodine/show.html", poslovneGodine, preduzeca, nadredjeneForme);
+			renderTemplate("PoslovneGodine/show.html", poslovneGodine, preduzeca, nadredjeneForme, povezaneForme);
 		} else if (forma.equals("grupe")) {
 
 		} else if (forma.equals("poslovniPartneri")) {
 
 			List<Preduzece> preduzeca = checkCache();
 			List<String> nadredjeneForme = PoslovniPartneri.getForeignKeysFieldsManyToOne();
+			List<String> povezaneForme = PoslovniPartneri.getForeignKeysFields();
 
-			renderTemplate("PoslovniPartneri/show.html", preduzeca, nadredjeneForme);
+			renderTemplate("PoslovniPartneri/show.html", preduzeca, nadredjeneForme, povezaneForme);
 		} else if (forma.equals("fakture")) {
 			List<Preduzece> preduzeca = checkCache();
 			List<PoslovnaGodina> poslovneGodine = PoslovneGodine.checkCache();
@@ -210,8 +212,10 @@ public class Preduzeca extends Controller {
 
 			List<Faktura> fakture = findFakture(id);
 			List<String> nadredjeneForme = Fakture.getForeignKeysFieldsManyToOne();
+			List<String> povezaneForme = Fakture.getForeignKeysFields();
 
-			renderTemplate("Fakture/show.html", fakture, preduzeca, nadredjeneForme, poslovneGodine, poslovniPartneri);
+			renderTemplate("Fakture/show.html", fakture, preduzeca, nadredjeneForme, poslovneGodine, povezaneForme,
+					poslovniPartneri);
 		}
 
 	}
