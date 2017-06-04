@@ -1,13 +1,4 @@
 eclipse.preferences.version=1
-encoding//app/views/Cenovnici/show.html=UTF-8
-encoding//app/views/Fakture/show.html=UTF-8
-encoding//app/views/KataloziRobeIUsluga/show.html=UTF-8
-encoding//app/views/PoslovneGodine/show.html=UTF-8
-encoding//app/views/PoslovniPartneri/show.html=UTF-8
-encoding//app/views/Preduzeca/show.html=UTF-8
-encoding//app/views/StavkeCenovnika/show.html=UTF-8
 encoding//app/views/StavkeFakture/show.html=UTF-8
 encoding//app/views/StopePDVa/show.html=UTF-8
-encoding//app/views/VrstePDVa/show.html=UTF-8
-encoding//app/views/standardForm.html=UTF-8
 encoding/<project>=UTF-8

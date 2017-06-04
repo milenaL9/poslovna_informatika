@@ -6,8 +6,8 @@
 <script>
 	function sync(item){
 		if ("${session.mode}" == "edit"){
-			datumKreiranja = item.find(".s_datumKreiranja").html()
-		    procenatPDVa = item.find(".s_procenatPDVa").html()
+			datumKreiranja = item.find(".datumKreiranja").html()
+		    procenatPDVa = item.find(".procenatPDVa").html()
 		    vrstaPDVa = item.find(".vrstaPDVa").html()
 		    id = item.find(".id").html()
 		    $("#stopaPDVa_procenatPDVa").val(procenatPDVa);
@@ -46,9 +46,9 @@
 
 	function remove(id){  <!-- ne znam koji je uanpred selektovani red , ovde se vrsi redirekcija -->
 		if(id == null){
-			alert("Označite red u tabeli!");
+			alert("OznaÄ�ite red u tabeli!");
 		}else{
-			var r  = confirm("Da li želite da obrište slog?");
+			var r  = confirm("Da li Å¾elite da obriÅ¡te slog?");
 			if(r == true) {
 		    	$(location).attr('href', '/StopePDVa/delete?id='+id);
 			}
@@ -142,8 +142,8 @@
 				</tr>
 				#{list items:stopePDVa, as:'stopaPDVa'}
 				<tr #{if stopaPDVa.id== idd} class="highlighted"#{/if} class="tableRow">
-					<td class="s_datumKreiranja">${stopaPDVa.datumKreiranja}</td>
-					<td class="s_procenatPDVa">${stopaPDVa.procenatPDVa}</td>
+					<td class="datumKreiranja">${stopaPDVa.datumKreiranja}</td>
+					<td class="procenatPDVa">${stopaPDVa.procenatPDVa}</td>
 					<td class="vrstaPDVa">${stopaPDVa.vrstaPDVa.nazivVrstePDva}</td>
 					<td style="visibility: hidden; max-width: 0px" class="id">${stopaPDVa.id}</td>
 				</tr>
@@ -167,11 +167,11 @@
 				<form action=${action} method="post">
 
 
-					<p>
+				<p>
 						#{field 'stopaPDVa.datumKreiranja'}
-						 <label for="${field.id}">Datum kreiranja</label> 
-						 <input type="text" name="${field.name}" id="${field.id}" />
-						#{/} 
+					      	<label for = "${field.id}">Datum kreiranja</label>
+							<input type="text" name="${field.name}" id="${field.id}"/>
+						#{/}
 					</p>
 
 					<p>
@@ -185,7 +185,7 @@
 						#{field 'stopaPDVa.procenatPDVa'} 
 						<label for="${field.id}">Procenat PDVa</label> 
 						<input type="text" name="${field.name}" id="${field.id}"
-							value="${session.prcenatPDVa}" /> 
+							value="${session.procenatPDVa}" /> 
 							<span>#{error field.name /}</span> 
 						#{/}
 					</p>
@@ -210,7 +210,7 @@
 					<div id="formActions">
 						<input type="submit" value="Potvrda" style="margin-left: 6em" class="btn btn-success" /> <a
 							href="@{StopePDVa.changeMode(" edit")}" style="margin-left: 1em">
-								<button type="button" class="btn btn-danger">Otkaži</button>
+								<button type="button" class="btn btn-danger">OtkaÅ¾i</button>
 							</a>
 					</div>
 				</form>
@@ -219,7 +219,7 @@
 	</div>
 </div>
 
-<p class="status_line">Trenutni režim: ${session.mode}</p>
+<p class="status_line">Trenutni reÅ¾im: ${session.mode}</p>
 
 <button onclick="topFunction()" id="myBtn" title="Idi na vrh">
 	<img src="@{'/public/images/back_top.png'}" alt=""
@@ -251,7 +251,7 @@
 
 				<div class="modal-footer">
 					<input id="vrstaPDVaPickup" type="button" value="Izbor" class="btn btn-success"/>
-					<button type="button" class="btn btn-danger" onclick="cancel_vrstePDVaModal()">Otkaži</button>
+					<button type="button" class="btn btn-danger" onclick="cancel_vrstePDVaModal()">OtkaÅ¾i</button>
 				</div>
 			</div>
 		</div>
@@ -263,7 +263,7 @@
 	<div class="modal-dialog">
 		<!-- Modal content-->
 		<div class="modal-content">
-			<div class="modal-header">Izaberite nadređenu formu</div>
+			<div class="modal-header">Izaberite nadreÄ‘enu formu</div>
 
 			<div class="modal-body">
 				<table style="padding: 2em">
@@ -280,7 +280,7 @@
 
 				<div class="modal-footer">
 					<input id="pickupPickup" type="button" value="Izbor" class="btn btn-success" />
-					<button type="button" class="btn btn-danger" onclick="cancel_pickupModal()">Otkaži</button>
+					<button type="button" class="btn btn-danger" onclick="cancel_pickupModal()">OtkaÅ¾i</button>
 				</div>
 			</div>
 		</div>

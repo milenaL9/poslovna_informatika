@@ -109,7 +109,7 @@ public class StavkeFakture extends Controller {
 
 			stavkaFakture.save();
 			stavkeFakture.add(stavkaFakture);
-			Cache.set("stavkaFakture", stavkaFakture);
+			Cache.set("stavkeFakture", stavkeFakture);
 
 			Long idd = stavkaFakture.id;
 

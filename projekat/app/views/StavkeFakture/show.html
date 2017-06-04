@@ -112,9 +112,9 @@
 
 	function remove(id){  <!-- ne znam koji je uanpred selektovani red , ovde se vrsi redirekcija -->
 		if(id == null){
-			alert("Označite red u tabeli!");
+			alert("OznaÄ�ite red u tabeli!");
 		}else{
-			var r  = confirm("Da li želite da obrište slog?");
+			var r  = confirm("Da li Å¾elite da obriÅ¡te slog?");
 			if(r == true) {
 		    	$(location).attr('href', '/StavkeFakture/delete?id='+id);
 			}
@@ -300,7 +300,7 @@
 						
 						<p>
 							#{field 'stavkaFakture.kolicina'} 
-								<label for="${field.id}">Količina</label>
+								<label for="${field.id}">KoliÄ�ina</label>
 								<input type="text" name="${field.name}" id="${field.id}" value="${session.cena}" /> 
 								<span>#{error field.name /}</span>
 							#{/}
@@ -396,7 +396,7 @@
 						<div id = "formActions">
 							<input type = "submit" value = "Potvrda" style="margin-left:6em" class="btn btn-success"/>
 							<a href = "@{StavkeFakture.changeMode("edit")}" style="margin-left:1em">
-								<button type="button" class="btn btn-danger">Otkaži</button>
+								<button type="button" class="btn btn-danger">OtkaÅ¾i</button>
 							</a>
 						</div>				
 				</form>
@@ -405,7 +405,7 @@
 	</div>
 </div>
 
-<p class="status_line">Trenutni režim: ${session.mode}</p>
+<p class="status_line">Trenutni reÅ¾im: ${session.mode}</p>
 
 <button onclick="topFunction()" id="myBtn" title="Idi na vrh">
 	<img src="@{'/public/images/back_top.png'}" alt=""
@@ -441,7 +441,7 @@
 				
 				<div class="modal-footer">
 					<input id = "izborPickupStopaPDVa" type = "button" value = "Izbor" class="btn btn-success"/>
-					<button type="button" class="btn btn-danger" onclick="cancel_stopaPDVaModal()">Otkaži</button>
+					<button type="button" class="btn btn-danger" onclick="cancel_stopaPDVaModal()">OtkaÅ¾i</button>
 				</div>
 			</div>
 		</div>
@@ -466,7 +466,7 @@
 		   				<th>Ukupno osnovica</th>
 		   				<th>Ukupno PDV</th>
 		   				<th>Ukupno za placanje</th>
-		   				<th>Preduzeće</th>
+		   				<th>PreduzeÄ‡e</th>
 					</tr>
 					
 					#{list fakture, as:'faktura'}
@@ -485,7 +485,7 @@
 				
 				<div class="modal-footer">
 					<input id = "izborPickupFaktura" type = "button" value = "Izbor" class="btn btn-success"/>
-					<button type="button" class="btn btn-danger" onclick="cancel_fakturaModal()">Otkaži</button>
+					<button type="button" class="btn btn-danger" onclick="cancel_fakturaModal()">OtkaÅ¾i</button>
 				</div>
 			</div>
 		</div>
@@ -521,7 +521,7 @@
 				
 				<div class="modal-footer">
 					<input id = "izborPickup" type = "button" value = "Izbor" class="btn btn-success"/>
-					<button type="button" class="btn btn-danger" onclick="cancel_katalogModal()">Otkaži</button>
+					<button type="button" class="btn btn-danger" onclick="cancel_katalogModal()">OtkaÅ¾i</button>
 				</div>
 			</div>
 		</div>
@@ -533,7 +533,7 @@
 	<div class="modal-dialog">
 		<!-- Modal content-->
 		<div class="modal-content">
-			<div class="modal-header">Izaberite nadređenu formu</div>
+			<div class="modal-header">Izaberite nadreÄ‘enu formu</div>
 
 			<div class="modal-body">
 				<table style="padding: 2em">
@@ -550,7 +550,7 @@
 
 				<div class="modal-footer">
 					<input id="pickupPickup" type="button" value="Izbor" class="btn btn-success" />
-					<button type="button" class="btn btn-danger" onclick="cancel_pickupModal()">Otkaži</button>
+					<button type="button" class="btn btn-danger" onclick="cancel_pickupModal()">OtkaÅ¾i</button>
 				</div>
 			</div>
 		</div>
