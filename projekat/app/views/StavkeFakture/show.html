@@ -430,7 +430,7 @@
 					</tr>
 					
 					#{list stopePDVa, as:'stopaPDVa'}
-						<tr #{if faktura.id == idd} class = "highlighted" #{/if}>
+						<tr #{if stopaPDVa.id == idd} class = "highlighted" #{/if}>
 							<td class="s_datumKreiranja">${stopaPDVa.datumKreiranja}</td>
 							<td class="s_procenatPDVa">${stopaPDVa.procenatPDVa}</td>
 							<td class="vrstaPDVa">${stopaPDVa.vrstaPDVa.nazivVrstePDva}</td>

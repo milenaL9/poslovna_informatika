@@ -20,13 +20,19 @@
 	    	$("#poslovniPartner_naziv").val(naziv);
 	    	$("#poslovniPartner_mesto").val(mesto);
 	    	$("#poslovniPartner_adresa").val(adresa);
-	    	$("#poslovniPartner_vrsta").val(vrsta);
 	    	$("#poslovniPartner_telefon").val(telefon);
 	    	$("#poslovniPartner_pib").val(pib);
 	    	$("#poslovniPartner_tekuciRacun").val(tekuciRacun);
 	    	$("#poslovniPartner_id").val(id);
 	    	
-	    	
+	    	if(vrsta == "K"){
+		    	document.getElementById("poslovniPartner_vrstaK").checked = true;
+		    }else if(vrsta == "D"){
+		    	document.getElementById("poslovniPartner_vrstaD").checked = true;
+		    }else{
+		    	document.getElementById("poslovniPartner_vrstaKD").checked = true;
+		    }
+	    		    	
 	    	var options = document.getElementById("preduzece").children;
 			for (i = 0; i < options.length; i++) { 
     			if(options[i].label == preduzece){
@@ -264,7 +270,9 @@
 					<p>
 						#{field 'poslovniPartner.vrsta'}
 					      	<label for = "${field.id}">Vrsta</label>
-							<input type="text" name="${field.name}" id="${field.id}" maxlength="2" size="2"/>
+							<input type="radio" name="${field.name}" id="${field.id}K" value="K" checked> Kupac
+  							<input type="radio" name="${field.name}" id="${field.id}D" value="D">Dobavljač<br>
+  							&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input type="radio" name="${field.name}" id="${field.id}KD" value="KD">Kupac i dobavljač<br>
 						#{/}
 					</p>
 					

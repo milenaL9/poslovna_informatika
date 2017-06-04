@@ -295,6 +295,8 @@ public class StavkeFakture extends Controller {
 			Fakture.show();
 		} else if (forma.equals("katalogRobeIUsluga")) {
 			KataloziRobeIUsluga.show();
+		} else if (forma.equals("stopaPDVa")) {
+			StopePDVa.show();
 		}
 	}
 

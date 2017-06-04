@@ -171,17 +171,24 @@ public class PoslovniPartneri extends Controller {
 		validation.valid(poslovniPartner);
 		clearSession();
 
+		System.out.println("naziv : " + poslovniPartner.naziv);
+		System.out.println("mesto: " + poslovniPartner.mesto);
+		System.out.println("adresa: " + poslovniPartner.adresa);
+		System.out.println("vrsta: " + poslovniPartner.vrsta);
+		System.out.println("telefon: " + poslovniPartner.telefon);
+		System.out.println("pib: " + poslovniPartner.pib);
+		System.out.println("tekuci_Racun: " + poslovniPartner.tekuciRacun);
+
 		session.put("mode", "add");
 		String mode = session.get("mode");
-		List<String> povezaneForme = getForeignKeysFields();
-
-		List<String> nadredjeneForme = getForeignKeysFieldsManyToOne();
 
 		List<PoslovniPartner> poslovniPartneri = null;
 		List<Preduzece> preduzeca = Preduzeca.checkCache();
 
-		if (!validation.hasErrors()) {
+		List<String> nadredjeneForme = getForeignKeysFieldsManyToOne();
+		List<String> povezaneForme = getForeignKeysFields();
 
+		if (!validation.hasErrors()) {
 			poslovniPartneri = PoslovniPartner.findAll();
 
 			Preduzece findPreduzece = null;
@@ -193,6 +200,7 @@ public class PoslovniPartneri extends Controller {
 			}
 
 			poslovniPartner.preduzece = findPreduzece;
+			System.out.println("preduzece: " + poslovniPartner.preduzece.naziv);
 
 			poslovniPartner.save();
 			poslovniPartneri.add(poslovniPartner);
@@ -203,8 +211,8 @@ public class PoslovniPartneri extends Controller {
 
 			poslovniPartneri.clear();
 			poslovniPartneri = fillList();
+
 			validation.clear();
-			clearSession();
 
 			renderTemplate("poslovniPartneri/show.html", poslovniPartneri, povezaneForme, nadredjeneForme, preduzeca,
 					idd, mode);
@@ -213,7 +221,6 @@ public class PoslovniPartneri extends Controller {
 
 			poslovniPartneri = fillList();
 			// potrebno da bi se ispisla greska
-			session.put("idPP", poslovniPartner.id);
 			session.put("naziv", poslovniPartner.naziv);
 			session.put("adresa", poslovniPartner.adresa);
 			session.put("mesto", poslovniPartner.mesto);

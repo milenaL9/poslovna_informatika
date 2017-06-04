@@ -128,6 +128,7 @@ public class PoslovneGodine extends Controller {
 
 		List<PoslovnaGodina> poslovneGodine = null;
 		List<Preduzece> preduzeca = Preduzeca.checkCache();
+
 		List<String> nadredjeneForme = getForeignKeysFieldsManyToOne();
 		List<String> povezaneForme = getForeignKeysFields();
 
