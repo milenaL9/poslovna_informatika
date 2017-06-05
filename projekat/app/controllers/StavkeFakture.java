@@ -60,7 +60,7 @@ public class StavkeFakture extends Controller {
 
 	}
 
-	public static void create(StavkaFakture stavkaFakture, Long faktura, Long katalogRobeIUsluga, Long stopaPDVa) {
+	public static void create(StavkaFakture stavkaFakture, Long faktura, Long katalogRobeIUsluga) {
 		validation.clear();
 		clearSession();
 
@@ -72,7 +72,7 @@ public class StavkeFakture extends Controller {
 		List<StavkaFakture> stavkeFakture = null;
 		List<Faktura> fakture = Fakture.checkCache();
 		List<KatalogRobeIUsluga> kataloziRobeIUsluga = KataloziRobeIUsluga.checkCache();
-		List<StopaPDVa> stopePDVa = StopePDVa.checkCache();
+		//List<StopaPDVa> stopePDVa = StopePDVa.checkCache();
 		List<String> nadredjeneForme = getForeignKeysFieldsManyToOne();
 
 		if (!validation.hasErrors()) {
@@ -95,19 +95,19 @@ public class StavkeFakture extends Controller {
 				findKatalog = KatalogRobeIUsluga.findById(katalogRobeIUsluga);
 			}
 
-			StopaPDVa findStopaPDVa = null;
-			if (stopaPDVa == null) {
-				Long id = Long.parseLong(session.get("idStopePDVa"));
-				findStopaPDVa = StopaPDVa.findById(id);
-			} else {
-				findStopaPDVa = StopaPDVa.findById(stopaPDVa);
-			}
+//			StopaPDVa findStopaPDVa = null;
+//			if (stopaPDVa == null) {
+//				Long id = Long.parseLong(session.get("idStopePDVa"));
+//				findStopaPDVa = StopaPDVa.findById(id);
+//			} else {
+//				findStopaPDVa = StopaPDVa.findById(stopaPDVa);
+//			}
 			
 			
 
 			stavkaFakture.faktura = findFaktura;
 			stavkaFakture.katalogRobeIUsluga = findKatalog;
-			stavkaFakture.stopaPDVa = findStopaPDVa;
+			//stavkaFakture.stopaPDVa = findStopaPDVa;
 
 			
 			List<StavkaCenovnika> stavkeCenovnika = stavkaFakture.katalogRobeIUsluga.stavkeCenovnika;
@@ -117,6 +117,25 @@ public class StavkeFakture extends Controller {
 				}
 			}
 			
+			
+			stavkaFakture.save();
+			
+		
+			
+			
+			List<StopaPDVa> stopePDVa = stavkaFakture.katalogRobeIUsluga.podgrupa.grupa.vrstaPDVa.stopePDVa;
+			
+			
+			
+			for(StopaPDVa sp : stopePDVa) {
+				if(sp.vrstaPDVa == stavkaFakture.katalogRobeIUsluga.podgrupa.grupa.vrstaPDVa) {
+					stavkaFakture.stopaPDVa = sp;
+					System.out.println("AAAAAAAAAAAAAAAAAAAA Stopa PDVa je:" + stavkaFakture.stopaPDVa + "AAAAAAAAAAAAAAAAAAAAAAAAA");
+				}
+			}
+			
+			
+		
 
 			stavkaFakture.osnovicaZaPDV = stavkaFakture.cena;
 			
@@ -154,7 +173,7 @@ public class StavkeFakture extends Controller {
 			session.put("ukupnoPDV", null);
 			session.put("ukupnoZaPlacanje", null);
 
-			renderTemplate("StavkeFakture/show.html", stavkeFakture, stopePDVa, fakture, nadredjeneForme,
+			renderTemplate("StavkeFakture/show.html", stavkeFakture,  fakture, nadredjeneForme,
 					kataloziRobeIUsluga, mode);
 		}
 
@@ -177,7 +196,7 @@ public class StavkeFakture extends Controller {
 		List<StavkaFakture> stavkeFakture = null;
 		List<Faktura> fakture = Fakture.checkCache();
 		List<KatalogRobeIUsluga> kataloziRobeIUsluga = KataloziRobeIUsluga.checkCache();
-		List<StopaPDVa> stopePDVa = StopePDVa.checkCache();
+		//List<StopaPDVa> stopePDVa = StopePDVa.checkCache();
 
 		List<String> nadredjeneForme = getForeignKeysFieldsManyToOne();
 
@@ -201,28 +220,53 @@ public class StavkeFakture extends Controller {
 				findKatalog = KatalogRobeIUsluga.findById(katalogRobeIUsluga);
 			}
 
-			StopaPDVa findStopaPDVa = null;
-			if (stopaPDVa == null) {
-				Long id = Long.parseLong(session.get("idStopePDVa"));
-				findStopaPDVa = StopaPDVa.findById(id);
-			} else {
-				findStopaPDVa = StopaPDVa.findById(stopaPDVa);
-			}
+//			StopaPDVa findStopaPDVa = null;
+//			if (stopaPDVa == null) {
+//				Long id = Long.parseLong(session.get("idStopePDVa"));
+//				findStopaPDVa = StopaPDVa.findById(id);
+//			} else {
+//				findStopaPDVa = StopaPDVa.findById(stopaPDVa);
+//			}
 
 			stavkaFakture.faktura = findFaktura;
 			stavkaFakture.katalogRobeIUsluga = findKatalog;
-
+			stavkaFakture.save();
+			
+			
+//////////////////////////////////////
+			
+			List<StavkaCenovnika> stavkeCenovnika = stavkaFakture.katalogRobeIUsluga.stavkeCenovnika;
+			for(StavkaCenovnika sc : stavkeCenovnika) {
+				if(sc.katalogRobeIUsluga == stavkaFakture.katalogRobeIUsluga) {
+					stavkaFakture.cena = (float) sc.cena;
+				}
+			}
+			
+			stavkaFakture.save();
+			List<StopaPDVa> stopePDVa = stavkaFakture.katalogRobeIUsluga.podgrupa.grupa.vrstaPDVa.stopePDVa;
+			
+			for(StopaPDVa sp : stopePDVa) {
+				if(sp.vrstaPDVa == stavkaFakture.katalogRobeIUsluga.podgrupa.grupa.vrstaPDVa) {
+					stavkaFakture.stopaPDVa = sp;
+				}
+			}
+			
+			stavkaFakture.osnovicaZaPDV = stavkaFakture.cena;
+			stavkaFakture.save();
+			stavkaFakture.iznosPDVa = (stavkaFakture.osnovicaZaPDV) * stavkaFakture.stopaPDVa.procenatPDVa / 100 ;	
+			stavkaFakture.cena = (float) (stavkaFakture.cena + stavkaFakture.iznosPDVa);
+			stavkaFakture.save();
+			
+//////////////////////////////////////////
 			for (StavkaFakture tmp : stavkeFakture) {
 				if (tmp.id == stavkaFakture.id) {
-					tmp.cena = stavkaFakture.cena;
-					tmp.iznosPDVa = stavkaFakture.iznosPDVa;
 					tmp.kolicina = stavkaFakture.kolicina;
-					tmp.osnovicaZaPDV = stavkaFakture.osnovicaZaPDV;
 					tmp.rabat = stavkaFakture.rabat;
-					tmp.stopaPDVa = stavkaFakture.stopaPDVa;
-					tmp.ukupno = stavkaFakture.ukupno;
-
 					tmp.save();
+					
+					tmp.ukupno = ((tmp.cena) * (tmp.kolicina)) - tmp.rabat;
+					tmp.save();
+					
 					break;
 				}
 			}
@@ -248,7 +292,7 @@ public class StavkeFakture extends Controller {
 
 		}
 
-		renderTemplate("StavkeFakture/show.html", stavkeFakture, stopePDVa, fakture, nadredjeneForme,
+		renderTemplate("StavkeFakture/show.html", stavkeFakture, fakture, nadredjeneForme,
 				kataloziRobeIUsluga, mode);
 	}
 

@@ -41,13 +41,13 @@
 			}
 			
 			
-			var options = document.getElementById("stopePDVa").children;
-			for (i = 0; i < options.length; i++) { 
-    			if(options[i].label == stopaPDVa){
-    				document.getElementById("stopaPDVa").selectedIndex = i;
-    				break;
-    			}
-			}
+// 			var options = document.getElementById("stopePDVa").children;
+// 			for (i = 0; i < options.length; i++) { 
+//     			if(options[i].label == stopaPDVa){
+//     				document.getElementById("stopaPDVa").selectedIndex = i;
+//     				break;
+//     			}
+// 			}
 			
 		}
 	}
@@ -89,23 +89,23 @@
 	}
 	
 	
-	function SelectElementStopaPDVa(){
-		if(${session.idStopePDVa} != null){
-			var options = document.getElementById("stopaPDVa").children;
-			for (i = 0; i < options.length; i++) {
-    			if(options[i].value == ${session.idStopePDVa}){
-    				document.getElementById("stopaPDVa").selectedIndex = i;
-    				break;
-    			}
-			}
+// 	function SelectElementStopaPDVa(){
+// 		if(${session.idStopePDVa} != null){
+// 			var options = document.getElementById("stopaPDVa").children;
+// 			for (i = 0; i < options.length; i++) {
+//     			if(options[i].value == ${session.idStopePDVa}){
+//     				document.getElementById("stopaPDVa").selectedIndex = i;
+//     				break;
+//     			}
+// 			}
 
-			document.getElementById("stopaPDVa").disabled = true;
-			document.getElementById("zoomBtnStopaPDVa").disabled = true;
-		}else{
-			document.getElementById("stopaPDVa").disabled = false;
-			document.getElementById("zoomBtnStopaPDVa").disabled = false;
-		}
-	}
+// 			document.getElementById("stopaPDVa").disabled = true;
+// 			document.getElementById("zoomBtnStopaPDVa").disabled = true;
+// 		}else{
+// 			document.getElementById("stopaPDVa").disabled = false;
+// 			document.getElementById("zoomBtnStopaPDVa").disabled = false;
+// 		}
+// 	}
 	
 	
 	
@@ -128,14 +128,14 @@
 		$(location).attr('href', '/StavkeFakture/refresh');
 	}
 	
-	// modal StopaPDVa
-	$(document).ready(function(){
-		$("#izborPickupStopaPDVa").click(function(){
-			id = $(".highlighted").find(".izbor_id").html();
-			$("select").val(id);
-			$('#modalDialogStopaPDVa').modal('toggle');
-		});
-	});
+// 	// modal StopaPDVa
+// 	$(document).ready(function(){
+// 		$("#izborPickupStopaPDVa").click(function(){
+// 			id = $(".highlighted").find(".izbor_id").html();
+// 			$("select").val(id);
+// 			$('#modalDialogStopaPDVa').modal('toggle');
+// 		});
+// 	});
 	
 	function cancel_stopaPDVaModal(){
 		$('#modalDialogStopaPDVa').modal('toggle');
@@ -349,21 +349,21 @@
 <!-- 						</p> -->
 						
 						
-						<p>
-							#{field 'stopaPDVa'} 
-								<label for="${field.id}">Stopa PDVa</label>
-								&nbsp &nbsp &nbsp
-								<select name = "${field.name}" id = "${field.id}">
-									#{list items:stopePDVa, as:'stopaPDVa'}
-										<option value = "${stopaPDVa.id}">${stopaPDVa.procenatPDVa} %</option>
-									#{/list} 
-								</select>
+<!-- 						<p> -->
+<!-- 							#{field 'stopaPDVa'}  -->
+<!-- 								<label for="${field.id}">Stopa PDVa</label> -->
+<!-- 								&nbsp &nbsp &nbsp -->
+<!-- 								<select name = "${field.name}" id = "${field.id}"> -->
+<!-- 									#{list items:stopePDVa, as:'stopaPDVa'} -->
+<!-- 										<option value = "${stopaPDVa.id}">${stopaPDVa.procenatPDVa} %</option> -->
+<!-- 									#{/list}  -->
+<!-- 								</select> -->
 								
-								<button id = "zoomBtnStopaPDVa" type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#modalDialogStopaPDVa">...	</button>
-							#{/}
+<!-- 								<button id = "zoomBtnStopaPDVa" type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#modalDialogStopaPDVa">...	</button> -->
+<!-- 							#{/} -->
 							
-							<script>SelectElementStopaPDVa()</script>
-						</p>
+<!-- 							<script>SelectElementStopaPDVa()</script> -->
+<!-- 						</p> -->
 						
 <!-- 						<p> -->
 <!-- 							#{field 'stavkaFakture.iznosPDVa'}  -->
