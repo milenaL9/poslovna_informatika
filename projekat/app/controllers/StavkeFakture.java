@@ -26,7 +26,7 @@ public class StavkeFakture extends Controller {
 
 		session.put("idKataloga", "null"); // ManytoOne
 		session.put("idFakture", "null");
-		session.put("idStopePDVa", "null");
+		//session.put("idStopePDVa", "null");
 
 		session.put("mode", "edit");
 		String mode = session.get("mode");
@@ -34,11 +34,11 @@ public class StavkeFakture extends Controller {
 		List<KatalogRobeIUsluga> kataloziRobeIUsluga = KataloziRobeIUsluga.checkCache();
 		List<Faktura> fakture = Fakture.checkCache();
 		List<StavkaFakture> stavkeFakture = checkCache();
-		List<StopaPDVa> stopePDVa = StopePDVa.checkCache();
+		//List<StopaPDVa> stopePDVa = StopePDVa.checkCache();
 
 		List<String> nadredjeneForme = getForeignKeysFieldsManyToOne();
 
-		render(kataloziRobeIUsluga, fakture, stopePDVa, stavkeFakture, mode, nadredjeneForme);
+		render(kataloziRobeIUsluga, fakture, stavkeFakture, mode, nadredjeneForme);
 
 	}
 
@@ -51,11 +51,11 @@ public class StavkeFakture extends Controller {
 		List<KatalogRobeIUsluga> kataloziRobeIUsluga = KataloziRobeIUsluga.checkCache();
 		List<Faktura> fakture = Fakture.checkCache();
 		List<StavkaFakture> stavkeFakture = fillList();
-		List<StopaPDVa> stopePDVa = StopePDVa.checkCache();
+	//	List<StopaPDVa> stopePDVa = StopePDVa.checkCache();
 
 		List<String> nadredjeneForme = getForeignKeysFieldsManyToOne();
 
-		renderTemplate("StavkeFakture/show.html", kataloziRobeIUsluga, stopePDVa, fakture, nadredjeneForme,
+		renderTemplate("StavkeFakture/show.html", kataloziRobeIUsluga,  fakture, nadredjeneForme,
 				stavkeFakture, mode);
 
 	}
@@ -113,23 +113,20 @@ public class StavkeFakture extends Controller {
 			List<StavkaCenovnika> stavkeCenovnika = stavkaFakture.katalogRobeIUsluga.stavkeCenovnika;
 			for(StavkaCenovnika sc : stavkeCenovnika) {
 				if(sc.katalogRobeIUsluga == stavkaFakture.katalogRobeIUsluga) {
-					stavkaFakture.cena = (float) sc.cena;
+					stavkaFakture.cena =  (float) sc.cena;
 				}
 			}
 			
 			
 			stavkaFakture.save();
 			
-		
-			
-			
 			List<StopaPDVa> stopePDVa = stavkaFakture.katalogRobeIUsluga.podgrupa.grupa.vrstaPDVa.stopePDVa;
 			
-			
-			
+	
+
 			for(StopaPDVa sp : stopePDVa) {
 				if(sp.vrstaPDVa == stavkaFakture.katalogRobeIUsluga.podgrupa.grupa.vrstaPDVa) {
-					stavkaFakture.stopaPDVa = sp;
+					stavkaFakture.stopaPDVa = sp.procenatPDVa;
 					System.out.println("AAAAAAAAAAAAAAAAAAAA Stopa PDVa je:" + stavkaFakture.stopaPDVa + "AAAAAAAAAAAAAAAAAAAAAAAAA");
 				}
 			}
@@ -138,12 +135,9 @@ public class StavkeFakture extends Controller {
 		
 
 			stavkaFakture.osnovicaZaPDV = stavkaFakture.cena;
-			
-			
-			
 			stavkaFakture.save();
-			stavkaFakture.iznosPDVa = (stavkaFakture.osnovicaZaPDV) * stavkaFakture.stopaPDVa.procenatPDVa / 100 ;	
-			stavkaFakture.cena = (float) (stavkaFakture.cena + stavkaFakture.iznosPDVa);
+			stavkaFakture.iznosPDVa = (stavkaFakture.osnovicaZaPDV) * stavkaFakture.stopaPDVa / 100 ;	
+			stavkaFakture.cena =  stavkaFakture.cena + stavkaFakture.iznosPDVa ;
 			
 			stavkaFakture.save();
 			stavkaFakture.ukupno = ((stavkaFakture.cena) * (stavkaFakture.kolicina)) - stavkaFakture.rabat;
@@ -247,14 +241,14 @@ public class StavkeFakture extends Controller {
 			
 			for(StopaPDVa sp : stopePDVa) {
 				if(sp.vrstaPDVa == stavkaFakture.katalogRobeIUsluga.podgrupa.grupa.vrstaPDVa) {
-					stavkaFakture.stopaPDVa = sp;
+					stavkaFakture.stopaPDVa = sp.procenatPDVa;
 				}
 			}
 			
 			stavkaFakture.osnovicaZaPDV = stavkaFakture.cena;
 			stavkaFakture.save();
-			stavkaFakture.iznosPDVa = (stavkaFakture.osnovicaZaPDV) * stavkaFakture.stopaPDVa.procenatPDVa / 100 ;	
-			stavkaFakture.cena = (float) (stavkaFakture.cena + stavkaFakture.iznosPDVa);
+			stavkaFakture.iznosPDVa = (stavkaFakture.osnovicaZaPDV) * stavkaFakture.stopaPDVa / 100 ;	
+			stavkaFakture.cena = stavkaFakture.cena + stavkaFakture.iznosPDVa;
 			stavkaFakture.save();
 			
 //////////////////////////////////////////

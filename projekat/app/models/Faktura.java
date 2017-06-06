@@ -37,7 +37,7 @@ public class Faktura extends Model {
 	public String datumValute;
 	
 	@Required
-	public double ukupnoOsnovica;
+	public float ukupnoOsnovica;
 	
 	@Required
 	public float ukupnoPDV;
@@ -59,7 +59,7 @@ public class Faktura extends Model {
 	public Preduzece preduzece;
 	
 
-	public Faktura(String datumFakture, int brojFakture, String datumValute, double ukupnoOsnovica, 
+	public Faktura(String datumFakture, int brojFakture, String datumValute, float ukupnoOsnovica, 
 			float ukupnoPDV,
 			float ukupnoZaPlacanje) {
 		super();

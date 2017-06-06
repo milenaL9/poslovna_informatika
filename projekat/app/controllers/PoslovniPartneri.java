@@ -236,7 +236,14 @@ public class PoslovniPartneri extends Controller {
 
 	public static void filter(PoslovniPartner poslovniPartner) {
 		List<PoslovniPartner> poslovniPartneri = PoslovniPartner
-				.find("byNazivLikeAndVrstaLike", "%" + poslovniPartner.naziv + "%", "%" + poslovniPartner.vrsta + "%")
+				.find("byNazivLikeAndVrstaLikeAndMestoLikeAndAdresaLikeAndTelefonLike", 
+						"%" + poslovniPartner.naziv + "%", 
+						"%" + poslovniPartner.vrsta + "%",
+						"%" + poslovniPartner.mesto + "%",
+						"%" + poslovniPartner.adresa + "%",
+						"%" + poslovniPartner.telefon + "%"
+						
+						)
 				.fetch();
 
 		session.put("mode", "edit");

@@ -16,16 +16,16 @@ public class StavkaFakture extends Model {
 	public float cena;
 
 	@Required
-	public int rabat;
+	public float rabat;
 
 	@Required
-	public double osnovicaZaPDV;
+	public float osnovicaZaPDV;
 
 	@Required
-	public double iznosPDVa;
+	public float iznosPDVa;
 
 	@Required
-	public double ukupno;
+	public float ukupno;
 
 	@ManyToOne
 	public Faktura faktura;
@@ -33,11 +33,13 @@ public class StavkaFakture extends Model {
 	@ManyToOne
 	public KatalogRobeIUsluga katalogRobeIUsluga;
 
-	@ManyToOne
-	public StopaPDVa stopaPDVa;
+//	@ManyToOne
+//	public StopaPDVa stopaPDVa;
+	
+	public float stopaPDVa;
 
-	public StavkaFakture(int kolicina, float cena, int rabat, double osnovicaZaPDV, StopaPDVa stopaPDVa,
-			double iznosPDVa, double ukupno) {
+	public StavkaFakture(int kolicina, float cena, float rabat, float osnovicaZaPDV, float stopaPDVa,
+			float iznosPDVa, float ukupno) {
 		super();
 		this.kolicina = kolicina;
 		this.cena = cena;

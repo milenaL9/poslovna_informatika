@@ -20,13 +20,13 @@ public class StopaPDVa extends Model {
 	@Column(columnDefinition = "varchar(10)")
 	public String datumKreiranja;
 
-	public int procenatPDVa;
+	public float procenatPDVa;
 
 	@ManyToOne
 	public VrstaPDVa vrstaPDVa;
 
-	@OneToMany(mappedBy = "stopaPDVa")
-	public List<StavkaFakture> stavkeFakture;
+//	@OneToMany(mappedBy = "stopaPDVa")
+//	public List<StavkaFakture> stavkeFakture;
 
 	public StopaPDVa(int procenatPDVa, String datumKreiranja) {
 		super();
