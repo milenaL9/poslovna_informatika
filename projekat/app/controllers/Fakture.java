@@ -34,6 +34,8 @@ public class Fakture extends Controller {
 			mode = "edit";
 		}
 
+	
+		
 		session.put("mode", mode);
 
 		List<String> povezaneForme = getForeignKeysFields();
@@ -183,6 +185,21 @@ public class Fakture extends Controller {
 			faktura.poslovnaGodina = findPoslovnaGodina;
 			faktura.poslovniPartner = findPoslovniPartner;
 
+			faktura.save();
+			List<StavkaFakture> stavkeFakture = faktura.stavkeFakture;
+			faktura.ukupnoOsnovica = 0;
+			faktura.ukupnoPDV = 0;
+			faktura.ukupnoZaPlacanje = 0;
+			
+			if(stavkeFakture != null) {
+				for(StavkaFakture sf : stavkeFakture) {
+					faktura.ukupnoOsnovica += sf.osnovicaZaPDV;
+					faktura.ukupnoPDV += sf.iznosPDVa;
+					faktura.ukupnoZaPlacanje += sf.ukupno;
+				}
+				
+			}
+			
 			faktura.save();
 			fakture.add(faktura);
 			Cache.set("fakture", fakture);
