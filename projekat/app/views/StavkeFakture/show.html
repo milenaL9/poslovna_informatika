@@ -12,7 +12,7 @@
 			iznosPDVa = item.find(".iznosPDVa").html()
 			ukupno = item.find(".ukupno").html()
 	
-		    katalogRobeIUsluga = item.find(".katalogRobeIUsluga").html()
+		    stavkaCenovnika = item.find(".stavkaCenovnika").html()
 		    faktura = item.find(".faktura").html()
 		    id = item.find(".id").html()
 		    $("#stavkaFakture_cena").val(cena);
@@ -24,10 +24,10 @@
 		    $("#stavkaFakture_iznosPDVa").val(iznosPDVa);
 		    $("#stavkaFakture_ukupno").val(ukupno);
 
-			var options = document.getElementById("katalogRobeIUsluga").children;
+			var options = document.getElementById("stavkaCenovnika").children;
 			for (i = 0; i < options.length; i++) { 
     			if(options[i].label == katalogRobeIUsluga){
-    				document.getElementById("katalogRobeIUsluga").selectedIndex = i;
+    				document.getElementById("stavkaCenovnika").selectedIndex = i;
     				break;
     			}
 			}
@@ -54,18 +54,18 @@
 	
 	function SelectElement(){
 		if(${session.idKataloga} != null){
-			var options = document.getElementById("katalogRobeIUsluga").children;
+			var options = document.getElementById("stavkaCenovnika").children;
 			for (i = 0; i < options.length; i++) {
     			if(options[i].value == ${session.idKataloga}){
-    				document.getElementById("katalogRobeIUsluga").selectedIndex = i;
+    				document.getElementById("stavkaCenovnika").selectedIndex = i;
     				break;
     			}
 			}
 
-			document.getElementById("katalogRobeIUsluga").disabled = true;
+			document.getElementById("stavkaCenovnika").disabled = true;
 			document.getElementById("zoomBtn").disabled = true;
 		}else{
-			document.getElementById("katalogRobeIUsluga").disabled = false;
+			document.getElementById("stavkaCenovnika").disabled = false;
 			document.getElementById("zoomBtn").disabled = false;
 		}
 	}
@@ -303,7 +303,7 @@
 						
 						
 						<p>
-							#{field 'katalogRobeIUsluga'}
+							#{field 'stavkaCenovnika'}
 								<label for = "${field.id}">Naziv stavke</label>
 								&nbsp &nbsp &nbsp
 								<select name = "${field.name}" id = "${field.id}">

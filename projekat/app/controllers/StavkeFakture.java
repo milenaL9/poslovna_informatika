@@ -67,10 +67,10 @@ public class StavkeFakture extends Controller {
 
 	}
 
-	public static void create(StavkaFakture stavkaFakture, Long faktura, Long katalogRobeIUsluga)
-			throws ParseException {
+	public static void create(StavkaFakture stavkaFakture, Long faktura, Long stavkaCenovnika) throws ParseException {
 		validation.clear();
 		clearSession();
+		System.out.println("stavkaCenovnika: " + stavkaCenovnika);
 
 		validation.valid(stavkaFakture);
 
@@ -96,13 +96,10 @@ public class StavkeFakture extends Controller {
 				findFaktura = Faktura.findById(faktura);
 			}
 
-			KatalogRobeIUsluga findKatalog = null;
-			if (katalogRobeIUsluga == null) {
-				Long id = Long.parseLong(session.get("idKataloga"));
-				findKatalog = KatalogRobeIUsluga.findById(id);
-			} else {
-				findKatalog = KatalogRobeIUsluga.findById(katalogRobeIUsluga);
-			}
+			//StavkaCenovnika stavkaCenovnika = StavkaCenovnika.findById(stavkaCenovnika);
+//			System.out.println("sc " + sc.id);
+//			System.out.println("sc_katalog : " + sc.katalogRobeIUsluga);
+//			stavkaFakture.katalogRobeIUsluga = sc.katalogRobeIUsluga;
 
 			// StopaPDVa findStopaPDVa = null;
 			// if (stopaPDVa == null) {
@@ -113,24 +110,7 @@ public class StavkeFakture extends Controller {
 			// }
 
 			stavkaFakture.faktura = findFaktura;
-			stavkaFakture.katalogRobeIUsluga = findKatalog;
 			// stavkaFakture.stopaPDVa = findStopaPDVa;
-
-			List<StavkaCenovnika> stavkeCenovnika1 = stavkaFakture.katalogRobeIUsluga.stavkeCenovnika;
-
-			for (StavkaCenovnika sc : stavkeCenovnika1) {
-
-				// Date datumCenovnika =
-				// convertToDate(sc.cenovnik.datumVazenja);
-				// Date datumFakture =
-				// convertToDate(stavkaFakture.faktura.datumFakture);
-
-				// if ((!datumCenovnika.after(datumFakture))
-				// && (sc.katalogRobeIUsluga ==
-				// stavkaFakture.katalogRobeIUsluga)) {
-				// stavkaFakture.cena = (float) sc.cena;
-				// }
-			}
 
 			stavkaFakture.save();
 
@@ -139,8 +119,6 @@ public class StavkeFakture extends Controller {
 			for (StopaPDVa sp : stopePDVa) {
 				if (sp.vrstaPDVa == stavkaFakture.katalogRobeIUsluga.podgrupa.grupa.vrstaPDVa) {
 					stavkaFakture.stopaPDVa = sp.procenatPDVa;
-					System.out.println("AAAAAAAAAAAAAAAAAAAA Stopa PDVa je:" + stavkaFakture.stopaPDVa
-							+ "AAAAAAAAAAAAAAAAAAAAAAAAA");
 				}
 			}
 
@@ -250,12 +228,16 @@ public class StavkeFakture extends Controller {
 
 			//////////////////////////////////////
 
-			List<StavkaCenovnika> stavkeCenovnika1 = stavkaFakture.katalogRobeIUsluga.stavkeCenovnika;
-			for (StavkaCenovnika sc : stavkeCenovnika1) {
-				if (sc.katalogRobeIUsluga == stavkaFakture.katalogRobeIUsluga) {
-					stavkaFakture.cena = (float) sc.cena;
-				}
-			}
+			// List<StavkaCenovnika> stavkeCenovnika1 =
+			// stavkaFakture.katalogRobeIUsluga.stavkeCenovnika;
+			// for (StavkaCenovnika sc : stavkeCenovnika1) {
+			// if (sc.katalogRobeIUsluga == stavkaFakture.katalogRobeIUsluga) {
+			// stavkaFakture.cena = (float) sc.cena;
+			// }
+			// }
+
+			StavkaCenovnika stavkaCenovnika = StavkaCenovnika.findById(katalogRobeIUsluga);
+			stavkaCenovnika.katalogRobeIUsluga = stavkaCenovnika.katalogRobeIUsluga;
 
 			stavkaFakture.save();
 			List<StopaPDVa> stopePDVa = stavkaFakture.katalogRobeIUsluga.podgrupa.grupa.vrstaPDVa.stopePDVa;
