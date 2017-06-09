@@ -40,6 +40,8 @@ public class Fakture extends Controller {
 
 		List<String> povezaneForme = getForeignKeysFields();
 		List<Faktura> fakture = Fakture.checkCache();
+		
+		
 		List<PoslovniPartner> poslovniPartneri = PoslovniPartneri.checkCache();
 		List<PoslovnaGodina> poslovneGodine = PoslovneGodine.checkCache();
 		List<Preduzece> preduzeca = Preduzeca.checkCache();

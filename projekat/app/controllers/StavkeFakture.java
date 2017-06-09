@@ -2,11 +2,16 @@ package controllers;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.ManyToOne;
 
+import models.Cenovnik;
 import models.Faktura;
 import models.KatalogRobeIUsluga;
 import models.StavkaCenovnika;
@@ -26,7 +31,7 @@ public class StavkeFakture extends Controller {
 
 		session.put("idKataloga", "null"); // ManytoOne
 		session.put("idFakture", "null");
-		//session.put("idStopePDVa", "null");
+		// session.put("idStopePDVa", "null");
 
 		session.put("mode", "edit");
 		String mode = session.get("mode");
@@ -34,7 +39,7 @@ public class StavkeFakture extends Controller {
 		List<KatalogRobeIUsluga> kataloziRobeIUsluga = KataloziRobeIUsluga.checkCache();
 		List<Faktura> fakture = Fakture.checkCache();
 		List<StavkaFakture> stavkeFakture = checkCache();
-		//List<StopaPDVa> stopePDVa = StopePDVa.checkCache();
+		// List<StopaPDVa> stopePDVa = StopePDVa.checkCache();
 
 		List<String> nadredjeneForme = getForeignKeysFieldsManyToOne();
 
@@ -51,16 +56,15 @@ public class StavkeFakture extends Controller {
 		List<KatalogRobeIUsluga> kataloziRobeIUsluga = KataloziRobeIUsluga.checkCache();
 		List<Faktura> fakture = Fakture.checkCache();
 		List<StavkaFakture> stavkeFakture = fillList();
-	//	List<StopaPDVa> stopePDVa = StopePDVa.checkCache();
+		// List<StopaPDVa> stopePDVa = StopePDVa.checkCache();
 
 		List<String> nadredjeneForme = getForeignKeysFieldsManyToOne();
 
-		renderTemplate("StavkeFakture/show.html", kataloziRobeIUsluga,  fakture, nadredjeneForme,
-				stavkeFakture, mode);
+		renderTemplate("StavkeFakture/show.html", kataloziRobeIUsluga, fakture, nadredjeneForme, stavkeFakture, mode);
 
 	}
 
-	public static void create(StavkaFakture stavkaFakture, Long faktura, Long katalogRobeIUsluga) {
+	public static void create(StavkaFakture stavkaFakture, Long faktura, Long katalogRobeIUsluga) throws ParseException {
 		validation.clear();
 		clearSession();
 
@@ -72,7 +76,7 @@ public class StavkeFakture extends Controller {
 		List<StavkaFakture> stavkeFakture = null;
 		List<Faktura> fakture = Fakture.checkCache();
 		List<KatalogRobeIUsluga> kataloziRobeIUsluga = KataloziRobeIUsluga.checkCache();
-		//List<StopaPDVa> stopePDVa = StopePDVa.checkCache();
+		// List<StopaPDVa> stopePDVa = StopePDVa.checkCache();
 		List<String> nadredjeneForme = getForeignKeysFieldsManyToOne();
 
 		if (!validation.hasErrors()) {
@@ -95,54 +99,68 @@ public class StavkeFakture extends Controller {
 				findKatalog = KatalogRobeIUsluga.findById(katalogRobeIUsluga);
 			}
 
-//			StopaPDVa findStopaPDVa = null;
-//			if (stopaPDVa == null) {
-//				Long id = Long.parseLong(session.get("idStopePDVa"));
-//				findStopaPDVa = StopaPDVa.findById(id);
-//			} else {
-//				findStopaPDVa = StopaPDVa.findById(stopaPDVa);
-//			}
-			
-			
+			// StopaPDVa findStopaPDVa = null;
+			// if (stopaPDVa == null) {
+			// Long id = Long.parseLong(session.get("idStopePDVa"));
+			// findStopaPDVa = StopaPDVa.findById(id);
+			// } else {
+			// findStopaPDVa = StopaPDVa.findById(stopaPDVa);
+			// }
 
 			stavkaFakture.faktura = findFaktura;
 			stavkaFakture.katalogRobeIUsluga = findKatalog;
-			//stavkaFakture.stopaPDVa = findStopaPDVa;
+			// stavkaFakture.stopaPDVa = findStopaPDVa;
 
-			
 			List<StavkaCenovnika> stavkeCenovnika = stavkaFakture.katalogRobeIUsluga.stavkeCenovnika;
-			for(StavkaCenovnika sc : stavkeCenovnika) {
-				if(sc.katalogRobeIUsluga == stavkaFakture.katalogRobeIUsluga) {
-					stavkaFakture.cena =  (float) sc.cena;
-				}
-			}
-			
-			
-			stavkaFakture.save();
-			
-			List<StopaPDVa> stopePDVa = stavkaFakture.katalogRobeIUsluga.podgrupa.grupa.vrstaPDVa.stopePDVa;
-			
-	
 
-			for(StopaPDVa sp : stopePDVa) {
-				if(sp.vrstaPDVa == stavkaFakture.katalogRobeIUsluga.podgrupa.grupa.vrstaPDVa) {
-					stavkaFakture.stopaPDVa = sp.procenatPDVa;
-					System.out.println("AAAAAAAAAAAAAAAAAAAA Stopa PDVa je:" + stavkaFakture.stopaPDVa + "AAAAAAAAAAAAAAAAAAAAAAAAA");
-				}
-			}
-			
+			for (StavkaCenovnika sc : stavkeCenovnika) {
+
+				Date datumCenovnika = convertToDate(sc.cenovnik.datumVazenja);
+				Date datumFakture = convertToDate(stavkaFakture.faktura.datumFakture);
 			
 		
+				if ((!datumCenovnika.after(datumFakture))
+						&& (sc.katalogRobeIUsluga == stavkaFakture.katalogRobeIUsluga)) {
+					stavkaFakture.cena = (float) sc.cena;
+				}
+			}
+
+			stavkaFakture.save();
+
+			List<StopaPDVa> stopePDVa = stavkaFakture.katalogRobeIUsluga.podgrupa.grupa.vrstaPDVa.stopePDVa;
+
+			for (StopaPDVa sp : stopePDVa) {
+				if (sp.vrstaPDVa == stavkaFakture.katalogRobeIUsluga.podgrupa.grupa.vrstaPDVa) {
+					stavkaFakture.stopaPDVa = sp.procenatPDVa;
+					System.out.println("AAAAAAAAAAAAAAAAAAAA Stopa PDVa je:" + stavkaFakture.stopaPDVa
+							+ "AAAAAAAAAAAAAAAAAAAAAAAAA");
+				}
+			}
 
 			stavkaFakture.osnovicaZaPDV = stavkaFakture.cena;
 			stavkaFakture.save();
-			stavkaFakture.iznosPDVa = (stavkaFakture.osnovicaZaPDV) * stavkaFakture.stopaPDVa / 100 ;	
-			stavkaFakture.cena =  stavkaFakture.cena + stavkaFakture.iznosPDVa ;
-			
+			stavkaFakture.iznosPDVa = (stavkaFakture.osnovicaZaPDV) * stavkaFakture.stopaPDVa / 100;
+			stavkaFakture.cena = stavkaFakture.cena + stavkaFakture.iznosPDVa;
+
 			stavkaFakture.save();
 			stavkaFakture.ukupno = ((stavkaFakture.cena) * (stavkaFakture.kolicina)) - stavkaFakture.rabat;
 			stavkaFakture.save();
-			
+
+			stavkaFakture.faktura.ukupnoPDV += stavkaFakture.iznosPDVa;
+			stavkaFakture.faktura.ukupnoZaPlacanje += stavkaFakture.ukupno;
+			stavkaFakture.faktura.ukupnoOsnovica += stavkaFakture.osnovicaZaPDV;
+
+			System.out.println("FAKTURA_ID: " + stavkaFakture.faktura.id);
+			System.out.println("FAKTURA_ukupnoPDV:" + stavkaFakture.faktura.ukupnoPDV);
+			System.out.println("FAKTURA_ukupnoZaPlacanje:" + stavkaFakture.faktura.ukupnoZaPlacanje);
+			System.out.println("FAKTURA_ukupnoOsnovica:" + stavkaFakture.faktura.ukupnoOsnovica);
+
+			stavkaFakture.faktura.save();
+			stavkaFakture.save();
+
+			List<Faktura> faktureAll = Faktura.findAll();
+			Cache.set("fakture", faktureAll);
+
 			stavkeFakture.add(stavkaFakture);
 			Cache.set("stavkeFakture", stavkeFakture);
 
@@ -167,16 +185,18 @@ public class StavkeFakture extends Controller {
 			session.put("ukupnoPDV", null);
 			session.put("ukupnoZaPlacanje", null);
 
-			renderTemplate("StavkeFakture/show.html", stavkeFakture,  fakture, nadredjeneForme,
-					kataloziRobeIUsluga, mode);
+			renderTemplate("StavkeFakture/show.html", stavkeFakture, fakture, nadredjeneForme, kataloziRobeIUsluga,
+					mode);
 		}
 
 	}
-	
-	
-	
 
-	
+	public static Date convertToDate(String receivedDate) throws ParseException {
+		SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+		Date date = formatter.parse(receivedDate);
+		return date;
+
+	}
 
 	public static void edit(StavkaFakture stavkaFakture, Long faktura, Long katalogRobeIUsluga, Long stopaPDVa) {
 		validation.clear();
@@ -190,7 +210,7 @@ public class StavkeFakture extends Controller {
 		List<StavkaFakture> stavkeFakture = null;
 		List<Faktura> fakture = Fakture.checkCache();
 		List<KatalogRobeIUsluga> kataloziRobeIUsluga = KataloziRobeIUsluga.checkCache();
-		//List<StopaPDVa> stopePDVa = StopePDVa.checkCache();
+		// List<StopaPDVa> stopePDVa = StopePDVa.checkCache();
 
 		List<String> nadredjeneForme = getForeignKeysFieldsManyToOne();
 
@@ -214,53 +234,52 @@ public class StavkeFakture extends Controller {
 				findKatalog = KatalogRobeIUsluga.findById(katalogRobeIUsluga);
 			}
 
-//			StopaPDVa findStopaPDVa = null;
-//			if (stopaPDVa == null) {
-//				Long id = Long.parseLong(session.get("idStopePDVa"));
-//				findStopaPDVa = StopaPDVa.findById(id);
-//			} else {
-//				findStopaPDVa = StopaPDVa.findById(stopaPDVa);
-//			}
+			// StopaPDVa findStopaPDVa = null;
+			// if (stopaPDVa == null) {
+			// Long id = Long.parseLong(session.get("idStopePDVa"));
+			// findStopaPDVa = StopaPDVa.findById(id);
+			// } else {
+			// findStopaPDVa = StopaPDVa.findById(stopaPDVa);
+			// }
 
 			stavkaFakture.faktura = findFaktura;
 			stavkaFakture.katalogRobeIUsluga = findKatalog;
 			stavkaFakture.save();
-			
-			
-//////////////////////////////////////
-			
+
+			//////////////////////////////////////
+
 			List<StavkaCenovnika> stavkeCenovnika = stavkaFakture.katalogRobeIUsluga.stavkeCenovnika;
-			for(StavkaCenovnika sc : stavkeCenovnika) {
-				if(sc.katalogRobeIUsluga == stavkaFakture.katalogRobeIUsluga) {
+			for (StavkaCenovnika sc : stavkeCenovnika) {
+				if (sc.katalogRobeIUsluga == stavkaFakture.katalogRobeIUsluga) {
 					stavkaFakture.cena = (float) sc.cena;
 				}
 			}
-			
+
 			stavkaFakture.save();
 			List<StopaPDVa> stopePDVa = stavkaFakture.katalogRobeIUsluga.podgrupa.grupa.vrstaPDVa.stopePDVa;
-			
-			for(StopaPDVa sp : stopePDVa) {
-				if(sp.vrstaPDVa == stavkaFakture.katalogRobeIUsluga.podgrupa.grupa.vrstaPDVa) {
+
+			for (StopaPDVa sp : stopePDVa) {
+				if (sp.vrstaPDVa == stavkaFakture.katalogRobeIUsluga.podgrupa.grupa.vrstaPDVa) {
 					stavkaFakture.stopaPDVa = sp.procenatPDVa;
 				}
 			}
-			
+
 			stavkaFakture.osnovicaZaPDV = stavkaFakture.cena;
 			stavkaFakture.save();
-			stavkaFakture.iznosPDVa = (stavkaFakture.osnovicaZaPDV) * stavkaFakture.stopaPDVa / 100 ;	
+			stavkaFakture.iznosPDVa = (stavkaFakture.osnovicaZaPDV) * stavkaFakture.stopaPDVa / 100;
 			stavkaFakture.cena = stavkaFakture.cena + stavkaFakture.iznosPDVa;
 			stavkaFakture.save();
-			
-//////////////////////////////////////////
+
+			//////////////////////////////////////////
 			for (StavkaFakture tmp : stavkeFakture) {
 				if (tmp.id == stavkaFakture.id) {
 					tmp.kolicina = stavkaFakture.kolicina;
 					tmp.rabat = stavkaFakture.rabat;
 					tmp.save();
-					
+
 					tmp.ukupno = ((tmp.cena) * (tmp.kolicina)) - tmp.rabat;
 					tmp.save();
-					
+
 					break;
 				}
 			}
@@ -286,8 +305,7 @@ public class StavkeFakture extends Controller {
 
 		}
 
-		renderTemplate("StavkeFakture/show.html", stavkeFakture, fakture, nadredjeneForme,
-				kataloziRobeIUsluga, mode);
+		renderTemplate("StavkeFakture/show.html", stavkeFakture, fakture, nadredjeneForme, kataloziRobeIUsluga, mode);
 	}
 
 	public static void filter(StavkaFakture stavkaFakture) {
