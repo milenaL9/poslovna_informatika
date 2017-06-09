@@ -307,8 +307,8 @@
 								<label for = "${field.id}">Naziv stavke</label>
 								&nbsp &nbsp &nbsp
 								<select name = "${field.name}" id = "${field.id}">
-									#{list items:kataloziRobeIUsluga, as:'katalogRobeIUsluga'}
-										<option value = "${katalogRobeIUsluga.id}">${katalogRobeIUsluga.nazivStavkeKataloga}</option>
+									#{list items:stavkeCenovnika, as:'stavkaCenovnika'}
+										<option value = "${stavkaCenovnika.katalogRobeIUsluga.id}">${stavkaCenovnika.katalogRobeIUsluga.nazivStavkeKataloga}</option>
 									#{/list}
 								</select>
 								

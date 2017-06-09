@@ -2,16 +2,24 @@ package controllers;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import models.Cenovnik;
 import models.Faktura;
 import models.PoslovnaGodina;
 import models.PoslovniPartner;
 import models.Preduzece;
+import models.StavkaCenovnika;
 import models.StavkaFakture;
 import play.cache.Cache;
 import play.mvc.Controller;
@@ -34,14 +42,11 @@ public class Fakture extends Controller {
 			mode = "edit";
 		}
 
-	
-		
 		session.put("mode", mode);
 
 		List<String> povezaneForme = getForeignKeysFields();
 		List<Faktura> fakture = Fakture.checkCache();
-		
-		
+
 		List<PoslovniPartner> poslovniPartneri = PoslovniPartneri.checkCache();
 		List<PoslovnaGodina> poslovneGodine = PoslovneGodine.checkCache();
 		List<Preduzece> preduzeca = Preduzeca.checkCache();
@@ -139,7 +144,8 @@ public class Fakture extends Controller {
 				fakture, mode);
 	}
 
-	public static void create(Faktura faktura, Long poslovniPartner, Long poslovnaGodina, Long preduzece) {
+	public static void create(Faktura faktura, Long poslovniPartner, Long poslovnaGodina, Long preduzece)
+			throws ParseException {
 		validation.clear();
 		validation.valid(faktura);
 		clearSession();
@@ -192,16 +198,16 @@ public class Fakture extends Controller {
 			faktura.ukupnoOsnovica = 0;
 			faktura.ukupnoPDV = 0;
 			faktura.ukupnoZaPlacanje = 0;
-			
-			if(stavkeFakture != null) {
-				for(StavkaFakture sf : stavkeFakture) {
+
+			if (stavkeFakture != null) {
+				for (StavkaFakture sf : stavkeFakture) {
 					faktura.ukupnoOsnovica += sf.osnovicaZaPDV;
 					faktura.ukupnoPDV += sf.iznosPDVa;
 					faktura.ukupnoZaPlacanje += sf.ukupno;
 				}
-				
+
 			}
-			
+
 			faktura.save();
 			fakture.add(faktura);
 			Cache.set("fakture", fakture);
@@ -214,8 +220,10 @@ public class Fakture extends Controller {
 			validation.clear();
 			clearSession();
 
-			renderTemplate("fakture/show.html", poslovniPartneri, povezaneForme, preduzeca, fakture, poslovneGodine,
-					idd, nadredjeneForme, mode);
+			nextForm(faktura.id, "stavkeFakture");
+			// renderTemplate("fakture/show.html", poslovniPartneri,
+			// povezaneForme, preduzeca, fakture, poslovneGodine,
+			// idd, nadredjeneForme, mode);
 		} else {
 			validation.keep();
 
@@ -346,13 +354,55 @@ public class Fakture extends Controller {
 				povezaneForme, mode);
 	}
 
-	public static void nextForm(Long id, String forma) {
+	public static void nextForm(Long id, String forma) throws ParseException {
 		session.put("idFakture", id);
 		session.put("idPreduzeca", "null");
 		session.put("idPoslovneGodine", "null");
 		session.put("idPoslovnogPartnera", "null");
 
 		clearSession();
+
+		// Faktura faktura = Faktura.findById(id);
+		// String datumFakture = faktura.datumFakture;
+		// Date datumFaktureDate = convertToDate(datumFakture);
+		// Cenovnik cenovnik = null;
+		//
+		// List<Cenovnik> cenovniciSaDatumima = new ArrayList<>();
+		// List<Cenovnik> cenovnici = Cenovnici.checkCache();
+		// for (Cenovnik tmp : cenovnici) {
+		// String datumCenovnika = tmp.datumVazenja;
+		// Date datumCenovnikaDate = convertToDate(datumCenovnika);
+		//
+		// if (!datumCenovnikaDate.after(datumFaktureDate)) {
+		// cenovniciSaDatumima.add(tmp);
+		// }
+		// }
+		//
+		// List<Date> datumi = new ArrayList<>();
+		// // trazim cenovnik sa najvisim datumom
+		// for (Cenovnik tmp : cenovniciSaDatumima) {
+		// Date d = convertToDate(tmp.datumVazenja);
+		// datumi.add(d);
+		// // kada ga nadjem trazim njegove stavke
+		// }
+		//
+		// Collections.sort(datumi, new Comparator<Date>() {
+		// @Override
+		// public int compare(Date arg0, Date arg1) {
+		// // TODO Auto-generated method stub
+		// return arg0.compareTo(arg1);
+		// }
+		// });
+		//
+		// // trazim stavke cenovnika
+		// List<StavkaCenovnika> stavkeCenovnika = new ArrayList<>();
+		// for (Cenovnik tmp : cenovniciSaDatumima) {
+		// String string = new
+		// SimpleDateFormat("MM/dd/yyyy").format(datumi.get(datumi.size() - 1));
+		// if (tmp.datumVazenja.equals(string)) {
+		// stavkeCenovnika = tmp.stavkeCenovnika;
+		// }
+		// }
 
 		if (forma.equals("stavkeFakture")) {
 			List<Faktura> fakture = checkCache();
@@ -363,11 +413,64 @@ public class Fakture extends Controller {
 
 			List<String> nadredjeneForme = StavkeFakture.getForeignKeysFieldsManyToOne();
 
+			List<StavkaCenovnika> stavkeCenovnika = findStavkeCenovnika(id);
+
 			renderTemplate("StavkeFakture/show.html", fakture, stavkeFakture, preduzeca, poslovneGodine,
-					poslovniPartneri, nadredjeneForme);
+					poslovniPartneri, nadredjeneForme, stavkeCenovnika);
 		}
 
 		// DODATI ZA NARUDZBU
+	}
+
+	public static Date convertToDate(String receivedDate) throws ParseException {
+		SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+		Date date = formatter.parse(receivedDate);
+		return date;
+	}
+
+	public static List<StavkaCenovnika> findStavkeCenovnika(Long idFakture) throws ParseException {
+		Faktura faktura = Faktura.findById(idFakture);
+		String datumFakture = faktura.datumFakture;
+		Date datumFaktureDate = convertToDate(datumFakture);
+		Cenovnik cenovnik = null;
+
+		List<Cenovnik> cenovniciSaDatumima = new ArrayList<>();
+		List<Cenovnik> cenovnici = Cenovnici.checkCache();
+		for (Cenovnik tmp : cenovnici) {
+			String datumCenovnika = tmp.datumVazenja;
+			Date datumCenovnikaDate = convertToDate(datumCenovnika);
+
+			if (!datumCenovnikaDate.after(datumFaktureDate)) {
+				cenovniciSaDatumima.add(tmp);
+			}
+		}
+
+		List<Date> datumi = new ArrayList<>();
+		// trazim cenovnik sa najvisim datumom
+		for (Cenovnik tmp : cenovniciSaDatumima) {
+			Date d = convertToDate(tmp.datumVazenja);
+			datumi.add(d);
+			// kada ga nadjem trazim njegove stavke
+		}
+
+		Collections.sort(datumi, new Comparator<Date>() {
+			@Override
+			public int compare(Date arg0, Date arg1) {
+				// TODO Auto-generated method stub
+				return arg0.compareTo(arg1);
+			}
+		});
+
+		// trazim stavke cenovnika
+		List<StavkaCenovnika> stavkeCenovnika = new ArrayList<>();
+		for (Cenovnik tmp : cenovniciSaDatumima) {
+			String string = new SimpleDateFormat("MM/dd/yyyy").format(datumi.get(datumi.size() - 1));
+			if (tmp.datumVazenja.equals(string)) {
+				stavkeCenovnika = tmp.stavkeCenovnika;
+			}
+		}
+
+		return stavkeCenovnika;
 	}
 
 	public static List<StavkaFakture> findStavkeFakture(Long idFakture) {
