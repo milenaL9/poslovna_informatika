@@ -48,7 +48,7 @@
 		if(id == null){
 			alert("OznaÄ�ite red u tabeli!");
 		}else{
-			var r  = confirm("Da li Å¾elite da obriÅ¡te slog?");
+			var r  = confirm("Da li želite da obrište slog?");
 			if(r == true) {
 		    	$(location).attr('href', '/StopePDVa/delete?id='+id);
 			}
@@ -190,8 +190,6 @@
 						#{/}
 					</p>
 
-
-
 					<p>
 						#{field 'vrstaPDVa'} <label for="${field.id}">VrstaPDVa</label>
 						&nbsp &nbsp &nbsp <select name="${field.name}" id="${field.id}">
@@ -210,7 +208,7 @@
 					<div id="formActions">
 						<input type="submit" value="Potvrda" style="margin-left: 6em" class="btn btn-success" /> <a
 							href="@{StopePDVa.changeMode(" edit")}" style="margin-left: 1em">
-								<button type="button" class="btn btn-danger">OtkaÅ¾i</button>
+								<button type="button" class="btn btn-danger">Otkaži</button>
 							</a>
 					</div>
 				</form>
@@ -219,7 +217,7 @@
 	</div>
 </div>
 
-<p class="status_line">Trenutni reÅ¾im: ${session.mode}</p>
+<p class="status_line">Trenutni režim: ${session.mode}</p>
 
 <button onclick="topFunction()" id="myBtn" title="Idi na vrh">
 	<img src="@{'/public/images/back_top.png'}" alt=""
@@ -251,7 +249,7 @@
 
 				<div class="modal-footer">
 					<input id="vrstaPDVaPickup" type="button" value="Izbor" class="btn btn-success"/>
-					<button type="button" class="btn btn-danger" onclick="cancel_vrstePDVaModal()">OtkaÅ¾i</button>
+					<button type="button" class="btn btn-danger" onclick="cancel_vrstePDVaModal()">Otkaži</button>
 				</div>
 			</div>
 		</div>
@@ -263,7 +261,7 @@
 	<div class="modal-dialog">
 		<!-- Modal content-->
 		<div class="modal-content">
-			<div class="modal-header">Izaberite nadreÄ‘enu formu</div>
+			<div class="modal-header">Izaberite nadređenu formu</div>
 
 			<div class="modal-body">
 				<table style="padding: 2em">
@@ -280,7 +278,7 @@
 
 				<div class="modal-footer">
 					<input id="pickupPickup" type="button" value="Izbor" class="btn btn-success" />
-					<button type="button" class="btn btn-danger" onclick="cancel_pickupModal()">OtkaÅ¾i</button>
+					<button type="button" class="btn btn-danger" onclick="cancel_pickupModal()">Otkaži</button>
 				</div>
 			</div>
 		</div>

@@ -119,7 +119,7 @@ INSERT INTO [dbo].[Preduzece]
            ,[brojGodine]
            ,[preduzece_id])
      VALUES
-           ('A'
+           ('D'
            ,'2017'
            ,1)
 
@@ -137,7 +137,7 @@ INSERT INTO [dbo].[Preduzece]
            ,[brojGodine]
            ,[preduzece_id])
      VALUES
-           ('A'
+           ('D'
            ,'2017'
            ,2)
 
@@ -155,7 +155,7 @@ INSERT INTO [dbo].[Preduzece]
            ,[brojGodine]
            ,[preduzece_id])
      VALUES
-           ('A'
+           ('D'
            ,'2017'
            ,3)
 
@@ -173,7 +173,7 @@ INSERT INTO [dbo].[Preduzece]
            ,[brojGodine]
            ,[preduzece_id])
      VALUES
-           ('A'
+           ('D'
            ,'2017'
            ,4)
 

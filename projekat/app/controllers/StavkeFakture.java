@@ -6,6 +6,8 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -17,6 +19,7 @@ import models.KatalogRobeIUsluga;
 import models.StavkaCenovnika;
 import models.StavkaFakture;
 import models.StopaPDVa;
+import models.VrstaPDVa;
 import play.cache.Cache;
 import play.mvc.Controller;
 import play.mvc.With;
@@ -107,12 +110,8 @@ public class StavkeFakture extends Controller {
 			stavkaFakture.iznosRabata = stavkaFakture.vrednost * (stavkaFakture.rabat / 100);
 			stavkaFakture.osnovicaZaPDV = stavkaFakture.vrednost - stavkaFakture.iznosRabata;
 
-			List<StopaPDVa> stopePDVa = stavkaFakture.katalogRobeIUsluga.podgrupa.grupa.vrstaPDVa.stopePDVa;
-			for (StopaPDVa sp : stopePDVa) {
-				if (sp.vrstaPDVa == stavkaFakture.katalogRobeIUsluga.podgrupa.grupa.vrstaPDVa) {
-					stavkaFakture.stopaPDVa = sp.procenatPDVa;
-				}
-			}
+			stavkaFakture.stopaPDVa = findStopaPDVa(findFaktura.id,
+					stavkaFakture.katalogRobeIUsluga.podgrupa.grupa.vrstaPDVa).procenatPDVa;
 
 			stavkaFakture.iznosPDVa = (stavkaFakture.osnovicaZaPDV * stavkaFakture.stopaPDVa) / 100;
 			stavkaFakture.ukupno = stavkaFakture.vrednost - stavkaFakture.iznosRabata + stavkaFakture.iznosPDVa;
@@ -125,18 +124,6 @@ public class StavkeFakture extends Controller {
 
 			stavkaFakture.faktura.save();
 			stavkaFakture.save();
-
-			// stavkaFakture.save();
-			//
-			// stavkaFakture.iznosPDVa = (stavkaFakture.osnovicaZaPDV) *
-			// stavkaFakture.stopaPDVa / 100;
-			//
-			// stavkaFakture.save();
-			// stavkaFakture.ukupno = ((stavkaFakture.cena) *
-			// (stavkaFakture.kolicina)) - stavkaFakture.rabat;
-			// stavkaFakture.save();
-
-			// stavkaFakture.save();
 
 			List<Faktura> faktureAll = Faktura.findAll();
 			Cache.set("fakture", faktureAll);
@@ -151,8 +138,8 @@ public class StavkeFakture extends Controller {
 
 			validation.clear();
 
-			renderTemplate("StavkeFakture/show.html", stopePDVa, stavkeFakture, nadredjeneForme, fakture,
-					kataloziRobeIUsluga, idd, mode, stavkeCenovnika);
+			renderTemplate("StavkeFakture/show.html", stavkeFakture, nadredjeneForme, fakture, kataloziRobeIUsluga, idd,
+					mode, stavkeCenovnika);
 		} else {
 			validation.keep();
 
@@ -169,6 +156,47 @@ public class StavkeFakture extends Controller {
 					stavkaFakture, mode);
 		}
 
+	}
+
+	public static StopaPDVa findStopaPDVa(Long idFakture, VrstaPDVa vrstaPDVa) throws ParseException {
+		Faktura faktura = Faktura.findById(idFakture);
+		String datumFakture = faktura.datumFakture;
+		Date datumFaktureDate = Fakture.convertToDate(datumFakture);
+
+		List<StopaPDVa> stopePDVaSaDatumima = new ArrayList<>();
+		List<StopaPDVa> stopePDVa = StopePDVa.checkCache();
+		for (StopaPDVa tmp : stopePDVa) {
+			String datumStopePDVa = tmp.datumKreiranja;
+			Date datumStopePDVaDate = Fakture.convertToDate(datumStopePDVa);
+
+			if (!datumStopePDVaDate.after(datumFaktureDate) && (tmp.vrstaPDVa.id == vrstaPDVa.id)) {
+				stopePDVaSaDatumima.add(tmp);
+			}
+		}
+
+		List<Date> datumi = new ArrayList<>();
+		for (StopaPDVa tmp : stopePDVaSaDatumima) {
+			Date d = Fakture.convertToDate(tmp.datumKreiranja);
+			datumi.add(d);
+		}
+
+		Collections.sort(datumi, new Comparator<Date>() {
+			@Override
+			public int compare(Date arg0, Date arg1) {
+				return arg0.compareTo(arg1);
+			}
+		});
+
+		// trazim stopuPDVa
+		StopaPDVa stopaPDVa = null;
+		for (StopaPDVa tmp : stopePDVaSaDatumima) {
+			String string = new SimpleDateFormat("MM/dd/yyyy").format(datumi.get(datumi.size() - 1));
+			if (tmp.datumKreiranja.equals(string)) {
+				stopaPDVa = tmp;
+			}
+		}
+
+		return stopaPDVa;
 	}
 
 	public static void edit(StavkaFakture stavkaFakture, Long faktura, Long katalogRobeIUsluga, Long stopaPDVa)

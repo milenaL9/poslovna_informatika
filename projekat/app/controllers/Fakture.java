@@ -48,7 +48,7 @@ public class Fakture extends Controller {
 		List<Faktura> fakture = Fakture.checkCache();
 
 		List<PoslovniPartner> poslovniPartneri = PoslovniPartneri.checkCache();
-		List<PoslovnaGodina> poslovneGodine = PoslovneGodine.checkCache();
+		List<PoslovnaGodina> poslovneGodine = PoslovneGodine.findAktivnePoslovneGodine();
 		List<Preduzece> preduzeca = Preduzeca.checkCache();
 
 		List<String> nadredjeneForme = getForeignKeysFieldsManyToOne();
@@ -67,7 +67,7 @@ public class Fakture extends Controller {
 		String mode = session.get("mode");
 		List<String> povezaneForme = getForeignKeysFields();
 		List<PoslovniPartner> poslovniPartneri = PoslovniPartneri.checkCache();
-		List<PoslovnaGodina> poslovneGodine = PoslovneGodine.checkCache();
+		List<PoslovnaGodina> poslovneGodine = PoslovneGodine.findAktivnePoslovneGodine();
 		List<Preduzece> preduzeca = Preduzeca.checkCache();
 
 		List<String> nadredjeneForme = getForeignKeysFieldsManyToOne();
@@ -157,7 +157,7 @@ public class Fakture extends Controller {
 		List<Faktura> fakture = null;
 		List<Preduzece> preduzeca = Preduzeca.checkCache();
 		List<PoslovniPartner> poslovniPartneri = PoslovniPartneri.checkCache();
-		List<PoslovnaGodina> poslovneGodine = PoslovneGodine.checkCache();
+		List<PoslovnaGodina> poslovneGodine = PoslovneGodine.findAktivnePoslovneGodine();
 
 		List<String> nadredjeneForme = getForeignKeysFieldsManyToOne();
 
@@ -287,7 +287,7 @@ public class Fakture extends Controller {
 		String mode = session.get("mode");
 
 		List<Preduzece> preduzeca = Preduzeca.checkCache();
-		List<PoslovnaGodina> poslovneGodine = PoslovneGodine.checkCache();
+		List<PoslovnaGodina> poslovneGodine = PoslovneGodine.findAktivnePoslovneGodine();
 		List<PoslovniPartner> poslovniPartneri = PoslovniPartneri.checkCache();
 
 		List<String> povezaneForme = getForeignKeysFields();
@@ -309,7 +309,7 @@ public class Fakture extends Controller {
 		List<String> povezaneForme = getForeignKeysFields();
 		List<Faktura> fakture = Fakture.checkCache();
 		List<PoslovniPartner> poslovniPartneri = PoslovniPartneri.checkCache();
-		List<PoslovnaGodina> poslovneGodine = PoslovneGodine.checkCache();
+		List<PoslovnaGodina> poslovneGodine = PoslovneGodine.findAktivnePoslovneGodine();
 		List<Preduzece> preduzeca = Preduzeca.checkCache();
 
 		List<String> nadredjeneForme = getForeignKeysFieldsManyToOne();
@@ -326,7 +326,7 @@ public class Fakture extends Controller {
 		List<String> povezaneForme = getForeignKeysFields();
 		List<Preduzece> preduzeca = Preduzeca.checkCache();
 		List<PoslovniPartner> poslovniPartneri = PoslovniPartneri.checkCache();
-		List<PoslovnaGodina> poslovneGodine = PoslovneGodine.checkCache();
+		List<PoslovnaGodina> poslovneGodine = PoslovneGodine.findAktivnePoslovneGodine();
 
 		List<String> nadredjeneForme = getForeignKeysFieldsManyToOne();
 
@@ -360,7 +360,7 @@ public class Fakture extends Controller {
 			List<Faktura> fakture = checkCache();
 			List<StavkaFakture> stavkeFakture = findStavkeFakture(id);
 			List<Preduzece> preduzeca = Preduzeca.checkCache();
-			List<PoslovnaGodina> poslovneGodine = PoslovneGodine.checkCache();
+			List<PoslovnaGodina> poslovneGodine = PoslovneGodine.findAktivnePoslovneGodine();
 			List<PoslovniPartner> poslovniPartneri = PoslovniPartneri.checkCache();
 
 			List<String> nadredjeneForme = StavkeFakture.getForeignKeysFieldsManyToOne();
@@ -442,7 +442,7 @@ public class Fakture extends Controller {
 		List<String> povezaneForme = getForeignKeysFields();
 		List<Preduzece> preduzeca = Preduzeca.checkCache();
 		List<PoslovniPartner> poslovniPartneri = PoslovniPartneri.checkCache();
-		List<PoslovnaGodina> poslovneGodine = PoslovneGodine.checkCache();
+		List<PoslovnaGodina> poslovneGodine = PoslovneGodine.findAktivnePoslovneGodine();
 
 		List<String> nadredjeneForme = getForeignKeysFieldsManyToOne();
 
