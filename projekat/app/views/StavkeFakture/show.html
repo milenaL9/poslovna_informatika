@@ -4,68 +4,50 @@
 <script>
 	function sync(item){
 		if ("${session.mode}" == "edit"){
-			cena = item.find(".sf_cena").html()
+			faktura = item.find(".faktura").html()
+			katalogRobeIUsluga = item.find(".katalogRobeIUsluga").html()
 			kolicina = item.find(".kolicina").html()
 			rabat = item.find(".rabat").html()
-			osnovicaZaPDV = item.find(".osnovicaZaPDV").html()
-			stopaPDVa = item.find(".stopaPDVa").html()
-			iznosPDVa = item.find(".iznosPDVa").html()
-			ukupno = item.find(".ukupno").html()
-	
-		    stavkaCenovnika = item.find(".stavkaCenovnika").html()
-		    faktura = item.find(".faktura").html()
-		    id = item.find(".id").html()
-		    $("#stavkaFakture_cena").val(cena);
+			id = item.find(".id").html()
+		
 		    $("#stavkaFakture_id").val(id);
 		    $("#stavkaFakture_kolicina").val(kolicina);
-		    $("#stavkaFakture_rabat").val(rabat); 
-		    $("#stavkaFakture_osnovicaZaPDV ").val(osnovicaZaPDV );
-		    $("#stavkaFakture_stopaPDVa").val(stopaPDVa);  
-		    $("#stavkaFakture_iznosPDVa").val(iznosPDVa);
-		    $("#stavkaFakture_ukupno").val(ukupno);
-
-			var options = document.getElementById("stavkaCenovnika").children;
-			for (i = 0; i < options.length; i++) { 
-    			if(options[i].label == katalogRobeIUsluga){
-    				document.getElementById("stavkaCenovnika").selectedIndex = i;
-    				break;
-    			}
-			}
-			
-			var options = document.getElementById("faktura").children;
+		    $("#stavkaFakture_rabat").val(rabat);
+		    
+		    //select faktura
+		    var options = document.getElementById("faktura").children;
 			for (i = 0; i < options.length; i++) { 
     			if(options[i].label == faktura){
     				document.getElementById("faktura").selectedIndex = i;
     				break;
     			}
 			}
-			
-			
-// 			var options = document.getElementById("stopePDVa").children;
-// 			for (i = 0; i < options.length; i++) { 
-//     			if(options[i].label == stopaPDVa){
-//     				document.getElementById("stopaPDVa").selectedIndex = i;
-//     				break;
-//     			}
-// 			}
-			
+
+			//select katalogRobeIUsluga
+			var options = document.getElementById("katalogRobeIUsluga").children;
+			for (i = 0; i < options.length; i++) { 
+    			if(options[i].label == katalogRobeIUsluga){
+    				document.getElementById("katalogRobeIUsluga").selectedIndex = i;
+    				break;
+    			}
+			}		
 		}
 	}
 	
 	function SelectElement(){
 		if(${session.idKataloga} != null){
-			var options = document.getElementById("stavkaCenovnika").children;
+			var options = document.getElementById("katalogRobeIUsluga").children;
 			for (i = 0; i < options.length; i++) {
     			if(options[i].value == ${session.idKataloga}){
-    				document.getElementById("stavkaCenovnika").selectedIndex = i;
+    				document.getElementById("katalogRobeIUsluga").selectedIndex = i;
     				break;
     			}
 			}
 
-			document.getElementById("stavkaCenovnika").disabled = true;
+			document.getElementById("katalogRobeIUsluga").disabled = true;
 			document.getElementById("zoomBtn").disabled = true;
 		}else{
-			document.getElementById("stavkaCenovnika").disabled = false;
+			document.getElementById("katalogRobeIUsluga").disabled = false;
 			document.getElementById("zoomBtn").disabled = false;
 		}
 	}
@@ -88,33 +70,11 @@
 		}
 	}
 	
-	
-// 	function SelectElementStopaPDVa(){
-// 		if(${session.idStopePDVa} != null){
-// 			var options = document.getElementById("stopaPDVa").children;
-// 			for (i = 0; i < options.length; i++) {
-//     			if(options[i].value == ${session.idStopePDVa}){
-//     				document.getElementById("stopaPDVa").selectedIndex = i;
-//     				break;
-//     			}
-// 			}
-
-// 			document.getElementById("stopaPDVa").disabled = true;
-// 			document.getElementById("zoomBtnStopaPDVa").disabled = true;
-// 		}else{
-// 			document.getElementById("stopaPDVa").disabled = false;
-// 			document.getElementById("zoomBtnStopaPDVa").disabled = false;
-// 		}
-// 	}
-	
-	
-	
-
 	function remove(id){  <!-- ne znam koji je uanpred selektovani red , ovde se vrsi redirekcija -->
 		if(id == null){
-			alert("OznaÃ„ï¿½ite red u tabeli!");
+			alert("Označite red u tabeli!");
 		}else{
-			var r  = confirm("Da li Ã…Â¾elite da obriÃ…Â¡te slog?");
+			var r  = confirm("Da li želite da obrište slog?");
 			if(r == true) {
 		    	$(location).attr('href', '/StavkeFakture/delete?id='+id);
 			}
@@ -126,19 +86,6 @@
 	
 	function refresh_page(){
 		$(location).attr('href', '/StavkeFakture/refresh');
-	}
-	
-// 	// modal StopaPDVa
-// 	$(document).ready(function(){
-// 		$("#izborPickupStopaPDVa").click(function(){
-// 			id = $(".highlighted").find(".izbor_id").html();
-// 			$("select").val(id);
-// 			$('#modalDialogStopaPDVa').modal('toggle');
-// 		});
-// 	});
-	
-	function cancel_stopaPDVaModal(){
-		$('#modalDialogStopaPDVa').modal('toggle');
 	}
 	
 	// modal Faktura
@@ -240,31 +187,31 @@
 
 			<table>
 				<tr class = "header">
+					<th>Faktura</th>
 					<th>Naziv stavke</th>
-	   				<th>Kolicina</th>
-	   				<th>Rabat</th>
+	   				<th>Količina</th>
+	   				<th>Jedinična cena</th>
+	   				<th>Vrednost</th>
+	   				<th>Rabat %</th>
+	   				<th>Iznos rabata</th>
+	   				<th>Osnovica za PDV</th> 
 	   				<th>Stopa PDVa</th>
-	   				<th>Osnovica za PDV</th>
-	   				
 	   				<th>Iznos PDVa</th>
-	   				<th>Cena</th> 
-	   				<th>Ukupno</th>
-	   				<th>Faktura</th>
-	   				
+	   				<th>Ukupno za plaćanje</th>
 				</tr>
 				#{list items:stavkeFakture, as:'stavkaFakture'}
 					<tr #{if stavkaFakture.id== idd} class="highlighted"#{/if} class="tableRow">
+						<td class="faktura">${stavkaFakture.faktura.brojFakture}</td>
 						<td class="katalogRobeIUsluga">${stavkaFakture.katalogRobeIUsluga.nazivStavkeKataloga}</td>
 						<td class="kolicina">${stavkaFakture.kolicina}</td>
-						<td class="rabat">${stavkaFakture.rabat}</td>
-						
-						<td class="stopaPDVa">${stavkaFakture.stopaPDVa} % </td>
-						<td class="osnovicaZaPDV">${stavkaFakture.osnovicaZaPDV}</td>
-						<td class="iznosPDVa">${stavkaFakture.iznosPDVa}</td>
 						<td class="sf_cena">${stavkaFakture.cena}</td>
+						<td class="vrednost">${stavkaFakture.vrednost}</td>
+						<td class="rabat">${stavkaFakture.rabat}</td>
+						<td class="iznosRabata">${stavkaFakture.iznosRabata}</td>
+						<td class="osnovicaZaPDV">${stavkaFakture.osnovicaZaPDV}</td>
+						<td class="stopaPDVa">${stavkaFakture.stopaPDVa} % </td>
+						<td class="iznosPDVa">${stavkaFakture.iznosPDVa}</td>
 						<td class="ukupno">${stavkaFakture.ukupno}</td>
-						<td class="faktura">${stavkaFakture.faktura.brojFakture}</td>
-					
 						<td style="visibility: hidden; max-width: 0px" class="id">${stavkaFakture.id}</td>
 					</tr>
 				#{/list}
@@ -291,96 +238,6 @@
 								<input type="hidden" name="${field.name}" id="${field.id}" value="${session.idSC}" />
 							#{/}
 						</p>
-						
-<!-- 						<p> -->
-<!-- 							#{field 'stavkaFakture.cena'}  -->
-<!-- 								<label for="${field.id}">Cena</label> -->
-<!-- 								<input type="text" name="${field.name}" id="${field.id}" value="${session.cena}" />  -->
-<!-- 								<span>#{error field.name /}</span> -->
-<!-- 							#{/} -->
-<!-- 						</p> -->
-						
-						
-						
-						<p>
-							#{field 'stavkaCenovnika'}
-								<label for = "${field.id}">Naziv stavke</label>
-								&nbsp &nbsp &nbsp
-								<select name = "${field.name}" id = "${field.id}">
-									#{list items:stavkeCenovnika, as:'stavkaCenovnika'}
-										<option value = "${stavkaCenovnika.katalogRobeIUsluga.id}">${stavkaCenovnika.katalogRobeIUsluga.nazivStavkeKataloga}</option>
-									#{/list}
-								</select>
-								
-								<button id = "zoomBtn" type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#modalDialog">...	</button>
-							#{/}
-							
-							<script>SelectElement()</script>
-						</p>
-						
-						
-						<p>
-							#{field 'stavkaFakture.kolicina'} 
-								<label for="${field.id}">Količina</label>
-								<input type="text" name="${field.name}" id="${field.id}" value="${session.cena}" /> 
-								<span>#{error field.name /}</span>
-							#{/}
-						</p>
-						
-						
-						
-						
-						<p>
-							#{field 'stavkaFakture.rabat'} 
-								<label for="${field.id}">Rabat</label>
-								<input type="text" name="${field.name}" id="${field.id}" value="${session.cena}" /> 
-								<span>#{error field.name /}</span>
-							#{/}
-						</p>
-						
-						
-						
-<!-- 						<p> -->
-<!-- 							#{field 'stavkaFakture.osnovicaZaPDV'}  -->
-<!-- 								<label for="${field.id}">Osnovica za PDV</label> -->
-<!-- 								<input type="text" name="${field.name}" id="${field.id}" value="${session.cena}" />  -->
-<!-- 								<span>#{error field.name /}</span> -->
-<!-- 							#{/} -->
-<!-- 						</p> -->
-						
-						
-<!-- 						<p> -->
-<!-- 							#{field 'stopaPDVa'}  -->
-<!-- 								<label for="${field.id}">Stopa PDVa</label> -->
-<!-- 								&nbsp &nbsp &nbsp -->
-<!-- 								<select name = "${field.name}" id = "${field.id}"> -->
-<!-- 									#{list items:stopePDVa, as:'stopaPDVa'} -->
-<!-- 										<option value = "${stopaPDVa.id}">${stopaPDVa.procenatPDVa} %</option> -->
-<!-- 									#{/list}  -->
-<!-- 								</select> -->
-								
-<!-- 								<button id = "zoomBtnStopaPDVa" type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#modalDialogStopaPDVa">...	</button> -->
-<!-- 							#{/} -->
-							
-<!-- 							<script>SelectElementStopaPDVa()</script> -->
-<!-- 						</p> -->
-						
-<!-- 						<p> -->
-<!-- 							#{field 'stavkaFakture.iznosPDVa'}  -->
-<!-- 								<label for="${field.id}">Iznos PDVa</label> -->
-<!-- 								<input type="text" name="${field.name}" id="${field.id}" value="${session.cena}" />  -->
-<!-- 								<span>#{error field.name /}</span> -->
-<!-- 							#{/} -->
-<!-- 						</p> -->
-						
-						
-<!-- 						<p> -->
-<!-- 							#{field 'stavkaFakture.ukupno'}  -->
-<!-- 								<label for="${field.id}">Ukupno</label> -->
-<!-- 								<input type="text" name="${field.name}" id="${field.id}" value="${session.cena}" />  -->
-<!-- 								<span>#{error field.name /}</span> -->
-<!-- 							#{/} -->
-<!-- 						</p> -->
 
 						<p>
 							#{field 'faktura'} 
@@ -397,13 +254,43 @@
 							
 							<script>SelectElementFaktura()</script>
 						</p>
+
+						<p>
+							#{field 'katalogRobeIUsluga'}
+								<label for = "${field.id}">Naziv stavke</label>
+								&nbsp &nbsp &nbsp
+								<select name = "${field.name}" id = "${field.id}">
+									#{list items:stavkeCenovnika, as:'stavkaCenovnika'}
+										<option value = "${stavkaCenovnika.katalogRobeIUsluga.id}">${stavkaCenovnika.katalogRobeIUsluga.nazivStavkeKataloga}</option>
+									#{/list}
+								</select>
+								
+								<button id = "zoomBtn" type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#modalDialog">...	</button>
+							#{/}
+							
+							<script>SelectElement()</script>
+						</p>
+												
+						<p>
+							#{field 'stavkaFakture.kolicina'} 
+								<label for="${field.id}">Količina</label>
+								<input type="text" name="${field.name}" id="${field.id}" value="${session.cena}" /> 
+								<span>#{error field.name /}</span>
+							#{/}
+						</p>
 						
-						
+						<p>
+							#{field 'stavkaFakture.rabat'} 
+								<label for="${field.id}">Rabat %</label>
+								<input type="text" name="${field.name}" id="${field.id}" value="${session.cena}" /> 
+								<span>#{error field.name /}</span>
+							#{/}
+						</p>
 						
 						<div id = "formActions">
 							<input type = "submit" value = "Potvrda" style="margin-left:6em" class="btn btn-success"/>
 							<a href = "@{StavkeFakture.changeMode("edit")}" style="margin-left:1em">
-								<button type="button" class="btn btn-danger">OtkaÃ…Â¾i</button>
+								<button type="button" class="btn btn-danger">Otkaži</button>
 							</a>
 						</div>				
 				</form>
@@ -412,48 +299,12 @@
 	</div>
 </div>
 
-<p class="status_line">Trenutni reÃ…Â¾im: ${session.mode}</p>
+<p class="status_line">Trenutni režim: ${session.mode}</p>
 
 <button onclick="topFunction()" id="myBtn" title="Idi na vrh">
 	<img src="@{'/public/images/back_top.png'}" alt=""
 		class="rounded-circle" width="40" height="40">
 </button>
-
-<!-- Modal StopaPDVa-->
-<div class="modal fade" id="modalDialogStopaPDVa" role="dialog">
-	<div class="modal-dialog">
-		<!-- Modal content-->
-		<div class="modal-content">
-			<div class="modal-header">
-				StopaPDVa
-			</div>
-			
-      		<div class="modal-body">
-	    		<table style = "padding:2em">
-					<tr class = "header">
-	   					<th>Datum kreiranja</th>
-						<th>Procenat PDVa</th>
-						<th>Vrsta PDVa</th>
-					</tr>
-					
-					#{list stopePDVa, as:'stopaPDVa'}
-						<tr #{if stopaPDVa.id == idd} class = "highlighted" #{/if}>
-							<td class="s_datumKreiranja">${stopaPDVa.datumKreiranja}</td>
-							<td class="s_procenatPDVa">${stopaPDVa.procenatPDVa}</td>
-							<td class="vrstaPDVa">${stopaPDVa.vrstaPDVa.nazivVrstePDva}</td>
-							<td style = "visibility: hidden; max-width: 0px" class = "izbor_id">${stopaPDVa.id}</td>
-						</tr>
-					#{/list}
-				</table>
-				
-				<div class="modal-footer">
-					<input id = "izborPickupStopaPDVa" type = "button" value = "Izbor" class="btn btn-success"/>
-					<button type="button" class="btn btn-danger" onclick="cancel_stopaPDVaModal()">OtkaÃ…Â¾i</button>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
 
 <!-- Modal Faktura -->
 <div class="modal fade" id="modalDialogFaktura" role="dialog">
@@ -492,7 +343,7 @@
 				
 				<div class="modal-footer">
 					<input id = "izborPickupFaktura" type = "button" value = "Izbor" class="btn btn-success"/>
-					<button type="button" class="btn btn-danger" onclick="cancel_fakturaModal()">OtkaÃ…Â¾i</button>
+					<button type="button" class="btn btn-danger" onclick="cancel_fakturaModal()">Otkaži</button>
 				</div>
 			</div>
 		</div>
@@ -516,19 +367,19 @@
 		   				<th>Podgrupa</th>
 					</tr>
 					
-					#{list kataloziRobeIUsluga, as:'katalogRobeIUsluga'}
-						<tr #{if katalogRobeIUsluga.id == idd} class = "highlighted" #{/if}>
-							<td class = "naziv">${katalogRobeIUsluga.nazivStavkeKataloga}</td>
-							<td class = "opis">${katalogRobeIUsluga.opisStavkeKataloga}</td>
-							<td class = "podgrupa">${katalogRobeIUsluga.podgrupa.nazivPodgrupe}</td>
-							<td style = "visibility: hidden; max-width: 0px" class = "izbor_id">${katalogRobeIUsluga.id}</td>
+					#{list stavkeCenovnika, as:'stavkaCenovnika'}
+						<tr #{if stavkaCenovnika.katalogRobeIUsluga.id == idd} class = "highlighted" #{/if}>
+							<td class = "naziv">${stavkaCenovnika.katalogRobeIUsluga.nazivStavkeKataloga}</td>
+							<td class = "opis">${stavkaCenovnika.katalogRobeIUsluga.opisStavkeKataloga}</td>
+							<td class = "podgrupa">${stavkaCenovnika.katalogRobeIUsluga.podgrupa.nazivPodgrupe}</td>
+							<td style = "visibility: hidden; max-width: 0px" class = "izbor_id">${stavkaCenovnika.katalogRobeIUsluga.id}</td>
 						</tr>
 					#{/list}
 				</table>
 				
 				<div class="modal-footer">
 					<input id = "izborPickup" type = "button" value = "Izbor" class="btn btn-success"/>
-					<button type="button" class="btn btn-danger" onclick="cancel_katalogModal()">OtkaÃ…Â¾i</button>
+					<button type="button" class="btn btn-danger" onclick="cancel_katalogModal()">Otkaži</button>
 				</div>
 			</div>
 		</div>
@@ -557,7 +408,7 @@
 
 				<div class="modal-footer">
 					<input id="pickupPickup" type="button" value="Izbor" class="btn btn-success" />
-					<button type="button" class="btn btn-danger" onclick="cancel_pickupModal()">OtkaÃ…Â¾i</button>
+					<button type="button" class="btn btn-danger" onclick="cancel_pickupModal()">Otkaži</button>
 				</div>
 			</div>
 		</div>

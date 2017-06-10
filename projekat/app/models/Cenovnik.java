@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 
 import play.data.validation.Required;
+import play.data.validation.Unique;
 import play.db.jpa.Model;
 
 @Entity
@@ -17,6 +18,7 @@ public class Cenovnik extends Model {
 	public String naziv;
 
 	@Required
+	@Unique
 	@Column(columnDefinition = "varchar(10)")
 	public String datumVazenja;
 

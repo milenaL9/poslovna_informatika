@@ -212,18 +212,12 @@ public class Fakture extends Controller {
 			fakture.add(faktura);
 			Cache.set("fakture", fakture);
 
-			// potrebno da bi se selektovao dodati red na view delu
-			Long idd = faktura.id;
-
 			fakture.clear();
 			fakture = fillList();
 			validation.clear();
 			clearSession();
 
 			nextForm(faktura.id, "stavkeFakture");
-			// renderTemplate("fakture/show.html", poslovniPartneri,
-			// povezaneForme, preduzeca, fakture, poslovneGodine,
-			// idd, nadredjeneForme, mode);
 		} else {
 			validation.keep();
 
@@ -362,48 +356,6 @@ public class Fakture extends Controller {
 
 		clearSession();
 
-		// Faktura faktura = Faktura.findById(id);
-		// String datumFakture = faktura.datumFakture;
-		// Date datumFaktureDate = convertToDate(datumFakture);
-		// Cenovnik cenovnik = null;
-		//
-		// List<Cenovnik> cenovniciSaDatumima = new ArrayList<>();
-		// List<Cenovnik> cenovnici = Cenovnici.checkCache();
-		// for (Cenovnik tmp : cenovnici) {
-		// String datumCenovnika = tmp.datumVazenja;
-		// Date datumCenovnikaDate = convertToDate(datumCenovnika);
-		//
-		// if (!datumCenovnikaDate.after(datumFaktureDate)) {
-		// cenovniciSaDatumima.add(tmp);
-		// }
-		// }
-		//
-		// List<Date> datumi = new ArrayList<>();
-		// // trazim cenovnik sa najvisim datumom
-		// for (Cenovnik tmp : cenovniciSaDatumima) {
-		// Date d = convertToDate(tmp.datumVazenja);
-		// datumi.add(d);
-		// // kada ga nadjem trazim njegove stavke
-		// }
-		//
-		// Collections.sort(datumi, new Comparator<Date>() {
-		// @Override
-		// public int compare(Date arg0, Date arg1) {
-		// // TODO Auto-generated method stub
-		// return arg0.compareTo(arg1);
-		// }
-		// });
-		//
-		// // trazim stavke cenovnika
-		// List<StavkaCenovnika> stavkeCenovnika = new ArrayList<>();
-		// for (Cenovnik tmp : cenovniciSaDatumima) {
-		// String string = new
-		// SimpleDateFormat("MM/dd/yyyy").format(datumi.get(datumi.size() - 1));
-		// if (tmp.datumVazenja.equals(string)) {
-		// stavkeCenovnika = tmp.stavkeCenovnika;
-		// }
-		// }
-
 		if (forma.equals("stavkeFakture")) {
 			List<Faktura> fakture = checkCache();
 			List<StavkaFakture> stavkeFakture = findStavkeFakture(id);
@@ -432,7 +384,6 @@ public class Fakture extends Controller {
 		Faktura faktura = Faktura.findById(idFakture);
 		String datumFakture = faktura.datumFakture;
 		Date datumFaktureDate = convertToDate(datumFakture);
-		Cenovnik cenovnik = null;
 
 		List<Cenovnik> cenovniciSaDatumima = new ArrayList<>();
 		List<Cenovnik> cenovnici = Cenovnici.checkCache();
@@ -450,13 +401,11 @@ public class Fakture extends Controller {
 		for (Cenovnik tmp : cenovniciSaDatumima) {
 			Date d = convertToDate(tmp.datumVazenja);
 			datumi.add(d);
-			// kada ga nadjem trazim njegove stavke
 		}
 
 		Collections.sort(datumi, new Comparator<Date>() {
 			@Override
 			public int compare(Date arg0, Date arg1) {
-				// TODO Auto-generated method stub
 				return arg0.compareTo(arg1);
 			}
 		});

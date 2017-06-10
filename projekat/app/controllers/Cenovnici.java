@@ -28,6 +28,7 @@ public class Cenovnici extends Controller {
 
 		// potrebno za nextForm mehanizam
 		session.put("idCenovnika", "null");
+		clearSession();
 
 		if (mode == null || mode.equals("")) {
 			mode = "edit";

@@ -67,10 +67,10 @@ public class StavkeFakture extends Controller {
 
 	}
 
-	public static void create(StavkaFakture stavkaFakture, Long faktura, Long stavkaCenovnika) throws ParseException {
+	public static void create(StavkaFakture stavkaFakture, Long faktura, Long katalogRobeIUsluga)
+			throws ParseException {
 		validation.clear();
 		clearSession();
-		System.out.println("stavkaCenovnika: " + stavkaCenovnika);
 
 		validation.valid(stavkaFakture);
 
@@ -80,7 +80,6 @@ public class StavkeFakture extends Controller {
 		List<StavkaFakture> stavkeFakture = null;
 		List<Faktura> fakture = Fakture.checkCache();
 		List<KatalogRobeIUsluga> kataloziRobeIUsluga = KataloziRobeIUsluga.checkCache();
-		// List<StopaPDVa> stopePDVa = StopePDVa.checkCache();
 		List<String> nadredjeneForme = getForeignKeysFieldsManyToOne();
 		List<StavkaCenovnika> stavkeCenovnika = fillListStavkeCenovnika();
 
@@ -96,52 +95,48 @@ public class StavkeFakture extends Controller {
 				findFaktura = Faktura.findById(faktura);
 			}
 
-			//StavkaCenovnika stavkaCenovnika = StavkaCenovnika.findById(stavkaCenovnika);
-//			System.out.println("sc " + sc.id);
-//			System.out.println("sc_katalog : " + sc.katalogRobeIUsluga);
-//			stavkaFakture.katalogRobeIUsluga = sc.katalogRobeIUsluga;
+			KatalogRobeIUsluga katalogRobeIUslugaFind = KatalogRobeIUsluga.findById(katalogRobeIUsluga);
+			stavkaFakture.katalogRobeIUsluga = katalogRobeIUslugaFind;
 
-			// StopaPDVa findStopaPDVa = null;
-			// if (stopaPDVa == null) {
-			// Long id = Long.parseLong(session.get("idStopePDVa"));
-			// findStopaPDVa = StopaPDVa.findById(id);
-			// } else {
-			// findStopaPDVa = StopaPDVa.findById(stopaPDVa);
-			// }
-
-			stavkaFakture.faktura = findFaktura;
-			// stavkaFakture.stopaPDVa = findStopaPDVa;
-
-			stavkaFakture.save();
+			for (StavkaCenovnika sc : stavkeCenovnika) {
+				if (sc.katalogRobeIUsluga.id == stavkaFakture.katalogRobeIUsluga.id) {
+					stavkaFakture.cena = (float) sc.cena;
+				}
+			}
+			stavkaFakture.vrednost = stavkaFakture.cena * stavkaFakture.kolicina;
+			stavkaFakture.iznosRabata = stavkaFakture.vrednost * (stavkaFakture.rabat / 100);
+			stavkaFakture.osnovicaZaPDV = stavkaFakture.vrednost - stavkaFakture.iznosRabata;
 
 			List<StopaPDVa> stopePDVa = stavkaFakture.katalogRobeIUsluga.podgrupa.grupa.vrstaPDVa.stopePDVa;
-
 			for (StopaPDVa sp : stopePDVa) {
 				if (sp.vrstaPDVa == stavkaFakture.katalogRobeIUsluga.podgrupa.grupa.vrstaPDVa) {
 					stavkaFakture.stopaPDVa = sp.procenatPDVa;
 				}
 			}
 
-			stavkaFakture.osnovicaZaPDV = stavkaFakture.cena;
-			stavkaFakture.save();
-			stavkaFakture.iznosPDVa = (stavkaFakture.osnovicaZaPDV) * stavkaFakture.stopaPDVa / 100;
-			stavkaFakture.cena = stavkaFakture.cena + stavkaFakture.iznosPDVa;
+			stavkaFakture.iznosPDVa = (stavkaFakture.osnovicaZaPDV * stavkaFakture.stopaPDVa) / 100;
+			stavkaFakture.ukupno = stavkaFakture.vrednost - stavkaFakture.iznosRabata + stavkaFakture.iznosPDVa;
 
-			stavkaFakture.save();
-			stavkaFakture.ukupno = ((stavkaFakture.cena) * (stavkaFakture.kolicina)) - stavkaFakture.rabat;
-			stavkaFakture.save();
+			stavkaFakture.faktura = findFaktura;
 
 			stavkaFakture.faktura.ukupnoPDV += stavkaFakture.iznosPDVa;
 			stavkaFakture.faktura.ukupnoZaPlacanje += stavkaFakture.ukupno;
 			stavkaFakture.faktura.ukupnoOsnovica += stavkaFakture.osnovicaZaPDV;
 
-			System.out.println("FAKTURA_ID: " + stavkaFakture.faktura.id);
-			System.out.println("FAKTURA_ukupnoPDV:" + stavkaFakture.faktura.ukupnoPDV);
-			System.out.println("FAKTURA_ukupnoZaPlacanje:" + stavkaFakture.faktura.ukupnoZaPlacanje);
-			System.out.println("FAKTURA_ukupnoOsnovica:" + stavkaFakture.faktura.ukupnoOsnovica);
-
 			stavkaFakture.faktura.save();
 			stavkaFakture.save();
+
+			// stavkaFakture.save();
+			//
+			// stavkaFakture.iznosPDVa = (stavkaFakture.osnovicaZaPDV) *
+			// stavkaFakture.stopaPDVa / 100;
+			//
+			// stavkaFakture.save();
+			// stavkaFakture.ukupno = ((stavkaFakture.cena) *
+			// (stavkaFakture.kolicina)) - stavkaFakture.rabat;
+			// stavkaFakture.save();
+
+			// stavkaFakture.save();
 
 			List<Faktura> faktureAll = Faktura.findAll();
 			Cache.set("fakture", faktureAll);

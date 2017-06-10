@@ -3,3 +3,5 @@
 #
 validation.required=%s je obavezno polje
 validation.maxSize=Maksimalna dužina %s polja je %d
+
+validation.unique=%s mora da bude jedinstveno

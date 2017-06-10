@@ -191,7 +191,7 @@
 					<p>
 						#{field 'cenovnik.naziv'} 
 							<label for = "${field.id}">Naziv</label>
-							<input type = "text" name = "${field.name}" id = "${field.id}" maxlength="40" size="40"/>
+							<input type = "text" name = "${field.name}" id = "${field.id}" maxlength="40" size="40" value="${session.nazivCenovnik}"/>
 						#{/}
 					</p>
 				
@@ -199,6 +199,7 @@
 						#{field 'cenovnik.datumVazenja'}
 					      	<label for = "${field.id}">Datum važenja</label>
 							<input type="text" name="${field.name}" id="${field.id}"/>
+							<span>#{error field.name /}</span>
 						#{/}
 					</p>
 					

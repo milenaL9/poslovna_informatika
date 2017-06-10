@@ -363,4 +363,20 @@ public class PoslovneGodine extends Controller {
 
 		return povezaneForme;
 	}
+
+	public static List<PoslovnaGodina> findAktivnePoslovneGodine(Long idPreduzeca) {
+		Preduzece preduzece = Preduzece.findById(idPreduzeca);
+		List<PoslovnaGodina> poslovneGodineAll = preduzece.poslovneGodine;
+
+		List<PoslovnaGodina> aktivneGodine = new ArrayList<>();
+
+		for (PoslovnaGodina pg : poslovneGodineAll) {
+			if (pg.aktivna.equals("D")) {
+				aktivneGodine.add(pg);
+			}
+		}
+
+		return aktivneGodine;
+	}
+
 }
