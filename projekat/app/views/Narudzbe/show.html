@@ -1,0 +1,96 @@
+#{extends 'standardForm.html' /}
+#{set title:'Narudzbe' /}
+
+
+<script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
+
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="icon-bar">
+			<a href="#" onclick="openSideNav()">
+				<img width="16px" height="16px" src="@{'/public/images/menu_icon.png'}" />
+			</a>
+			
+			<a href="@{Narudzbe.changeMode("search")}" id = "search">
+				<img src="@{'/public/images/search.gif'}"/>
+			</a>
+			
+			<a href="@{Narudzbe.changeMode("edit")}" id = "refresh">
+				<img src="@{'/public/images/refresh.gif'}"/>
+			</a>
+			
+			<a href="#" onclick="pickup()">
+				<img src="@{'/public/images/zoom-pickup.gif'}"/>
+			</a>
+			
+			<a href="#" id = "help">
+				<img src="@{'/public/images/help.gif'}"/>
+			</a>
+			
+			<a id = "first">
+				<img src="@{'/public/images/first.gif'}"/>
+			</a>
+
+			<a id = "prev">
+				<img src="@{'/public/images/prev.gif'}"/>
+			</a>
+
+			<a id = "next">
+				<img src="@{'/public/images/next.gif'}"/>
+			</a>
+
+			<a id = "last">
+				<img src="@{'/public/images/last.gif'}"/>
+			</a>
+			
+			<a href="@{Narudzbe.changeMode("add")}" id = "add">
+				<img src="@{'/public/images/add.gif'}"/>
+			</a>
+			
+			<a href="#" id = "remove">
+				<img src="@{'/public/images/remove.gif'}"/>
+			</a>
+			
+			<a href="#" id = "nextform">
+				<img src="@{'/public/images/nextform.gif'}"/>
+			</a>
+		</div>
+		
+		<div class="container-fluid">
+			<h1> Narudzbe </h1>
+			
+			<table>
+				<tr class = "header">
+					<th>Datum narudzbe</th>
+	   				<th>Broj narudzbe</th>
+	   				<th>Datum valute</th>
+	   				<th>Ukupno osnovica</th>
+	   				<th>Ukupno PDV</th>
+	   				<th>Ukupno za placanje</th>
+	   				<th>Preduzece</th>
+	   				<th>Poslovna godina</th>
+	   				<th>Poslovni partner</th>
+				</tr>
+				
+				#{list items:narudzbe, as 'narudzba'}
+					<tr>
+					<td class = "datumNarudzbe">${narudzba.datumNarudzbe}</td>
+					<td class = "brojNarudzbe">${narudzba.brojNarudzbe}</td>
+					<td class = "datumNarudzbe">${narudzba.datumValute}</td>
+					<td class = "ukupnoOsnovica">${narudzba.ukupnoOsnovica}</td>
+					<td class = "ukupnoPDV">${narudzba.ukupnoPDV}</td>
+					<td class = "ukupnoZaPlacanje">${narudzba.ukupnoZaPlacanje}</td>
+				
+					<td class="preduzece">${narudzba.preduzece.naziv}</td>
+					<td class="poslovnaGodina">${faktura.poslovnaGodina.brojGodine}</td>
+					<td class="poslovniPartner">${faktura.poslovniPartner.naziv}</td>
+					</tr>
+				#{/list}
+			</table>		
+		</div>
+		
+		</div>
+	</div>
+	
