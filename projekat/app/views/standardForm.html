@@ -30,6 +30,12 @@
 			nextform_func(id);
 		});
 		
+		$("#kupovinaProdaja").click(function() {
+			highlighted = $(".highlighted");
+			id = highlighted.find(".id").html();
+			kupovinaProdaja_func(id);
+		});
+		
 		$("#copy").click(function() {
 			highlighted = $(".highlighted");
 			id = highlighted.find(".id").html();

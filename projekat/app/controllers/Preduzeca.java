@@ -29,6 +29,7 @@ public class Preduzeca extends Controller {
 	 */
 	public static void show(String mode) {
 		validation.clear();
+		clearSession();
 
 		// potrebno za nextForm mehanizam
 		session.put("idPreduzeca", "null");

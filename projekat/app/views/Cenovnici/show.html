@@ -184,7 +184,7 @@
 				<form action=${action} method="post"> 
 					<p>
 						#{field 'cenovnik.id'}
-							<input type = "hidden" name = "${field.name}" id = "${field.id}"/>
+							<input type = "hidden" name = "${field.name}" id = "${field.id}" value="${session.idCen}"/>
 						#{/}
 					</p>
 				
@@ -192,6 +192,7 @@
 						#{field 'cenovnik.naziv'} 
 							<label for = "${field.id}">Naziv</label>
 							<input type = "text" name = "${field.name}" id = "${field.id}" maxlength="40" size="40" value="${session.nazivCenovnik}"/>
+							<span>#{error field.name /}</span>
 						#{/}
 					</p>
 				

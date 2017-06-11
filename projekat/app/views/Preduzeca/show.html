@@ -48,6 +48,7 @@
 		}
 	}
 
+	// nextForm modal
 	function nextform_func(id){
 		if(id==null){
 			alert("Označite red u tabeli!");
@@ -59,6 +60,15 @@
 	
 	function cancel_modal(){
    		$('#nextFormModal').modal('toggle');
+	}
+	
+	//dnevnik izlaznih faktura
+	function kupovinaProdaja_func(id){
+		if(id==null){
+			alert("Označite red u tabeli!");
+		}else{
+			
+		}	
 	}
 
 	function refresh_page(){
@@ -113,6 +123,10 @@
 			<a href="#" id = "nextform">
 				<img src="@{'/public/images/nextform.gif'}"/>
 			</a>
+			
+			<a id = "kupovinaProdaja">
+				<img src="@{'/public/images/message_send.png'}" width="23px" height="23px"/>
+			</a>
 		</div>
 
 		<div class="container-fluid">
@@ -157,56 +171,63 @@
 				<form action=${action} method="post"> 
 					<p>
 						#{field 'preduzece.id'}
-							<input type = "hidden" name = "${field.name}" id = "${field.id}"/>
+							<input type = "hidden" value="${session.idPred}" name = "${field.name}" id = "${field.id}"/>
 						#{/}
 					</p>
 				
 					<p>
 						#{field 'preduzece.naziv'} 
 							<label for = "${field.id}">Naziv</label>
-							<input type = "text" name = "${field.name}" id = "${field.id}"/>
+							<input type = "text" value="${session.nazivPred}" name = "${field.name}" id = "${field.id}"/>
+							<span>#{error field.name /}</span>
 						#{/}
 					</p>
 				
 					<p>
 						#{field 'preduzece.pib'}
 							<label for = "${field.id}">PIB</label>
-							<input type = "text" name = "${field.name}" id = "${field.id}" maxlength="8" size="8"/>
+							<input type = "text" value="${session.pibPred}" name = "${field.name}" id = "${field.id}" maxlength="8" size="8"/>
+							<span>#{error field.name /}</span>
 						#{/}
 					</p>
 					
 					<p>
 						#{field 'preduzece.mesto'}
 							<label for = "${field.id}">Mesto</label>
-							<input type = "text" name = "${field.name}" id = "${field.id}" maxlength="40" size="40"/>
+							<input type = "text" value="${session.mestoPred}" name = "${field.name}" id = "${field.id}" maxlength="40" size="40"/>
+							<span>#{error field.name /}</span>
 						#{/}
 					</p>
 					
 					<p>
 						#{field 'preduzece.adresa'}
 							<label for = "${field.id}">Adresa</label>
-							<input type = "text" name = "${field.name}" id = "${field.id}" maxlength="40" size="40"/>
+							<input type = "text" value="${session.adresaPred}" name = "${field.name}" id = "${field.id}" maxlength="40" size="40"/>
+							<span>#{error field.name /}</span>
 						#{/}
 					</p>
 					
 					<p>
 						#{field 'preduzece.telefon'}
 							<label for = "${field.id}">Telefon</label>
-							<input type = "text" name = "${field.name}" id = "${field.id}" maxlength="15" size="15"/>
+							<input type = "text" value="${session.telefonPred}" name = "${field.name}" id = "${field.id}" maxlength="15" size="15"/>
+							<span>#{error field.name /}</span>
 						#{/}
 					</p>
 					
 					<p>
 						#{field 'preduzece.maticniBroj'}
 							<label for = "${field.id}">Matični broj</label>
-							<input type = "text" name = "${field.name}" id = "${field.id}" maxlength="13" size="13"/>
+							<input type = "text" value="${session.maticniBrojPred}" name = "${field.name}" id = "${field.id}" maxlength="13" size="13"/>
+							<span>#{error field.name /}</span>
 						#{/}
 					</p>
 					
 					<p>
 						#{field 'preduzece.tekuciRacun'}
 							<label for = "${field.id}">Tekući račun</label>
-							<input type = "text" name = "${field.name}" id = "${field.id}" maxlength="18" size="18"/>
+							<input type = "text" value="${session.tekuciRacunPred}" name = "${field.name}" id = "${field.id}" maxlength="18" size="18"/>
+							<span>#{error field.name /}</span>
 						#{/}
 					</p>
 					

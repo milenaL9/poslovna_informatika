@@ -22,6 +22,7 @@ public class VrstePDVa extends Controller {
 
 	public static void show(String mode) {
 		validation.clear();
+		clearSession();
 
 		// potrebno za nextForm mehanizam
 		session.put("idVrstePDVa", "null");
@@ -68,8 +69,9 @@ public class VrstePDVa extends Controller {
 
 			validation.keep();
 
-			session.put("idVr", vrstaPDVa.id);
-			session.put("nazivVrstePDva", vrstaPDVa.nazivVrstePDva);
+			session.put("idVPDVa", vrstaPDVa.id);
+			session.put("nazivVPDVa", vrstaPDVa.nazivVrstePDva);
+
 		}
 
 		renderTemplate("vrstePDVa/show.html", vrstePDVa, povezaneForme, mode);
@@ -102,7 +104,7 @@ public class VrstePDVa extends Controller {
 			validation.keep();
 
 			// potrebno da bi se ispisla greska
-			session.put("nazivVrstePDVa", vrstaPDVa.nazivVrstePDva);
+			session.put("nazivVPDVa", vrstaPDVa.nazivVrstePDva);
 
 			renderTemplate("vrstePDVa/show.html", vrstePDVa, povezaneForme, mode);
 		}
@@ -194,8 +196,8 @@ public class VrstePDVa extends Controller {
 	}
 
 	private static boolean clearSession() {
-		session.put("idVr", null);
-		session.put("nazivVrstePDva", null);
+		session.put("idVPDVa", null);
+		session.put("nazivVPDVa", null);
 
 		return true;
 	}

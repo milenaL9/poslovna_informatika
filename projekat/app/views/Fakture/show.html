@@ -217,6 +217,15 @@
 			$(location).attr('href', '/Fakture/pickup?forma='+nazivForme);
 		});
 	});
+	
+	//Faktura sa stavkama (za slanje kupcu)
+	function kupovinaProdaja_func(id){
+		if(id==null){
+			alert("Označite red u tabeli!");
+		}else{
+			
+		}	
+	}
 </script>
 
 <div class="container-fluid">
@@ -268,6 +277,10 @@
 			
 			<a href="#" id = "nextform">
 				<img src="@{'/public/images/nextform.gif'}"/>
+			</a>
+			
+			<a id = "kupovinaProdaja">
+				<img src="@{'/public/images/message_send.png'}" width="23px" height="23px"/>
 			</a>
 		</div>
 

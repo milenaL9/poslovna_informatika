@@ -25,10 +25,11 @@ public class Cenovnici extends Controller {
 	 */
 	public static void show(String mode) {
 		validation.clear();
+		clearSession();
 
 		// potrebno za nextForm mehanizam
 		session.put("idCenovnika", "null");
-		clearSession();
+		
 
 		if (mode == null || mode.equals("")) {
 			mode = "edit";

@@ -33,6 +33,7 @@ public class PoslovniPartneri extends Controller {
 
 	public static void show() {
 		validation.clear();
+		clearSession();
 
 		// za next mehanizam
 		session.put("idPoslovnogPartnera", "null");
@@ -62,6 +63,7 @@ public class PoslovniPartneri extends Controller {
 			mode = "edit";
 		}
 		session.put("mode", mode);
+		clearSession();
 
 		List<Preduzece> preduzeca = Preduzeca.checkCache();
 		List<PoslovniPartner> poslovniPartneri = fillList();
@@ -153,13 +155,12 @@ public class PoslovniPartneri extends Controller {
 			validation.keep();
 
 			session.put("idPP", poslovniPartner.id);
-			session.put("naziv", poslovniPartner.naziv);
-			session.put("adresa", poslovniPartner.adresa);
-			session.put("mesto", poslovniPartner.mesto);
-			session.put("pib", poslovniPartner.pib);
-			session.put("tekuciRacun", poslovniPartner.tekuciRacun);
-			session.put("telefon", poslovniPartner.telefon);
-			session.put("vrsta", poslovniPartner.vrsta);
+			session.put("nazivPP", poslovniPartner.naziv);
+			session.put("adresaPP", poslovniPartner.adresa);
+			session.put("mestoPP", poslovniPartner.mesto);
+			session.put("pibPP", poslovniPartner.pib);
+			session.put("tekuciRacunPP", poslovniPartner.tekuciRacun);
+			session.put("telefonPP", poslovniPartner.telefon);
 
 		}
 
@@ -170,14 +171,6 @@ public class PoslovniPartneri extends Controller {
 		validation.clear();
 		validation.valid(poslovniPartner);
 		clearSession();
-
-		System.out.println("naziv : " + poslovniPartner.naziv);
-		System.out.println("mesto: " + poslovniPartner.mesto);
-		System.out.println("adresa: " + poslovniPartner.adresa);
-		System.out.println("vrsta: " + poslovniPartner.vrsta);
-		System.out.println("telefon: " + poslovniPartner.telefon);
-		System.out.println("pib: " + poslovniPartner.pib);
-		System.out.println("tekuci_Racun: " + poslovniPartner.tekuciRacun);
 
 		session.put("mode", "add");
 		String mode = session.get("mode");
@@ -221,13 +214,12 @@ public class PoslovniPartneri extends Controller {
 
 			poslovniPartneri = fillList();
 			// potrebno da bi se ispisla greska
-			session.put("naziv", poslovniPartner.naziv);
-			session.put("adresa", poslovniPartner.adresa);
-			session.put("mesto", poslovniPartner.mesto);
-			session.put("pib", poslovniPartner.pib);
-			session.put("tekuciRacun", poslovniPartner.tekuciRacun);
-			session.put("telefon", poslovniPartner.telefon);
-			session.put("vrsta", poslovniPartner.vrsta);
+			session.put("nazivPP", poslovniPartner.naziv);
+			session.put("adresaPP", poslovniPartner.adresa);
+			session.put("mestoPP", poslovniPartner.mesto);
+			session.put("pibPP", poslovniPartner.pib);
+			session.put("tekuciRacunPP", poslovniPartner.tekuciRacun);
+			session.put("telefonPP", poslovniPartner.telefon);
 
 			renderTemplate("poslovniPartneri/show.html", poslovniPartneri, povezaneForme, nadredjeneForme, preduzeca,
 					mode);
@@ -235,16 +227,12 @@ public class PoslovniPartneri extends Controller {
 	}
 
 	public static void filter(PoslovniPartner poslovniPartner) {
-		List<PoslovniPartner> poslovniPartneri = PoslovniPartner
-				.find("byNazivLikeAndVrstaLikeAndMestoLikeAndAdresaLikeAndTelefonLike", 
-						"%" + poslovniPartner.naziv + "%", 
-						"%" + poslovniPartner.vrsta + "%",
-						"%" + poslovniPartner.mesto + "%",
-						"%" + poslovniPartner.adresa + "%",
-						"%" + poslovniPartner.telefon + "%"
-						
-						)
-				.fetch();
+		List<PoslovniPartner> poslovniPartneri = PoslovniPartner.find(
+				"byNazivLikeAndVrstaLikeAndMestoLikeAndAdresaLikeAndTelefonLike", "%" + poslovniPartner.naziv + "%",
+				"%" + poslovniPartner.vrsta + "%", "%" + poslovniPartner.mesto + "%",
+				"%" + poslovniPartner.adresa + "%", "%" + poslovniPartner.telefon + "%"
+
+		).fetch();
 
 		session.put("mode", "edit");
 		String mode = session.get("mode");
@@ -258,13 +246,12 @@ public class PoslovniPartneri extends Controller {
 
 	public static boolean clearSession() {
 		session.put("idPP", null);
-		session.put("naziv", null);
-		session.put("mesto", null);
-		session.put("adresa", null);
-		session.put("vrsta", null);
-		session.put("telefon", null);
-		session.put("pib", null);
-		session.put("tekuciRacun", null);
+		session.put("nazivPP", null);
+		session.put("mestoPP", null);
+		session.put("adresaPP", null);
+		session.put("telefonPP", null);
+		session.put("pibPP", null);
+		session.put("tekuciRacunPP", null);
 
 		return true;
 
@@ -390,5 +377,18 @@ public class PoslovniPartneri extends Controller {
 		}
 
 		return povezaneForme;
+	}
+
+	public static List<PoslovniPartner> findKupci() {
+		List<PoslovniPartner> poslovniPartneriAll = PoslovniPartner.findAll();
+		List<PoslovniPartner> kupci = new ArrayList<>();
+
+		for (PoslovniPartner pp : poslovniPartneriAll) {
+			if (pp.vrsta.equals("K")) {
+				kupci.add(pp);
+			}
+		}
+
+		return kupci;
 	}
 }

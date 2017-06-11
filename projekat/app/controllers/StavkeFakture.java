@@ -52,6 +52,8 @@ public class StavkeFakture extends Controller {
 	}
 
 	public static void changeMode(String mode) throws ParseException {
+		clearSession();
+
 		if (mode == null || mode.equals("")) {
 			mode = "edit";
 		}
@@ -145,12 +147,8 @@ public class StavkeFakture extends Controller {
 
 			stavkeFakture = fillList();
 
-			session.put("datumFakture", null);
-			session.put("brojFakture", null);
-			session.put("datumValute", null);
-			session.put("ukupnoOsnovica", null);
-			session.put("ukupnoPDV", null);
-			session.put("ukupnoZaPlacanje", null);
+			session.put("kolicinaSF", stavkaFakture.kolicina);
+			session.put("rabatSF", stavkaFakture.rabat);
 
 			renderTemplate("StavkeFakture/show.html", stavkeFakture, fakture, nadredjeneForme, kataloziRobeIUsluga,
 					stavkaFakture, mode);
@@ -302,13 +300,9 @@ public class StavkeFakture extends Controller {
 
 			stavkeFakture = fillList();
 
-			session.put("idSF", null);
-			session.put("datumFakture", null);
-			session.put("brojFakture", null);
-			session.put("datumValute", null);
-			session.put("ukupnoOsnovica", null);
-			session.put("ukupnoPDV", null);
-			session.put("ukupnoZaPlacanje", null);
+			session.put("idSF", stavkaFakture.id);
+			session.put("kolicinaSF", stavkaFakture.kolicina);
+			session.put("rabatSF", stavkaFakture.rabat);
 
 		}
 
@@ -396,12 +390,8 @@ public class StavkeFakture extends Controller {
 
 	public static boolean clearSession() {
 		session.put("idSF", null);
-		session.put("datumFakture", null);
-		session.put("brojFakture", null);
-		session.put("datumValute", null);
-		session.put("ukupnoOsnovica", null);
-		session.put("ukupnoPDV", null);
-		session.put("ukupnoZaPlacanje", null);
+		session.put("kolicinaSF", null);
+		session.put("rabatSF", null);
 
 		return true;
 	}

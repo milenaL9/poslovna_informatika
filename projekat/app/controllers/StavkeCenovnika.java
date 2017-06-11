@@ -50,6 +50,8 @@ public class StavkeCenovnika extends Controller {
 	 *            njega na view delu menja action.
 	 */
 	public static void changeMode(String mode) {
+		clearSession();
+
 		if (mode == null || mode.equals("")) {
 			mode = "edit";
 		}
@@ -120,7 +122,7 @@ public class StavkeCenovnika extends Controller {
 
 			stavkeCenovnika = fillList();
 
-			session.put("cena", null);
+			session.put("cenaSC", null);
 
 			renderTemplate("StavkeCenovnika/show.html", stavkeCenovnika, cenovnici, kataloziRobeIUsluga,
 					nadredjeneForme, mode);
@@ -187,7 +189,7 @@ public class StavkeCenovnika extends Controller {
 			stavkeCenovnika = fillList();
 
 			session.put("idSC", null);
-			session.put("cena", null);
+			session.put("cenaSC", null);
 		}
 
 		renderTemplate("StavkeCenovnika/show.html", stavkeCenovnika, cenovnici, kataloziRobeIUsluga, nadredjeneForme,
@@ -260,7 +262,7 @@ public class StavkeCenovnika extends Controller {
 	/** Pomocna metoda za brisanje podataka iz sesije. */
 	public static boolean clearSession() {
 		session.put("idSC", null);
-		session.put("cena", null);
+		session.put("cenaSC", null);
 		return true;
 	}
 

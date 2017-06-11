@@ -235,7 +235,7 @@
 						
 						<p>
 							#{field 'stavkaFakture.id'} 
-								<input type="hidden" name="${field.name}" id="${field.id}" value="${session.idSC}" />
+								<input type="hidden" name="${field.name}" id="${field.id}" value="${session.idSF}" />
 							#{/}
 						</p>
 
@@ -274,7 +274,7 @@
 						<p>
 							#{field 'stavkaFakture.kolicina'} 
 								<label for="${field.id}">Količina</label>
-								<input type="text" name="${field.name}" id="${field.id}" value="${session.cena}" /> 
+								<input type="text" name="${field.name}" id="${field.id}" value="${session.kolicinaSF}" /> 
 								<span>#{error field.name /}</span>
 							#{/}
 						</p>
@@ -282,7 +282,7 @@
 						<p>
 							#{field 'stavkaFakture.rabat'} 
 								<label for="${field.id}">Rabat %</label>
-								<input type="text" name="${field.name}" id="${field.id}" value="${session.cena}" /> 
+								<input type="text" name="${field.name}" id="${field.id}" value="${session.rabatSF}" maxlength="2" size="2" /> 
 								<span>#{error field.name /}</span>
 							#{/}
 						</p>

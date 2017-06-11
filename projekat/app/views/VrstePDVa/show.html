@@ -137,14 +137,15 @@
 				<form action=${action} method="post">  <!-- umesto Drzave.show --> 
 					<p>
 						#{field 'vrstaPDVa.id'}
-							<input type = "hidden" name = "${field.name}" id = "${field.id}"/>
+							<input type = "hidden" name = "${field.name}" id = "${field.id}" value="${session.idVPDVa}"/>
 						#{/}
 					</p>
 
 					<p>
 						#{field 'vrstaPDVa.nazivVrstePDva'}
 							<label for = "${field.id}">Naziv</label>
-							<input type = "text" name = "${field.name}" id = "${field.id}" maxlength="40" size="40"/>
+							<input type = "text" value="${session.nazivVPDVa}" name = "${field.name}" id = "${field.id}" maxlength="40" size="40"/>
+							<span>#{error field.name /}</span> 
 						#{/}
 					</p>
 					

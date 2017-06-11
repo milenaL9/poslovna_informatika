@@ -34,6 +34,7 @@ public class StopePDVa extends Controller {
 	}
 
 	public static void changeMode(String mode) {
+		clearSession();
 
 		if (mode == null || mode.equals("")) {
 			mode = "edit";
@@ -93,9 +94,8 @@ public class StopePDVa extends Controller {
 			validation.keep();
 			stopePDVa = fillList();
 
-			session.put("idSP", stopaPDVa.id);
-			session.put("datumKreiranjaStopePDVa", stopaPDVa.datumKreiranja);
-			session.put("procenatPDVa", stopaPDVa.procenatPDVa);
+			session.put("idSPDVa", stopaPDVa.id);
+			session.put("procenatSPDVa", stopaPDVa.procenatPDVa);
 
 		}
 
@@ -148,8 +148,7 @@ public class StopePDVa extends Controller {
 
 			stopePDVa = fillList();
 
-			session.put("datumKreiranjaStopePDVa", stopaPDVa.datumKreiranja);
-			session.put("procenatPDVa", stopaPDVa.procenatPDVa);
+			session.put("procenatSPDVa", stopaPDVa.procenatPDVa);
 
 			renderTemplate("StopePDVa/show.html", stopePDVa, vrstePDVa, nadredjeneForme, mode);
 		}
@@ -229,9 +228,8 @@ public class StopePDVa extends Controller {
 	}
 
 	private static boolean clearSession() {
-		session.put("idSP", null);
-		session.put("datumKreiranjaStopePDVa", null);
-		session.put("procenatPDVa", null);
+		session.put("idSPDVa", null);
+		session.put("procenatSPDVa", null);
 
 		return true;
 	}

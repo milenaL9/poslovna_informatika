@@ -165,28 +165,28 @@
 
 			<div class="panel">
 				<form action=${action} method="post">
-
+				
+					<p>
+						#{field 'stopaPDVa.id'}
+						 <input type="hidden" name="${field.name}"
+							id="${field.id}" value="${session.idSPDVa}" />
+						 #{/}
+					</p>
 
 					<p>
 						#{field 'stopaPDVa.datumKreiranja'}
 					      	<label for = "${field.id}">Datum kreiranja</label>
 							<input type="text" name="${field.name}" id="${field.id}"/>
+							<span>#{error field.name /}</span>
 						#{/}
-					</p>
-
-					<p>
-						#{field 'stopaPDVa.id'}
-						 <input type="hidden" name="${field.name}"
-							id="${field.id}" value="${session.idStopePDVa}" />
-						 #{/}
 					</p>
 
 					<p>
 						#{field 'stopaPDVa.procenatPDVa'} 
 						<label for="${field.id}">Procenat PDVa</label> 
 						<input type="text" name="${field.name}" id="${field.id}"
-							value="${session.procenatPDVa}" /> 
-							<span>#{error field.name /}</span> 
+							value="${session.procenatSPDVa}" maxlength="2" size="2"/> 
+						<span>#{error field.name /}</span> 
 						#{/}
 					</p>
 

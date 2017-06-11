@@ -57,6 +57,8 @@ public class KataloziRobeIUsluga extends Controller {
 	 *            njega na view delu menja action.
 	 */
 	public static void changeMode(String mode) {
+		clearSession();
+
 		if (mode == null || mode.equals("")) {
 			mode = "edit";
 		}

@@ -25,6 +25,7 @@ public class PoslovneGodine extends Controller {
 	public static void show() {
 		validation.clear();
 		clearSession();
+
 		session.put("idPreduzeca", "null");
 
 		String mode = "edit";
@@ -46,6 +47,8 @@ public class PoslovneGodine extends Controller {
 	 *            njega na view delu menja action.
 	 */
 	public static void changeMode(String mode) {
+		clearSession();
+
 		if (mode == null || mode.equals("")) {
 			mode = "edit";
 		}
@@ -109,7 +112,6 @@ public class PoslovneGodine extends Controller {
 
 			session.put("idPG", poslovnaGodina.id);
 			session.put("brojGodine", poslovnaGodina.brojGodine);
-			session.put("aktivna", poslovnaGodina.aktivna);
 
 		}
 		renderTemplate("PoslovneGodine/show.html", poslovneGodine, preduzeca, nadredjeneForme, povezaneForme, mode);
@@ -163,7 +165,6 @@ public class PoslovneGodine extends Controller {
 			poslovneGodine = fillList();
 
 			session.put("brojGodine", poslovnaGodina.brojGodine);
-			session.put("aktivna", poslovnaGodina.aktivna);
 
 			renderTemplate("PoslovneGodine/show.html", poslovneGodine, preduzeca, nadredjeneForme, povezaneForme, mode);
 		}
@@ -281,7 +282,6 @@ public class PoslovneGodine extends Controller {
 	public static boolean clearSession() {
 		session.put("idPG", null);
 		session.put("brojGodine", null);
-		session.put("aktivna", null);
 		return true;
 	}
 

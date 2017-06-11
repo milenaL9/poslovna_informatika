@@ -240,21 +240,23 @@
 				<form action=${action} method="post"> 
 					<p>
 						#{field 'poslovniPartner.id'}
-							<input type = "hidden" name = "${field.name}" id = "${field.id}"/>
+							<input type = "hidden" name = "${field.name}" id = "${field.id}" value="${session.idPP}"/>
 						#{/}
 					</p>
 				
 					<p>
 						#{field 'poslovniPartner.naziv'} 
 							<label for = "${field.id}">Naziv</label>
-							<input type = "text" name = "${field.name}" id = "${field.id}" maxlength="40" size="40"/>
+							<input type = "text" name = "${field.name}" id = "${field.id}" value="${session.nazivPP}" maxlength="40" size="40"/>
+							<span>#{error field.name /}</span>
 						#{/}
 					</p>
 				
 					<p>
 						#{field 'poslovniPartner.mesto'}
 					      	<label for = "${field.id}">Mesto</label>
-							<input type="text" name="${field.name}" id="${field.id}" maxlength="40" size="40"/>
+							<input type="text" name="${field.name}" id="${field.id}" maxlength="40" size="40" value="${session.mestoPP}"/>
+							<span>#{error field.name /}</span>
 						#{/}
 					</p>
 					
@@ -262,7 +264,8 @@
 					<p>
 						#{field 'poslovniPartner.adresa'}
 					      	<label for = "${field.id}">Adresa</label>
-							<input type="text" name="${field.name}" id="${field.id}" maxlength="40" size="40"/>
+							<input type="text" name="${field.name}" id="${field.id}" maxlength="40" size="40" value="${session.adresaPP}"/>
+							<span>#{error field.name /}</span>
 						#{/}
 					</p>
 					
@@ -279,23 +282,26 @@
 						<p>
 						#{field 'poslovniPartner.telefon'}
 					      	<label for = "${field.id}">Telefon</label>
-							<input type="text" name="${field.name}" id="${field.id}"/>
+							<input type="text" name="${field.name}" id="${field.id}" value="${session.telefonPP}"/>
+							<span>#{error field.name /}</span>
 						#{/}
 					</p>
 					
 					
-						<p>
+					<p>
 						#{field 'poslovniPartner.pib'}
 					      	<label for = "${field.id}">PIB</label>
-							<input type="text" name="${field.name}" id="${field.id}" maxlength="8" size="8"/>
+							<input type="text" name="${field.name}" id="${field.id}" maxlength="8" size="8" value="${session.pibPP}"/>
+							<span>#{error field.name /}</span>
 						#{/}
 					</p>
 					
 					
-						<p>
+					<p>
 						#{field 'poslovniPartner.tekuciRacun'}
-					      	<label for = "${field.id}">Tekuci račun</label>
-							<input type="text" name="${field.name}" id="${field.id}" maxlength="18" size="18"/>
+					      	<label for = "${field.id}">Tekući račun</label>
+							<input type="text" name="${field.name}" id="${field.id}" maxlength="18" size="18" value="${session.tekuciRacunPP}"/>
+							<span>#{error field.name /}</span>
 						#{/}
 					</p>
 					
