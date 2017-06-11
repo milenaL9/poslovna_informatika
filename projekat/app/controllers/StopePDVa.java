@@ -8,7 +8,6 @@ import java.util.List;
 import javax.persistence.ManyToOne;
 
 import models.Cenovnik;
-import models.Drzava;
 import models.Faktura;
 import models.PoslovnaGodina;
 import models.StopaPDVa;

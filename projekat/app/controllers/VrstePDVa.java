@@ -10,7 +10,6 @@ import javax.persistence.OneToMany;
 import models.Cenovnik;
 import models.Grupa;
 import models.KatalogRobeIUsluga;
-import models.NaseljenoMesto;
 import models.PoslovnaGodina;
 import models.Preduzece;
 import models.StavkaCenovnika;

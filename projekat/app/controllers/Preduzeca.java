@@ -8,10 +8,8 @@ import java.util.List;
 
 import javax.persistence.OneToMany;
 
-import models.Drzava;
 import models.Faktura;
 import models.Grupa;
-import models.NaseljenoMesto;
 import models.PoslovnaGodina;
 import models.PoslovniPartner;
 import models.Preduzece;

@@ -84,6 +84,9 @@
 		});
 	});
 	
+	function cancel_modalGrupe(){
+		// $('#modalDialogGrupe').modal('toggle');
+	}	
 	
 	function pickup(){
 		$('#pickupModal').modal('show');
@@ -148,8 +151,8 @@
 		
 		<table>
 			<tr class="header">
-				<th> Naziv Podgrupe </th>
-				<th> Grupa </th>
+				<th>Naziv Podgrupe</th>
+				<th>Grupa</th>
 			</tr> 
 			
 			#{list items:podgrupe, as : 'podgrupa'}
@@ -186,7 +189,7 @@
 
 				<p>
 					#{field 'podgrupa.nazivPodgrupe'}
-						<label for="${field.id}"> Naziv </label>
+						<label for="${field.id}">Naziv</label>
 						<input type="text" name="${field.name}" id="${field.id}" value="${session.nazivPodgrupe}" />
 						<span>#{error field.name /}</span>
 					#{/}
@@ -208,8 +211,10 @@
 					#{/}
 				</p>
 				<div id = "formActions">
-						<input type = "submit" value = "Potvrda" style="margin-left:6em"/>
-						<a href = "@{Podgrupe.changeMode("edit")}" style="margin-left:1em">Rollback</a>
+						<input type = "submit" value = "Potvrda" style="margin-left:6em" class="btn btn-success"/>
+						<a href = "@{Podgrupe.changeMode("edit")}" style="margin-left:1em">
+							<button type="button" class="btn btn-danger">Otkaži</button>
+						</a>
 				</div>		
 			</form>
 		</div>
@@ -219,6 +224,11 @@
 </div>
 
 <p class="status_line">Trenutni režim: ${session.mode}</p>
+
+<button onclick="topFunction()" id="myBtn" title="Idi na vrh">
+	<img src="@{'/public/images/back_top.png'}" alt=""
+		class="rounded-circle" width="40" height="40">
+</button>
 
 <div class="modal fade" id="modalDialogGrupe" role="dialog">
 	<div class="modal-dialog">
@@ -243,8 +253,8 @@
 				</table>
 				
 				<div class="modal-footer">
-					<input id = "izborPickupGrupa" type = "button" value = "izbor"/>
-					
+					<input id = "izborPickupGrupa" type = "button" value = "Izbor" class="btn btn-success"/>
+					<button type="button" class="btn btn-danger" onclick="cancel_modalGrupe()">Otkaži</button>
 				</div>
 			</div>
 		</div>
@@ -272,7 +282,7 @@
 
 				<div class="modal-footer">
 					<input id="pickupPickup" type="button" value="Izbor" class="btn btn-success" />
-					<button type="button" class="btn btn-danger" onclick="cancel_pickupModal()">Otkazi</button>
+					<button type="button" class="btn btn-danger" onclick="cancel_pickupModal()">Otkaži</button>
 				</div>
 			</div>
 		</div>
