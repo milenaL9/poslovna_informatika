@@ -13,7 +13,6 @@ import javax.persistence.TemporalType;
 import play.data.validation.Required;
 import play.db.jpa.Model;
 
-
 /*
  * 
  * MALA NAPOMENA:
@@ -28,39 +27,32 @@ public class Faktura extends Model {
 	@Required
 	@Column(columnDefinition = "varchar(10)")
 	public String datumFakture;
-	
-	@Required
+
 	public int brojFakture;
-	
+
 	@Required
 	@Column(columnDefinition = "varchar(10)")
 	public String datumValute;
-	
-	@Required
+
 	public float ukupnoOsnovica;
-	
-	@Required
+
 	public float ukupnoPDV;
-	
-	@Required
+
 	public float ukupnoZaPlacanje;
-	
-	
+
 	@OneToMany(mappedBy = "faktura")
 	public List<StavkaFakture> stavkeFakture;
-	
+
 	@ManyToOne
 	public PoslovniPartner poslovniPartner;
-	
+
 	@ManyToOne
 	public PoslovnaGodina poslovnaGodina;
-	
-	@ManyToOne 
-	public Preduzece preduzece;
-	
 
-	public Faktura(String datumFakture, int brojFakture, String datumValute, float ukupnoOsnovica, 
-			float ukupnoPDV,
+	@ManyToOne
+	public Preduzece preduzece;
+
+	public Faktura(String datumFakture, int brojFakture, String datumValute, float ukupnoOsnovica, float ukupnoPDV,
 			float ukupnoZaPlacanje) {
 		super();
 		this.datumFakture = datumFakture;
@@ -70,10 +62,5 @@ public class Faktura extends Model {
 		this.ukupnoPDV = ukupnoPDV;
 		this.ukupnoZaPlacanje = ukupnoZaPlacanje;
 	}
-	
-	
-	
-	
-	
-	
+
 }

@@ -6,6 +6,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 
+import play.data.validation.MaxSize;
+import play.data.validation.MinSize;
 import play.data.validation.Required;
 import play.data.validation.Unique;
 import play.db.jpa.Model;
@@ -14,6 +16,8 @@ import play.db.jpa.Model;
 public class Cenovnik extends Model {
 
 	@Required
+	@MinSize(3)
+	@MaxSize(40)
 	@Column(columnDefinition = "varchar(40)")
 	public String naziv;
 

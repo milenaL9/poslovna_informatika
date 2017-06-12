@@ -137,9 +137,6 @@
 <div class="container-fluid">
 	<div class="row">
 		<div class="icon-bar">
-			<a href="#" onclick="openSideNav()">
-				<img width="16px" height="16px" src="@{'/public/images/menu_icon.png'}" />
-			</a>
 
 			<a href="@{StavkeFakture.changeMode("search")}" id="search">
 				<img src="@{'/public/images/search.gif'}" />
@@ -149,27 +146,23 @@
 				<img src="@{'/public/images/refresh.gif'}" />
 			</a> 
 			
-			<a href="#" onclick="pickup()"> 
-				<img src="@{'/public/images/zoom-pickup.gif'}" />
-			</a> 
-			
 			<a href="#" id="help"> 
 				<img src="@{'/public/images/help.gif'}" />
 			</a> 
 			
-			<a id="first"> 
+			<a href="#" id="first"> 
 				<img src="@{'/public/images/first.gif'}" />
 			</a> 
 			
-			<a id="prev"> 
+			<a href="#" id="prev"> 
 				<img src="@{'/public/images/prev.gif'}" />
 			</a> 
 			
-			<a id="next"> 
+			<a href="#" id="next"> 
 				<img src="@{'/public/images/next.gif'}" />
 			</a> 
 			
-			<a id="last"> 
+			<a href="#" id="last"> 
 				<img src="@{'/public/images/last.gif'}" />
 			</a> 
 			
@@ -179,6 +172,10 @@
 			
 			<a href="#" id="remove"> 
 				<img src="@{'/public/images/remove.gif'}" />
+			</a>
+			
+			<a href="@{StavkeFakture.saveStavke}" id="done"> 
+				<img src="@{'/public/images/stavke_fakture_done.png'}" width="22px" height="22px"/>
 			</a> 
 		</div>
 
@@ -391,7 +388,7 @@
 	<div class="modal-dialog">
 		<!-- Modal content-->
 		<div class="modal-content">
-			<div class="modal-header">Izaberite nadreÃ„â€˜enu formu</div>
+			<div class="modal-header">Izaberite nadređnu formu</div>
 
 			<div class="modal-body">
 				<table style="padding: 2em">

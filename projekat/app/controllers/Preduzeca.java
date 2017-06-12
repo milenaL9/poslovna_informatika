@@ -15,6 +15,7 @@ import models.PoslovniPartner;
 import models.Preduzece;
 import models.StavkaCenovnika;
 import models.StopaPDVa;
+import models.VrstaPDVa;
 import play.cache.Cache;
 import play.mvc.Controller;
 import play.mvc.With;
@@ -186,7 +187,6 @@ public class Preduzeca extends Controller {
 		session.put("idPreduzeca", id);
 		clearSession();
 
-		/** TODO: Dodati prelazak na ostale forme. */
 		if (forma.equals("poslovneGodine")) {
 			List<Preduzece> preduzeca = checkCache();
 
@@ -196,7 +196,14 @@ public class Preduzeca extends Controller {
 
 			renderTemplate("PoslovneGodine/show.html", poslovneGodine, preduzeca, nadredjeneForme, povezaneForme);
 		} else if (forma.equals("grupe")) {
+			List<Grupa> grupe = Grupe.checkCache();
+			List<Preduzece> preduzeca = checkCache();
+			List<VrstaPDVa> vrstePDVa = VrstePDVa.checkCache();
 
+			List<String> povezaneForme = Grupe.getForeignKeysFields();
+			List<String> nadredjeneForme = Grupe.getForeignKeysFieldsManyToOne();
+
+			renderTemplate("Grupe/show.html", grupe, preduzeca, vrstePDVa, povezaneForme, nadredjeneForme);
 		} else if (forma.equals("poslovniPartneri")) {
 
 			List<Preduzece> preduzeca = checkCache();

@@ -10,6 +10,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import play.data.validation.Min;
 import play.data.validation.Required;
 import play.db.jpa.Model;
 
@@ -20,13 +21,11 @@ public class StopaPDVa extends Model {
 	@Column(columnDefinition = "varchar(10)")
 	public String datumKreiranja;
 
+	@Min(1)
 	public float procenatPDVa;
 
 	@ManyToOne
 	public VrstaPDVa vrstaPDVa;
-
-//	@OneToMany(mappedBy = "stopaPDVa")
-//	public List<StavkaFakture> stavkeFakture;
 
 	public StopaPDVa(int procenatPDVa, String datumKreiranja) {
 		super();

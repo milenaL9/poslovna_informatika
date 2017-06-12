@@ -7,7 +7,9 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import play.data.validation.Max;
 import play.data.validation.MaxSize;
+import play.data.validation.Min;
 import play.data.validation.MinSize;
 import play.data.validation.Required;
 import play.db.jpa.Model;
@@ -52,6 +54,8 @@ public class PoslovniPartner extends Model {
 	@Required
 	@MinSize(8)
 	@MaxSize(8)
+	@Min(11111111)
+	@Max(99999999)
 	public int pib;
 
 	@Required

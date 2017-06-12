@@ -28,6 +28,7 @@ public class Fakture extends Controller {
 
 	public static void show() {
 		validation.clear();
+		clearSession();
 
 		session.put("idFakture", "null"); // za next mehanizam
 
@@ -57,13 +58,34 @@ public class Fakture extends Controller {
 
 	}
 
-	public static void edit(Faktura faktura, Long poslovniPartner, Long poslovnaGodina, Long preduzece) {
+	public static void changeMode(String mode) {
+		if (mode == null || mode.equals("")) {
+			mode = "edit";
+		}
 
+		session.put("mode", mode);
+
+		List<String> povezaneForme = getForeignKeysFields();
+		List<Faktura> fakture = Fakture.checkCache();
+		List<PoslovniPartner> poslovniPartneri = PoslovniPartneri.findKupci();
+		List<PoslovnaGodina> poslovneGodine = PoslovneGodine.findAktivnePoslovneGodine();
+		List<Preduzece> preduzeca = Preduzeca.checkCache();
+
+		List<String> nadredjeneForme = getForeignKeysFieldsManyToOne();
+
+		renderTemplate("Fakture/show.html", povezaneForme, fakture, mode, poslovniPartneri, nadredjeneForme,
+				poslovneGodine, preduzeca);
+
+	}
+
+	public static void edit(Faktura faktura, Long poslovniPartner, Long poslovnaGodina, Long preduzece) {
 		validation.clear();
 		validation.valid(faktura);
+		clearSession();
 
 		session.put("mode", "edit");
 		String mode = session.get("mode");
+
 		List<String> povezaneForme = getForeignKeysFields();
 		List<PoslovniPartner> poslovniPartneri = PoslovniPartneri.findKupci();
 		List<PoslovnaGodina> poslovneGodine = PoslovneGodine.findAktivnePoslovneGodine();
@@ -102,12 +124,8 @@ public class Fakture extends Controller {
 
 			for (Faktura tmp : fakture) {
 				if (tmp.id == faktura.id) {
-					tmp.brojFakture = faktura.brojFakture;
 					tmp.datumFakture = faktura.datumFakture;
 					tmp.datumValute = faktura.datumValute;
-					tmp.ukupnoOsnovica = faktura.ukupnoOsnovica;
-					tmp.ukupnoPDV = faktura.ukupnoPDV;
-					tmp.ukupnoZaPlacanje = faktura.ukupnoZaPlacanje;
 
 					tmp.preduzece = findPreduzece;
 					tmp.poslovnaGodina = findPoslovnaGodina;
@@ -120,10 +138,10 @@ public class Fakture extends Controller {
 
 			Cache.set("fakture", fakture);
 
-			fakture.clear();
-			fakture = fillList();
 			validation.clear();
 
+			fakture.clear();
+			fakture = fillList();
 		} else {
 			fakture = checkCache();
 
@@ -132,11 +150,9 @@ public class Fakture extends Controller {
 			session.put("idF", faktura.id);
 			session.put("datumFakture", faktura.datumFakture);
 			session.put("datumValute", faktura.datumValute);
-			session.put("brojFakture", faktura.brojFakture);
 			session.put("ukupnoOsnovica", faktura.ukupnoOsnovica);
 			session.put("ukupnoPDV", faktura.ukupnoPDV);
 			session.put("ukupnoZaPlacanje", faktura.ukupnoZaPlacanje);
-
 		}
 
 		renderTemplate("fakture/show.html", poslovniPartneri, povezaneForme, preduzeca, poslovneGodine, nadredjeneForme,
@@ -147,6 +163,7 @@ public class Fakture extends Controller {
 			throws ParseException {
 		validation.clear();
 		validation.valid(faktura);
+		clearSession();
 
 		session.put("mode", "add");
 		String mode = session.get("mode");
@@ -187,6 +204,7 @@ public class Fakture extends Controller {
 				findPoslovniPartner = PoslovniPartner.findById(poslovniPartner);
 			}
 
+			faktura.brojFakture = incrementBrojFakture();
 			faktura.preduzece = findPreduzece;
 			faktura.poslovnaGodina = findPoslovnaGodina;
 			faktura.poslovniPartner = findPoslovniPartner;
@@ -224,7 +242,6 @@ public class Fakture extends Controller {
 			session.put("idF", faktura.id);
 			session.put("datumFakture", faktura.datumFakture);
 			session.put("datumValute", faktura.datumValute);
-			session.put("brojFakture", faktura.brojFakture);
 			session.put("ukupnoOsnovica", faktura.ukupnoOsnovica);
 			session.put("ukupnoPDV", faktura.ukupnoPDV);
 			session.put("ukupnoZaPlacanje", faktura.ukupnoZaPlacanje);
@@ -232,35 +249,6 @@ public class Fakture extends Controller {
 			renderTemplate("fakture/show.html", poslovniPartneri, fakture, poslovneGodine, povezaneForme, preduzeca,
 					nadredjeneForme, mode);
 		}
-	}
-
-	/** Prelazak na nadredjenu formu */
-	public static void pickup(String forma) {
-		if (forma.equals("poslovniPartner")) {
-			PoslovniPartneri.show();
-		} else if (forma.equals("poslovnaGodina")) {
-			PoslovneGodine.show();
-		} else if (forma.equals("preduzece")) {
-			Preduzeca.show("edit");
-		}
-	}
-
-	public static List<Faktura> fillList() {
-		List<Faktura> fakture = null;
-		if (!session.get("idPreduzeca").equals("null")) {
-			Long id = Long.parseLong(session.get("idPreduzeca"));
-			fakture = Preduzeca.findFakture(id);
-		} else if (!session.get("idPoslovnogPartnera").equals("null")) {
-			Long id = Long.parseLong(session.get("idPoslovnogPartnera"));
-			fakture = PoslovniPartneri.findFakture(id);
-		} else if (!session.get("idPoslovneGodine").equals("null")) {
-			Long id = Long.parseLong(session.get("idPoslovneGodine"));
-			fakture = PoslovneGodine.findFakture(id);
-		} else {
-			fakture = checkCache();
-		}
-
-		return fakture;
 	}
 
 	public static void filter(Faktura faktura) {
@@ -278,28 +266,8 @@ public class Fakture extends Controller {
 
 		List<String> nadredjeneForme = getForeignKeysFieldsManyToOne();
 
-		renderTemplate("poslovniPartneri/show.html", fakture, preduzeca, povezaneForme, poslovniPartneri,
-				poslovneGodine, mode, nadredjeneForme);
-
-	}
-
-	public static void changeMode(String mode) {
-		if (mode == null || mode.equals("")) {
-			mode = "edit";
-		}
-
-		session.put("mode", mode);
-
-		List<String> povezaneForme = getForeignKeysFields();
-		List<Faktura> fakture = Fakture.checkCache();
-		List<PoslovniPartner> poslovniPartneri = PoslovniPartneri.findKupci();
-		List<PoslovnaGodina> poslovneGodine = PoslovneGodine.findAktivnePoslovneGodine();
-		List<Preduzece> preduzeca = Preduzeca.checkCache();
-
-		List<String> nadredjeneForme = getForeignKeysFieldsManyToOne();
-
-		renderTemplate("Fakture/show.html", povezaneForme, fakture, mode, poslovniPartneri, nadredjeneForme,
-				poslovneGodine, preduzeca);
+		renderTemplate("Fakture/show.html", fakture, preduzeca, povezaneForme, poslovniPartneri, poslovneGodine, mode,
+				nadredjeneForme);
 
 	}
 
@@ -349,11 +317,80 @@ public class Fakture extends Controller {
 
 			List<StavkaCenovnika> stavkeCenovnika = findStavkeCenovnika(id);
 
+			String mode = "edit";
+			session.put("mode", mode);
+
+			StavkeFakture.clearSession();
+
 			renderTemplate("StavkeFakture/show.html", fakture, stavkeFakture, preduzeca, poslovneGodine,
-					poslovniPartneri, nadredjeneForme, stavkeCenovnika);
+					poslovniPartneri, nadredjeneForme, stavkeCenovnika, mode);
 		}
 
 		// DODATI ZA NARUDZBU
+	}
+
+	public static void refresh() {
+		String mode = session.get("mode");
+
+		List<Faktura> fakture = checkCache();
+		List<String> povezaneForme = getForeignKeysFields();
+		List<Preduzece> preduzeca = Preduzeca.checkCache();
+		List<PoslovniPartner> poslovniPartneri = PoslovniPartneri.findKupci();
+		List<PoslovnaGodina> poslovneGodine = PoslovneGodine.findAktivnePoslovneGodine();
+
+		List<String> nadredjeneForme = getForeignKeysFieldsManyToOne();
+
+		renderTemplate("fakture/show.html", fakture, poslovneGodine, preduzeca, poslovniPartneri, nadredjeneForme,
+				povezaneForme, mode);
+	}
+
+	/** Prelazak na nadredjenu formu */
+	public static void pickup(String forma) {
+		if (forma.equals("poslovniPartner")) {
+			PoslovniPartneri.show();
+		} else if (forma.equals("poslovnaGodina")) {
+			PoslovneGodine.show();
+		} else if (forma.equals("preduzece")) {
+			Preduzeca.show("edit");
+		}
+	}
+
+	/** Pomocna metoda za brisanje podataka iz sesije. */
+	private static boolean clearSession() {
+		session.put("idF", null);
+		session.put("datumFakture", null);
+		session.put("datumValute", null);
+		session.put("ukupnoOsnovica", null);
+		session.put("ukupnoPDV", null);
+		session.put("ukupnoZaPlacanje", null);
+
+		return true;
+	}
+
+	public static List<Faktura> fillList() {
+		List<Faktura> fakture = null;
+		if (!session.get("idPreduzeca").equals("null")) {
+			Long id = Long.parseLong(session.get("idPreduzeca"));
+			fakture = Preduzeca.findFakture(id);
+		} else if (!session.get("idPoslovnogPartnera").equals("null")) {
+			Long id = Long.parseLong(session.get("idPoslovnogPartnera"));
+			fakture = PoslovniPartneri.findFakture(id);
+		} else if (!session.get("idPoslovneGodine").equals("null")) {
+			Long id = Long.parseLong(session.get("idPoslovneGodine"));
+			fakture = PoslovneGodine.findFakture(id);
+		} else {
+			fakture = checkCache();
+		}
+
+		return fakture;
+	}
+
+	public static int incrementBrojFakture() {
+		List<Faktura> fakture = Faktura.findAll();
+		int brojFakture = fakture.get(fakture.size() - 1).brojFakture;
+		brojFakture++;
+
+		return brojFakture;
 	}
 
 	public static Date convertToDate(String receivedDate) throws ParseException {
@@ -415,21 +452,6 @@ public class Fakture extends Controller {
 		}
 
 		return stavkeFakture;
-	}
-
-	public static void refresh() {
-		String mode = session.get("mode");
-
-		List<Faktura> fakture = checkCache();
-		List<String> povezaneForme = getForeignKeysFields();
-		List<Preduzece> preduzeca = Preduzeca.checkCache();
-		List<PoslovniPartner> poslovniPartneri = PoslovniPartneri.findKupci();
-		List<PoslovnaGodina> poslovneGodine = PoslovneGodine.findAktivnePoslovneGodine();
-
-		List<String> nadredjeneForme = getForeignKeysFieldsManyToOne();
-
-		renderTemplate("fakture/show.html", fakture, poslovneGodine, preduzeca, poslovniPartneri, nadredjeneForme,
-				povezaneForme, mode);
 	}
 
 	public static List<String> getForeignKeysFields() {

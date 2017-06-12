@@ -67,7 +67,7 @@
 
 	function remove(id){  <!-- ne znam koji je uanpred selektovani red , ovde se vrsi redirekcija -->
 		if(id == null){
-			alert("Označite red u tabeli!");
+			alert("OznaÄ�ite red u tabeli!");
 		}else{
 			var r  = confirm("Da li želite da obrište slog?");
 			if(r == true) {
@@ -180,7 +180,7 @@
 
 			<table>
 				<tr class = "header">
-	   				<th>Cena</th> 
+	   				<th>Cena (din)</th> 
 	   				<th>Cenovnik</th>
 	   				<th>Katalog robe i usluga</th>
 				</tr>
@@ -218,7 +218,7 @@
 						
 						<p>
 							#{field 'stavkaCenovnika.cena'} 
-								<label for="${field.id}">Cena</label>
+								<label for="${field.id}">Cena (din)</label>
 								<input type="text" name="${field.name}" id="${field.id}" value="${session.cenaSC}" /> 
 								<span>#{error field.name /}</span>
 							#{/}

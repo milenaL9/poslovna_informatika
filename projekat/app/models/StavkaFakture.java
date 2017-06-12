@@ -3,6 +3,7 @@ package models;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 
+import play.data.validation.Min;
 import play.data.validation.Required;
 import play.db.jpa.Model;
 
@@ -10,6 +11,7 @@ import play.db.jpa.Model;
 public class StavkaFakture extends Model {
 
 	@Required
+	@Min(1)
 	public int kolicina;
 
 	public float cena;
@@ -17,6 +19,7 @@ public class StavkaFakture extends Model {
 	public float vrednost;
 
 	@Required
+	@Min(1)
 	public float rabat;
 
 	public float iznosRabata;

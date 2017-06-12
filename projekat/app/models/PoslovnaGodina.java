@@ -16,6 +16,7 @@ import play.db.jpa.Model;
 public class PoslovnaGodina extends Model {
 
 	@Required
+	@MinSize(4)
 	@MaxSize(4)
 	@Column(columnDefinition = "varchar(4)")
 	public String brojGodine;
