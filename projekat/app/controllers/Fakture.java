@@ -188,12 +188,12 @@ public class Fakture extends Controller {
 			fakture = Faktura.findAll();
 
 			Preduzece findPreduzece = null;
-			if (preduzece == null) {
-				Long id = Long.parseLong(session.get("idPreduzeca"));
-				findPreduzece = Preduzece.findById(id);
-			} else {
-				findPreduzece = Preduzece.findById(preduzece);
-			}
+			//if (preduzece == null) {
+			//	Long id = Long.parseLong(session.get("idPreduzeca"));
+				findPreduzece = Preduzece.findById(new Long(1));
+			//} else {
+			//	findPreduzece = Preduzece.findById(preduzece);
+			//}
 
 			PoslovnaGodina findPoslovnaGodina = null;
 			if (poslovnaGodina == null) {

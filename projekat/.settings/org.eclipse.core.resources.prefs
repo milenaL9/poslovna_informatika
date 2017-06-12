@@ -1,3 +1,6 @@
-#Tue Feb 17 18:35:42 CET 2009
 eclipse.preferences.version=1
+encoding//app/views/Cenovnici/show.html=UTF-8
+encoding//app/views/Fakture/show.html=UTF-8
+encoding//app/views/Preduzeca/show.html=UTF-8
+encoding//app/views/standardForm.html=UTF-8
 encoding/<project>=UTF-8

@@ -110,9 +110,9 @@
 
 	function remove(id){  <!-- ne znam koji je uanpred selektovani red , ovde se vrsi redirekcija -->
 		if(id == null){
-			alert("OznaÃ„ï¿½ite red u tabeli!");
+			alert("Označite red u tabeli!");
 		}else{
-			var r  = confirm("Da li Å¾elite da obriÅ¡ete slog?");
+			var r  = confirm("Da li želite da obrišete slog?");
 			if(r==true) {
 	    		$(location).attr('href', '/Fakture/delete?id='+id);
 			}else{
@@ -127,18 +127,18 @@
 	
 
 	$(function(){
-		$( "#faktura_datumFakture" ).datepicker();
+		$( "#faktura_datumFakture" ).datepicker({  maxDate: new Date() });
 	});
 	
 	
 	$(function(){
-		$( "#faktura_datumValute" ).datepicker();
+		$( "#faktura_datumValute" ).datepicker({ minDate: 0 });
 	});
 
 	// nextForm
 	function nextform_func(id){
 		if(id==null){
-			alert("OznaÄ�ite red u tabeli!");
+			alert("Označite red u tabeli!");
 		}else{
 			sessionStorage.setItem("selektovaniID",id);
 			$('#nextFormModal').modal('show');
@@ -295,7 +295,7 @@
 	   				<th>Ukupno osnovica</th>
 	   				<th>Ukupno PDV</th>
 	   				<th>Ukupno za placanje</th>
-	   				<th>PreduzeÄ‡e</th>
+	   				<th>Preduzeće</th>
 	   				<th>Poslovna godina</th>
 	   				<th>Poslovni partner</th>
 	   			</tr>
@@ -351,20 +351,20 @@
 						#{/}
 					</p>
 
-					<p>
-						#{field 'preduzece'} <label for="${field.id}">PreduzeÄ‡e</label>
-						&nbsp &nbsp &nbsp <select name="${field.name}" id="${field.id}">
-							#{list items:preduzeca, as:'preduzece'}
-							<option value="${preduzece.id}">${preduzece.naziv}</option>
-							#{/list}
-						</select>
+<!-- 					<p> -->
+<!-- 						#{field 'preduzece'} <label for="${field.id}">PreduzeÃ„â€¡e</label> -->
+<!-- 						&nbsp &nbsp &nbsp <select name="${field.name}" id="${field.id}"> -->
+<!-- 							#{list items:preduzeca, as:'preduzece'} -->
+<!-- 							<option value="${preduzece.id}">${preduzece.naziv}</option> -->
+<!-- 							#{/list} -->
+<!-- 						</select> -->
 
-						<button id="zoomBtnPreduzece" type="button" class="btn btn-info btn-sm"
-							data-toggle="modal" data-target="#preduzeceModal">...</button>
-						#{/}
+<!-- 						<button id="zoomBtnPreduzece" type="button" class="btn btn-info btn-sm" -->
+<!-- 							data-toggle="modal" data-target="#preduzeceModal">...</button> -->
+<!-- 						#{/} -->
 
-						<script>SelectElement()</script>
-					</p>
+<!-- 						<script>SelectElement()</script> -->
+<!-- 					</p> -->
 					
 						
 					<p>
@@ -402,7 +402,7 @@
 					<div id = "formActions">
 						<input type = "submit" value = "Potvrda" style="margin-left:6em" class="btn btn-success"/>
 						<a href = "@{Fakture.changeMode("edit")}" style="margin-left:1em">
-							<button type="button" class="btn btn-danger">OtkaÅ¾i</button>
+							<button type="button" class="btn btn-danger">Otkaži</button>
 						</a>
 					</div>				
 				</form>
@@ -411,7 +411,7 @@
 	</div>
 </div>
 
-<p class="status_line">Trenutni reÅ¾im: ${session.mode}</p>
+<p class="status_line">Trenutni režim: ${session.mode}</p>
 
 <button onclick="topFunction()" id="myBtn" title="Idi na vrh">
 	<img src="@{'/public/images/back_top.png'}" alt=""
@@ -423,7 +423,7 @@
 	<div class="modal-dialog">
 		<!-- Modal content-->
 		<div class="modal-content">
-			<div class="modal-header">Izaberite sledeÄ‡u formu</div>
+			<div class="modal-header">Izaberite sledeću formu</div>
 
 			<div class="modal-body">
 				<table style="padding: 2em">
@@ -440,7 +440,7 @@
 
 				<div class="modal-footer">
 					<input id="nextFormPickup" type="button" value="Izbor" class="btn btn-success"/>
-					<button type="button" class="btn btn-danger" onclick="cancel_nextFormModal()">OtkaÅ¾i</button>
+					<button type="button" class="btn btn-danger" onclick="cancel_nextFormModal()">Otkaži</button>
 				</div>
 			</div>
 		</div>
@@ -452,7 +452,7 @@
 	<div class="modal-dialog">
 		<!-- Modal content-->
 		<div class="modal-content">
-			<div class="modal-header">PreduzeÄ‡a</div>
+			<div class="modal-header">Preduzeća</div>
 
 			<div class="modal-body">
 				<table style="padding: 2em">
@@ -462,8 +462,8 @@
 		   				<th>Mesto</th>
 		   				<th>Adresa</th>
 		   				<th>Telefon</th>
-		   				<th>MatiÄ�ni broj</th>
-		   				<th>TekuÄ‡i raÄ�un</th>
+		   				<th>MatiÃ„ï¿½ni broj</th>
+		   				<th>TekuÃ„â€¡i raÃ„ï¿½un</th>
 					</tr>
 
 					#{list items:preduzeca, as:'preduzece'}
@@ -482,7 +482,7 @@
 
 				<div class="modal-footer">
 					<input id="preduzecePickup" type="button" value="Izbor" class="btn btn-success" />
-					<button type="button" class="btn btn-danger" onclick="cancel_preduzeceModal()">OtkaÅ¾i</button>
+					<button type="button" class="btn btn-danger" onclick="cancel_preduzeceModal()">OtkaÃ…Â¾i</button>
 				</div>
 			</div>
 		</div>
@@ -503,7 +503,7 @@
 					<tr class="header">
 						<th>Broj godine</th> 
 		   				<th>Aktivna</th>
-		   				<th>PreduzeÄ‡e</th>
+		   				<th>Preduzeće</th>
 					</tr>
 
 					#{list items:poslovneGodine, as:'poslovnaGodina'}
@@ -518,7 +518,7 @@
 
 				<div class="modal-footer">
 					<input id="poslovnaGodinaPickup" type="button" value="Izbor" class="btn btn-success"  />
-					<button type="button" class="btn btn-danger" onclick="cancel_poslovnaGodinaModal()">OtkaÅ¾i</button>
+					<button type="button" class="btn btn-danger" onclick="cancel_poslovnaGodinaModal()">Otkaži</button>
 				</div>
 			</div>
 		</div>
@@ -543,8 +543,8 @@
 	   					<th>Vrsta</th>
 	   					<th>Telefon</th>
 	   					<th>PIB</th>
-	   					<th>TekuÄ‡i raÄ�un</th>
-	   					<th>PreduzeÃ„â€¡e</th>
+	   					<th>Tekući račun</th>
+	   					<th>Preduzeće</th>
 					</tr>
 
 					#{list items:poslovniPartneri, as:'poslovniPartner'}
@@ -564,7 +564,7 @@
 
 				<div class="modal-footer">
 					<input id="poslovniPartnerPickup" type="button" value="Izbor" class="btn btn-success"/>
-					<button type="button" class="btn btn-danger" onclick="cancel_poslovniPartneriModal()">OtkaÅ¾i</button>
+					<button type="button" class="btn btn-danger" onclick="cancel_poslovniPartneriModal()">Otkaži</button>
 				</div>
 			</div>
 		</div>
@@ -576,7 +576,7 @@
 	<div class="modal-dialog">
 		<!-- Modal content-->
 		<div class="modal-content">
-			<div class="modal-header">Izaberite nadreÄ‘enu formu</div>
+			<div class="modal-header">Izaberite nadređnu formu</div>
 
 			<div class="modal-body">
 				<table style="padding: 2em">
@@ -593,7 +593,7 @@
 
 				<div class="modal-footer">
 					<input id="pickupPickup" type="button" value="Izbor" class="btn btn-success" />
-					<button type="button" class="btn btn-danger" onclick="cancel_pickupModal()">OtkaÅ¾i</button>
+					<button type="button" class="btn btn-danger" onclick="cancel_pickupModal()">Otkaži</button>
 				</div>
 			</div>
 		</div>

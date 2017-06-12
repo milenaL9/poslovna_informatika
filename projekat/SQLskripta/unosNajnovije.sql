@@ -27,24 +27,6 @@ INSERT INTO [dbo].[Preduzece]
            ,'123456789789456123'
            ,'021555999')
 
-
-		   INSERT INTO [dbo].[Preduzece]
-           ([adresa]
-           ,[maticniBroj]
-           ,[mesto]
-           ,[naziv]
-           ,[pib]
-           ,[tekuciRacun]
-           ,[telefon])
-     VALUES
-           ('Nova adresa 1'
-           ,'1234567896325'
-           ,'Zrenjanin'
-           ,'Dado Polumenta'
-           ,'12345678'
-           ,'123456789789456123'
-           ,'021555999')
-	
 	INSERT INTO [dbo].[PoslovniPartner]
            ([adresa]
            ,[mesto]
@@ -64,29 +46,6 @@ INSERT INTO [dbo].[Preduzece]
            ,'KD'
            ,1)
 
-		
-	INSERT INTO [dbo].[PoslovniPartner]
-           ([adresa]
-           ,[mesto]
-           ,[naziv]
-           ,[pib]
-           ,[tekuciRacun]
-           ,[telefon]
-           ,[vrsta]
-           ,[preduzece_id])
-     VALUES
-           ('Nova ulica 22'
-           ,'Zitiste'
-           ,'Juko'
-           ,12345678
-           ,'12345678998745'
-           ,'123456789'
-           ,'KD'
-           ,1)
-
-
-
-
 	INSERT INTO [dbo].[PoslovnaGodina]
            ([aktivna]
            ,[brojGodine]
@@ -105,33 +64,6 @@ INSERT INTO [dbo].[Preduzece]
            ,'2016'
            ,1)
 
-	
-
-
-
-	
-	INSERT INTO [dbo].[PoslovnaGodina]
-           ([aktivna]
-           ,[brojGodine]
-           ,[preduzece_id])
-     VALUES
-           ('D'
-           ,'2017'
-           ,2)
-
-	INSERT INTO [dbo].[PoslovnaGodina]
-           ([aktivna]
-           ,[brojGodine]
-           ,[preduzece_id])
-     VALUES
-           ('N'
-           ,'2016'
-           ,2)
-
-
-
-
-	
 	INSERT INTO [dbo].[Cenovnik]
            ([naziv]
            ,[datumVazenja])
@@ -203,31 +135,12 @@ INSERT INTO [dbo].[Preduzece]
            ,1
            ,1)
 
-
-	INSERT INTO [dbo].[Grupa]
-           ([nazivGrupe]
-           ,[preduzece_id]
-           ,[vrstaPDVa_id])
-     VALUES
-           ('pevanje'
-           ,2
-           ,2)
-
 	INSERT INTO [dbo].[Podgrupa]
-           ([nazivPodgrupe]
-           ,[grupa_id])
-     VALUES
-           ('narodnjaci'
-           ,3)
-
-
-		INSERT INTO [dbo].[Podgrupa]
            ([nazivPodgrupe]
            ,[grupa_id])
      VALUES
            ('piletina'
            ,1)
-
 
 	INSERT INTO [dbo].[Podgrupa]
            ([nazivPodgrupe]
@@ -499,5 +412,4 @@ INSERT INTO [dbo].[Preduzece]
            ,20
            ,1)
 GO
-
 
