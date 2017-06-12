@@ -1,10 +1,13 @@
 package controllers;
 
+import java.io.File;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.OneToMany;
 
@@ -16,6 +19,10 @@ import models.Preduzece;
 import models.StavkaCenovnika;
 import models.StopaPDVa;
 import models.VrstaPDVa;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import play.Play;
 import play.cache.Cache;
 import play.mvc.Controller;
 import play.mvc.With;
@@ -233,6 +240,33 @@ public class Preduzeca extends Controller {
 		List<String> povezaneForme = getForeignKeysFields();
 
 		renderTemplate("preduzeca/show.html", preduzeca, povezaneForme, mode);
+	}
+
+	public void exportToPdf(Long id) {
+		try {
+
+			Preduzece p = Preduzece.findById(id);
+			String nazivPreduzeca = p.naziv;
+
+			Map parametri = new HashMap<>();
+			parametri.put("nazivPreduzeca", nazivPreduzeca);
+
+			String file = imeIzvestaja("KIF.jasper");
+			JasperPrint jp = JasperFillManager.fillReport(file, parametri, play.db.DB.getConnection());
+			JasperExportManager.exportReportToPdfFile(jp, imeIzvestaja("KIF") + id + ".pdf");
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			List<Preduzece> preduzeca = checkCache();
+			List<String> povezaneForme = getForeignKeysFields();
+			String mode = "edit";
+			renderTemplate("Preduzeca/show.html", preduzeca, povezaneForme, mode);
+		}
+	}
+
+	public static String imeIzvestaja(String ime) {
+		return Play.applicationPath + File.separator + "jaspers" + File.separator + ime;
 	}
 
 	/** Pomocna metoda za brisanje podataka iz sesije. */

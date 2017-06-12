@@ -7,13 +7,13 @@
 	
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="C:\Users\Milena\Desktop\Milena\fax\4.godina\letnji\Poslovna_informatika\play-1.4.4\framework\play-1.4.4.jar" sourcepath="C:/users/milena/desktop/milena/fax/4.godina/letnji/poslovna_informatika/play-1.4.4/framework/src" />
-	<classpathentry kind="lib" path="C:\Users\Milena\Desktop\Milena\fax\4.godina\letnji\Poslovna_informatika\GitHub_proj\poslovna_informatika\projekat\lib\commons-digester-1.7.jar" sourcepath="C:\Users\Milena\.ivy2\cache\commons-digester\commons-digester\sources\commons-digester-1.7-sources.jar"/>
-	<classpathentry kind="lib" path="C:\Users\Milena\Desktop\Milena\fax\4.godina\letnji\Poslovna_informatika\GitHub_proj\poslovna_informatika\projekat\lib\itext-2.1.7.jar" sourcepath="C:\Users\Milena\.ivy2\cache\com.lowagie\itext\sources\itext-2.1.7-sources.jar"/>
-	<classpathentry kind="lib" path="C:\Users\Milena\Desktop\Milena\fax\4.godina\letnji\Poslovna_informatika\GitHub_proj\poslovna_informatika\projekat\lib\jasperreports-4.0.1.jar" sourcepath="C:\Users\Milena\.ivy2\cache\net.sf.jasperreports\jasperreports\sources\jasperreports-4.0.1-sources.jar"/>
-	<classpathentry kind="lib" path="C:\Users\Milena\Desktop\Milena\fax\4.godina\letnji\Poslovna_informatika\GitHub_proj\poslovna_informatika\projekat\lib\jcifs-1.3.17.jar"/>
-	<classpathentry kind="lib" path="C:\Users\Milena\Desktop\Milena\fax\4.godina\letnji\Poslovna_informatika\GitHub_proj\poslovna_informatika\projekat\lib\jtds-1.3.1.jar" sourcepath="C:\Users\Milena\.ivy2\cache\net.sourceforge.jtds\jtds\sources\jtds-1.3.1-sources.jar"/>
-	<classpathentry kind="lib" path="C:\Users\Milena\Desktop\Milena\fax\4.godina\letnji\Poslovna_informatika\GitHub_proj\poslovna_informatika\projekat\lib\jxl-2.6.10.jar"/>
-	<classpathentry kind="lib" path="C:\Users\Milena\Desktop\Milena\fax\4.godina\letnji\Poslovna_informatika\GitHub_proj\poslovna_informatika\projekat\lib\servlet-api-2.4.jar"/>
+	<classpathentry kind="lib" path="C:\Users\Milena\Desktop\Milena\fax\4.godina\letnji\Poslovna_informatika\GitHub\poslovna_informatika\projekat\lib\commons-digester-1.7.jar" sourcepath="C:\Users\Milena\.ivy2\cache\commons-digester\commons-digester\sources\commons-digester-1.7-sources.jar"/>
+	<classpathentry kind="lib" path="C:\Users\Milena\Desktop\Milena\fax\4.godina\letnji\Poslovna_informatika\GitHub\poslovna_informatika\projekat\lib\itext-2.1.7.jar" sourcepath="C:\Users\Milena\.ivy2\cache\com.lowagie\itext\sources\itext-2.1.7-sources.jar"/>
+	<classpathentry kind="lib" path="C:\Users\Milena\Desktop\Milena\fax\4.godina\letnji\Poslovna_informatika\GitHub\poslovna_informatika\projekat\lib\jasperreports-5.6.0.jar" sourcepath="C:\Users\Milena\.ivy2\cache\net.sf.jasperreports\jasperreports\sources\jasperreports-5.6.0-sources.jar"/>
+	<classpathentry kind="lib" path="C:\Users\Milena\Desktop\Milena\fax\4.godina\letnji\Poslovna_informatika\GitHub\poslovna_informatika\projekat\lib\jcifs-1.3.17.jar"/>
+	<classpathentry kind="lib" path="C:\Users\Milena\Desktop\Milena\fax\4.godina\letnji\Poslovna_informatika\GitHub\poslovna_informatika\projekat\lib\jtds-1.3.1.jar" sourcepath="C:\Users\Milena\.ivy2\cache\net.sourceforge.jtds\jtds\sources\jtds-1.3.1-sources.jar"/>
+	<classpathentry kind="lib" path="C:\Users\Milena\Desktop\Milena\fax\4.godina\letnji\Poslovna_informatika\GitHub\poslovna_informatika\projekat\lib\jxl-2.6.10.jar"/>
+	<classpathentry kind="lib" path="C:\Users\Milena\Desktop\Milena\fax\4.godina\letnji\Poslovna_informatika\GitHub\poslovna_informatika\projekat\lib\servlet-api-2.4.jar"/>
 	<classpathentry kind="lib" path="C:\Users\Milena\Desktop\Milena\fax\4.godina\letnji\Poslovna_informatika\play-1.4.4\modules\docviewer\lib\play-docviewer.jar"/>
 	<classpathentry kind="lib" path="C:\Users\Milena\Desktop\Milena\fax\4.godina\letnji\Poslovna_informatika\play-1.4.4\framework\lib\activation-1.1.1.jar"/>
 	<classpathentry kind="lib" path="C:\Users\Milena\Desktop\Milena\fax\4.godina\letnji\Poslovna_informatika\play-1.4.4\framework\lib\antlr-2.7.7.jar"/>

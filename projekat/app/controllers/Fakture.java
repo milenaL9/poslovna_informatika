@@ -1,5 +1,6 @@
 package controllers;
 
+import java.io.File;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.text.ParseException;
@@ -9,7 +10,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -21,6 +24,10 @@ import models.PoslovniPartner;
 import models.Preduzece;
 import models.StavkaCenovnika;
 import models.StavkaFakture;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import play.Play;
 import play.cache.Cache;
 import play.mvc.Controller;
 
@@ -355,6 +362,35 @@ public class Fakture extends Controller {
 		}
 	}
 
+	public void exportToPdf1(Long id) {
+		try {
+
+			Map parametri = new HashMap<>();
+			parametri.put("idFakture", id);
+
+			String file = imeIzvestaja1("faktura.jasper");
+
+			if (play.db.DB.getConnection() == null) {
+				System.out.println("NULL JE");
+			}
+
+			JasperPrint jp = JasperFillManager.fillReport(file, parametri, play.db.DB.getConnection());
+			JasperExportManager.exportReportToPdfFile(jp, imeIzvestaja1("faktura") + id + ".pdf");
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			List<Faktura> fakture = checkCache();
+			List<String> povezaneForme = getForeignKeysFields();
+			String mode = "edit";
+			renderTemplate("Fakture/show.html", fakture, povezaneForme, mode);
+		}
+	}
+
+	public static String imeIzvestaja1(String ime) {
+		return Play.applicationPath + File.separator + "jaspers" + File.separator + ime;
+	}
+
 	/** Pomocna metoda za brisanje podataka iz sesije. */
 	private static boolean clearSession() {
 		session.put("idF", null);
@@ -387,8 +423,13 @@ public class Fakture extends Controller {
 
 	public static int incrementBrojFakture() {
 		List<Faktura> fakture = Faktura.findAll();
-		int brojFakture = fakture.get(fakture.size() - 1).brojFakture;
-		brojFakture++;
+		int brojFakture = 0;
+		if (fakture.size() > 0) {
+			brojFakture = fakture.get(fakture.size() - 1).brojFakture;
+			brojFakture++;
+		} else {
+			brojFakture = 1;
+		}
 
 		return brojFakture;
 	}

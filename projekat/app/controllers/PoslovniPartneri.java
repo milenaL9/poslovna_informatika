@@ -384,7 +384,7 @@ public class PoslovniPartneri extends Controller {
 		List<PoslovniPartner> kupci = new ArrayList<>();
 
 		for (PoslovniPartner pp : poslovniPartneriAll) {
-			if (pp.vrsta.equals("K")) {
+			if (pp.vrsta.equals("K") || pp.vrsta.equals("KD")) {
 				kupci.add(pp);
 			}
 		}
