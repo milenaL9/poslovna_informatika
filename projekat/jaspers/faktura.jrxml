@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="izvestaj1" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="70a6c4e3-045a-41de-94f1-e2d084a97932">
 	<property name="ireport.zoom" value="1.2745232708414267"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="346"/>
 	<parameter name="idFakture" class="java.lang.Long"/>
 	<queryString>
 		<![CDATA[SELECT
@@ -48,7 +48,8 @@
      PoslovnaGodina."id" AS PoslovnaGodina_id,
      PoslovnaGodina."aktivna" AS PoslovnaGodina_aktivna,
      PoslovnaGodina."brojGodine" AS PoslovnaGodina_brojGodine,
-     PoslovnaGodina."preduzece_id" AS PoslovnaGodina_preduzece_id
+     PoslovnaGodina."preduzece_id" AS PoslovnaGodina_preduzece_id,
+     KatalogRobeIUsluga."opisStavkeKataloga" AS KatalogRobeIUsluga_opisStavkeKataloga
 FROM
      "dbo"."Faktura" Faktura INNER JOIN "dbo"."StavkaFakture" StavkaFakture ON Faktura."id" = StavkaFakture."faktura_id"
      INNER JOIN "dbo"."Preduzece" Preduzece ON Faktura."preduzece_id" = Preduzece."id"
@@ -56,7 +57,9 @@ FROM
      INNER JOIN "dbo"."PoslovnaGodina" PoslovnaGodina ON Faktura."poslovnaGodina_id" = PoslovnaGodina."id"
      AND Preduzece."id" = PoslovnaGodina."preduzece_id"
      AND Preduzece."id" = PoslovniPartner."preduzece_id"
-WHERE Faktura."id" = $P{idFakture}]]>
+     INNER JOIN "dbo"."KatalogRobeIUsluga" KatalogRobeIUsluga ON StavkaFakture."katalogRobeIUsluga_id" = KatalogRobeIUsluga."id"
+WHERE
+     Faktura."id" = $P{idFakture}]]>
 	</queryString>
 	<field name="Faktura_id" class="java.lang.Long"/>
 	<field name="Faktura_brojFakture" class="java.lang.Integer"/>
@@ -101,6 +104,7 @@ WHERE Faktura."id" = $P{idFakture}]]>
 	<field name="PoslovnaGodina_aktivna" class="java.lang.String"/>
 	<field name="PoslovnaGodina_brojGodine" class="java.lang.String"/>
 	<field name="PoslovnaGodina_preduzece_id" class="java.lang.Long"/>
+	<field name="KatalogRobeIUsluga_opisStavkeKataloga" class="java.lang.String"/>
 	<pageHeader>
 		<band height="421" splitType="Stretch">
 			<staticText>
@@ -171,11 +175,7 @@ WHERE Faktura."id" = $P{idFakture}]]>
 				<text><![CDATA[Valuta:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="16" y="385" width="24" height="20" uuid="0f6af17b-72ce-4c38-b8d5-b7e2e4051fb8"/>
-				<text><![CDATA[R.br.]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="40" y="385" width="114" height="20" uuid="b99eb3f5-53b0-40c4-9d43-2ec35da366a0"/>
+				<reportElement x="21" y="385" width="133" height="20" uuid="b99eb3f5-53b0-40c4-9d43-2ec35da366a0"/>
 				<text><![CDATA[OPIS]]></text>
 			</staticText>
 			<staticText>
@@ -292,6 +292,10 @@ WHERE Faktura."id" = $P{idFakture}]]>
 			<line>
 				<reportElement x="0" y="1" width="555" height="1" uuid="b077fda1-3907-49f9-a440-792e6aac2a84"/>
 			</line>
+			<textField>
+				<reportElement x="21" y="21" width="129" height="20" uuid="e17abebe-dc18-4a1c-8ff8-4bc097ec679a"/>
+				<textFieldExpression><![CDATA[$F{KatalogRobeIUsluga_opisStavkeKataloga}]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 	<pageFooter>
