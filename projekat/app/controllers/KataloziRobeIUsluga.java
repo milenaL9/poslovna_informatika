@@ -12,9 +12,9 @@ import models.Cenovnik;
 import models.Faktura;
 import models.KatalogRobeIUsluga;
 import models.Podgrupa;
-import models.PoslovnaGodina;
 import models.StavkaCenovnika;
 import models.StavkaFakture;
+import models.StavkaNarudzbe;
 import models.StopaPDVa;
 import play.cache.Cache;
 import play.mvc.Controller;
@@ -412,5 +412,19 @@ public class KataloziRobeIUsluga extends Controller {
 		}
 
 		return stavkeFakture;
+	}
+	
+	
+	public static List<StavkaNarudzbe> findStavkeNarudzbe(Long idNarudzbe) {
+		List<StavkaNarudzbe> stavkeNarudzbeAll = StavkaNarudzbe.findAll();
+		List<StavkaNarudzbe> stavkeNarudzba = new ArrayList<>();
+
+		for (StavkaNarudzbe sc : stavkeNarudzbeAll) {
+			if (sc.narudzba.id== idNarudzbe) {
+				stavkeNarudzba.add(sc);
+			}
+		}
+
+		return stavkeNarudzba;
 	}
 }

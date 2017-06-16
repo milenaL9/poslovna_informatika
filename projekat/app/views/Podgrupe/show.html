@@ -59,9 +59,9 @@
 	
 	function remove(id){  
 	if(id == null){
-		alert("Označite red u tabeli!");
+		alert("OznaÄ�ite red u tabeli!");
 	}else{
-		var r  = confirm("Da li želite da obrišete slog?");
+		var r  = confirm("Da li zelite da obrisete slog?");
 		if(r == true) {
 	    	$(location).attr('href', '/Podgrupe/delete?id='+id);
 		}
@@ -85,7 +85,7 @@
 	});
 	
 	function cancel_modalGrupe(){
-		// $('#modalDialogGrupe').modal('toggle');
+		 $('#modalDialogGrupe').modal('toggle');
 	}	
 	
 	function pickup(){
@@ -105,6 +105,37 @@
 		});
 	});
 	
+	
+	function nextform_func(id){
+		if(id==null){
+			alert("Oznacite red u tabeli!");
+		}else{
+			sessionStorage.setItem("selektovaniID",id);
+			$('#nextFormModal').modal('show');
+		}	
+	}
+
+	 $(document).ready(function(){
+			$("#nextFormPickup").click(function(){
+				nazivForme = $(".highlighted").find(".naziv_forme").html();
+				
+				var idPG = sessionStorage.getItem("selektovaniID");
+				
+				$('#nextFormModal').modal('toggle');
+				
+				$(location).attr('href', '/Podgrupe/nextForm?id='+idPG+'&forma='+nazivForme);
+			});
+		});
+	 
+	 function cancel_nextFormModal(){
+			$('#nextFormModal').modal('toggle');
+		}
+	 
+	 function sessionStates(){
+		 console.log(${session.idGrupe});
+		 
+	 }
+	 
 	
 </script>
 
@@ -145,6 +176,9 @@
 			</a>
 	</div>
 
+	<script>
+		SessionStates();
+	</script>
 
 	<div class="container-fluid">
 		<h1> Podgrupe </h1>
@@ -213,7 +247,7 @@
 				<div id = "formActions">
 						<input type = "submit" value = "Potvrda" style="margin-left:6em" class="btn btn-success"/>
 						<a href = "@{Podgrupe.changeMode("edit")}" style="margin-left:1em">
-							<button type="button" class="btn btn-danger">Otkaži</button>
+							<button type="button" class="btn btn-danger">OtkaÅ¾i</button>
 						</a>
 				</div>		
 			</form>
@@ -223,7 +257,7 @@
 
 </div>
 
-<p class="status_line">Trenutni režim: ${session.mode}</p>
+<p class="status_line">Trenutni rezim: ${session.mode}</p>
 
 <button onclick="topFunction()" id="myBtn" title="Idi na vrh">
 	<img src="@{'/public/images/back_top.png'}" alt=""
@@ -254,7 +288,7 @@
 				
 				<div class="modal-footer">
 					<input id = "izborPickupGrupa" type = "button" value = "Izbor" class="btn btn-success"/>
-					<button type="button" class="btn btn-danger" onclick="cancel_modalGrupe()">Otkaži</button>
+					<button type="button" class="btn btn-danger" onclick="cancel_modalGrupe()">OtkaÅ¾i</button>
 				</div>
 			</div>
 		</div>
@@ -265,7 +299,7 @@
 	<div class="modal-dialog">
 		<!-- Modal content-->
 		<div class="modal-content">
-			<div class="modal-header">Izaberite nadreÄ‘enu formu</div>
+			<div class="modal-header">Izaberite nadredjenu formu</div>
 
 			<div class="modal-body">
 				<table style="padding: 2em">
@@ -282,7 +316,35 @@
 
 				<div class="modal-footer">
 					<input id="pickupPickup" type="button" value="Izbor" class="btn btn-success" />
-					<button type="button" class="btn btn-danger" onclick="cancel_pickupModal()">Otkaži</button>
+					<button type="button" class="btn btn-danger" onclick="cancel_pickupModal()">OtkaÅ¾i</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="nextFormModal" role="dialog">
+	<div class="modal-dialog">
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">Izaberite sledecu formu</div>
+
+			<div class="modal-body">
+				<table style="padding: 2em">
+					<tr class="header">
+						<th>Forma</th>
+					</tr>
+
+					#{list items:povezaneForme, as:'forma'}
+					<tr>
+						<td class = "naziv_forme">${forma}</td>
+					</tr>
+					#{/list}
+				</table>
+
+				<div class="modal-footer">
+					<input id="nextFormPickup" type="button" value="Izbor" class="btn btn-success"/>
+					<button type="button" class="btn btn-danger" onclick="cancel_nextFormModal()">Otkazi</button>
 				</div>
 			</div>
 		</div>

@@ -17,16 +17,16 @@ public class StavkaNarudzbe extends Model {
 	
 
 	@Required
-	public int osnovicaZaPDV;
+	public float osnovicaZaPDV;
 	
 	@Required
 	public float stopaPDVa;
 	
 	@Required
-	public int iznosPDVa;
+	public float iznosPDVa;
 	
 	@Required
-	public int ukupno;
+	public float ukupno;
 	
 	@ManyToOne
 	public KatalogRobeIUsluga katalogRobeIUsluga;

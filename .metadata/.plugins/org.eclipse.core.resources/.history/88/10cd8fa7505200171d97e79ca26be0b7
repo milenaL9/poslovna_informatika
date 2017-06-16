@@ -1,0 +1,400 @@
+#{extends 'standardForm.html' /}
+#{set title:'Grupe' /}
+
+<script>
+
+	function sync(item){
+		if("${session.mode}" == "edit"){
+			var naziv = item.find(".naziv").html();
+			var nazivVrstePDVa = item.find(".pdv").html();
+			var nazivPreduzeca = item.find(".preduzece").html();
+			id = item.find(".id").html()
+
+			$("#grupa_nazivGrupe").val(naziv);
+		
+			var options = document.getElementById("vrstaPDVa_id").children;
+			for(i = 0; i < options.length; i++){
+				if(options[i].label==nazivVrstePDVa){
+					document.getElementById("vrstaPDVa_id").selectedIndex = i;
+					break;
+				}
+			}
+		
+			var options = document.getElementById("preduzece_id").children;
+
+			for(i = 0; i < options.length; i++){
+				if(options[i].label==nazivPreduzeca){
+					document.getElementById("preduzece_id").selectedIndex = i;
+					break;
+				}
+			}
+		}
+	}
+
+	function SelectPreduzece(){
+		if(${session.idPreduzeca} != null){
+			var options = document.getElementById("preduzece_id").children;
+		
+			for(i = 0; i < options.length; i++){
+				if(options[i].label==nazivPreduzeca){
+					document.getElementById("preduzece_id").selectedIndex = i;
+					break;
+				}
+			}
+		
+			document.getElementById("preduzece_id").disabled = true;
+			document.getElementById("zoomBtnPreduzece").disabled = true;
+		}
+	}
+
+
+	function SelectVrstaPDVa(){
+		if(${session.idVrstePDVa} != null){
+
+			document.getElementById("preduzece_id").disabled = true;
+			document.getElementById("zoomBtnPreduzece").disabled = true;
+		
+			var options = document.getElementById("vrstaPDVa_id").children;
+			for(i = 0; i < options.length; i++){
+				if(options[i].label==nazivVrstePDVa){
+					document.getElementById("vrstaPDVa_id").selectedIndex = i;
+					break;
+				}
+			}
+		
+			document.getElementById("vrstaPDVa_id").disabled = true;
+			document.getElementById("zoomBtnVrstaPDVa").disabled = true;
+		}
+	
+	}
+
+	function remove(id){  
+		if(id == null){
+			alert("Označite red u tabeli!");
+		}else{
+			var r  = confirm("Da li želite da obrišete slog?");
+			if(r == true) {
+	    		$(location).attr('href', '/Grupe/delete?id='+id);
+			}
+			else{
+				txt = "You pressed Cancel"
+			}
+		}
+	}
+
+	function refresh_page(){
+		$(location).attr('href', '/Grupe/refresh');
+	}
+
+	//modal Preduzeca
+	$(document).ready(function(){
+		$("#izborPickup").click(function(){
+			id = $(".highlighted").find(".izbor_id").html();
+			$("select").val(id);
+			$('#modalDialog').modal('toggle');
+		});
+	});
+	
+	function cancel_preduzece_modal(){
+		$('#modalDialog').modal('toggle');
+	}
+
+	//modal VrstaPDVa
+	$(document).ready(function(){
+		$("#izborPickupVrstaPDVa").click(function(){
+			id = $(".highlighted").find(".izbor_vrstaPDVa_id").html();
+		
+			var options = document.getElementById("vrstaPDVa_id").children;
+			for(i = 0; i < options.length; i++){
+				if(options[i].value==id){
+					document.getElementById("vrstaPDVa_id").selectedIndex = i;
+					break;
+				}
+			}
+		
+			$('#modalDialogVrstaPDVa').modal('toggle');
+		});
+	});
+	
+	function cancel_modalVrstaPDVa(){
+		$('#modalDialogVrstaPDVa').modal('toggle');
+	}
+
+
+	function nextform_func(id){
+		if(id==null){
+			alert("Označite red u tabeli!");
+		}else{
+			sessionStorage.setItem("selektovaniID",id);
+			$('#nextFormModal').modal('show');
+		}	
+	}
+
+	$(document).ready(function(){
+		$("#nextFormPickup").click(function(){
+			nazivForme = $(".highlighted").find(".naziv_forme").html();
+		
+			var idGrupe = sessionStorage.getItem("selektovaniID");
+			$('#nextFormModal').modal('toggle');
+		
+			$(location).attr('href', '/Grupe/nextForm?id='+idGrupe+'&forma='+nazivForme);
+		});
+	});
+
+	function cancel_nextFormModal(){
+		$('#nextFormModal').modal('toggle');
+	}
+</script>
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="icon-bar">
+			<a href="#" onclick="openSideNav()">
+				<img width="16px" height="16px" src="@{'/public/images/menu_icon.png'}" />
+			</a>
+				
+			<a href="@Grupe.changeMode("search")}" id = "search">
+				<img src="@{'/public/images/search.gif'}"/>
+			</a>
+				
+			<a href="#" onclick="refresh_page()">
+				<img src="@{'/public/images/refresh.gif'}"/>
+			</a>
+				
+			<a href="#" id = "pickup">
+				<img src="@{'/public/images/zoom-pickup.gif'}"/>
+			</a>
+				
+			<a href="#" id = "help">
+				<img src="@{'/public/images/help.gif'}"/>
+			</a>
+				
+			<a id = "first">
+				<img src="@{'/public/images/first.gif'}"/>
+			</a>
+	
+			<a id = "prev">
+				<img src="@{'/public/images/prev.gif'}"/>
+			</a>
+	
+			<a id = "next">
+				<img src="@{'/public/images/next.gif'}"/>
+			</a>
+	
+			<a id = "last">
+				<img src="@{'/public/images/last.gif'}"/>
+			</a>
+				
+			<a href="@{Grupe.changeMode("add")}" id = "add">
+				<img src="@{'/public/images/add.gif'}"/>
+			</a>
+				
+			<a href="#" id = "remove">
+				<img src="@{'/public/images/remove.gif'}"/>
+			</a>
+				
+			<a href="#" id = "nextform">
+				<img src="@{'/public/images/nextform.gif'}"/>
+			</a>
+		</div>
+			
+		<div class="container-fluid">
+			<h1> Grupe </h1>
+				
+			<table>
+				<tr class="header"> 
+					<th>Naziv</th>
+					<th>Preduzeće</th>
+					<th>Vrsta pdv-a</th>
+				</tr>
+				#{list items:grupe, as:'grupa'}
+					<tr>
+						<td class="naziv"> ${grupa.nazivGrupe} </td>
+						<td class="preduzece">${grupa.preduzece.naziv}</td>
+						<td class="pdv">${grupa.vrstaPDVa.nazivVrstePDva}</td>
+						<td style="visibility: hidden; max-width: 0px " class="id" >${grupa.id} </td>
+					</tr>
+				#{/}
+			</table>
+
+			#{set 'action'}
+				#{if mode == 'add'}
+					@{Grupe.create()}
+				#{/if}
+				#{elseif mode == 'edit'}
+					@{Grupe.edit()}
+				#{/elseif}
+				#{else}
+					@{Grupe.filter()}
+				#{/else}
+		  	#{/set}
+				
+			<div class="panel">
+				<form action=${action} method="post">
+					<p>
+						#{field 'grupa.id'}
+							<input type="hidden" name="${field.name}" id="${field.id}" />
+						#{/}
+					</p>
+						
+					<p>
+						#{field 'grupa.nazivGrupe'}
+							<label for="${field.id}">Naziv</label>
+							<input type="text" name="${field.name}" id="${field.id}" />
+							<span>#{error field.name /}</span>
+						#{/}
+					</p>
+							
+					<p>
+						#{field 'vrstaPDVa'}
+							<label for="${field.id}" >Vrsta PDVa</label>
+							&nbsp &nbsp &nbsp
+							<select name="${field.name}" id = "vrstaPDVa_id" >
+								#{list items:vrstePDVa, as:'vrstaPDVa'}
+									<option value="${vrstaPDVa.id}"> ${vrstaPDVa.nazivVrstePDva}  </option>
+								#{/}
+							</select>
+								
+							<button id = "zoomBtnVrstaPDVa" type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#modalDialogVrstaPDVa">...	</button>
+								
+						#{/}
+					</p>
+							
+					<p>
+						#{field 'preduzece'}
+							<label for="${field.id}" >Preduzeće</label>
+							&nbsp &nbsp &nbsp
+							<select name="${field.name}" id = "preduzece_id" >
+								#{list items:preduzeca, as:'preduzece'}
+									<option value="${preduzece.id}"> ${preduzece.naziv}</option>
+								#{/}
+							</select>
+								
+							<button id = "zoomBtn" type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#modalDialog">...	</button>	
+						#{/}
+					</p>
+						
+					<div id = "formActions">
+						<input type = "submit" value = "Potvrda" style="margin-left:6em" class="btn btn-success"/>
+						<a href = "@{Grupe.changeMode("edit")}" style="margin-left:1em">
+							<button type="button" class="btn btn-danger">Otkaži</button>
+						</a>
+					</div>	
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+	
+<p class="status_line">Trenutni režim: ${session.mode}</p>
+
+<button onclick="topFunction()" id="myBtn" title="Idi na vrh">
+	<img src="@{'/public/images/back_top.png'}" alt=""
+		class="rounded-circle" width="40" height="40">
+</button>
+	
+<div class="modal fade" id="modalDialogVrstaPDVa" role="dialog">
+	<div class="modal-dialog">
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">
+				Vrste PDVa
+			</div>
+				
+			<div class="modal-body">
+				<table style = "padding:2em">
+					<tr class = "header">
+						<th>Naziv vrste PDV-a</th>
+					</tr>
+						
+					#{list vrstePDVa, as:'vrstaPDVa'}
+						<tr >
+							<td class = "naziv">${vrstaPDVa.nazivVrstePDva}</td>
+							<td style = "visibility: hidden; max-width: 0px" class = "izbor_vrstaPDVa_id">${vrstaPDVa.id}</td>
+						</tr>
+					#{/list}
+				</table>
+					
+				<div class="modal-footer">
+					<input id = "izborPickupVrstaPDVa" type = "button" value = "Izbor" class="btn btn-success"/>
+					<button type="button" class="btn btn-danger" onclick="cancel_modalVrstaPDVa()">Otkaži</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<!-- Modal PREDUZECE -->
+<div class="modal fade" id="modalDialog" role="dialog">
+	<div class="modal-dialog">
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">
+				Preduzeća
+			</div>
+			
+      		<div class="modal-body">
+	    		<table style = "padding:2em">
+					<tr class = "header">
+		   				<th>Naziv</th>
+	   					<th>PIB</th>
+	   					<th>Mesto</th>
+	   					<th>Adresa</th>
+	   					<th>Telefon</th>
+	   					<th>Matični broj</th>
+	   					<th width="20%">Tekući račun</th>
+					</tr>
+					
+					#{list preduzeca, as:'preduzece'}
+						<tr #{if preduzece.id == idd} class = "highlighted" #{/if}>
+							<td class = "naziv">${preduzece.naziv}</td>
+							<td class = "pib">${preduzece.pib}</td>
+							<td class = "mesto">${preduzece.mesto}</td>
+							<td class = "adresa">${preduzece.adresa}</td>
+							<td class = "telefon">${preduzece.telefon}</td>
+							<td class = "maticniBroj">${preduzece.maticniBroj}</td>
+							<td class = "tekuciRacun">${preduzece.tekuciRacun}</td>
+							<td style = "visibility: hidden; max-width: 0px" class = "izbor_id">${preduzece.id}</td>
+						</tr>
+					#{/list}
+				</table>
+				
+				<div class="modal-footer">
+					<input id = "izborPickup" type = "button" value = "Izbor" class="btn btn-success"/>
+					<button type="button" class="btn btn-danger" onclick="cancel_preduzece_modal()">Otkaži</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<div class="modal fade" id="nextFormModal" role="dialog">
+	<div class="modal-dialog">
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">Izaberite sledeću formu</div>
+
+			<div class="modal-body">
+				<table style="padding: 2em">
+					<tr class="header">
+						<th>Forma</th>
+					</tr>
+
+					#{list items:povezaneForme, as:'forma'}
+					<tr>
+						<td class = "naziv_forme">${forma}</td>
+					</tr>
+					#{/list}
+				</table>
+
+				<div class="modal-footer">
+					<input id="nextFormPickup" type="button" value="Izbor" class="btn btn-success"/>
+					<button type="button" class="btn btn-danger" onclick="cancel_nextFormModal()">Otkaži</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+

@@ -9,10 +9,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import models.Faktura;
+import models.Narudzba;
 import models.PoslovnaGodina;
 import models.PoslovniPartner;
 import models.Preduzece;
-import models.StavkaCenovnika;
 import play.cache.Cache;
 import play.mvc.Controller;
 
@@ -373,6 +373,20 @@ public class PoslovneGodine extends Controller {
 		}
 
 		return aktivneGodine;
+	}
+	
+public static List<Narudzba> findNarudzbe(Long idPoslovneGodine){
+		
+		List<Narudzba> narudzbeAll = Narudzba.findAll();
+		List<Narudzba> narudzbe = new ArrayList<>();
+		
+		for (Narudzba narudzba : narudzbeAll) {
+			if (narudzba.poslovnaGodina.id == idPoslovneGodine) {
+				narudzbe.add(narudzba);
+			}
+		}
+		
+		return narudzbe;
 	}
 
 }

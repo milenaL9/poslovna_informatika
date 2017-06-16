@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import models.Grupa;
 import models.KatalogRobeIUsluga;
@@ -23,16 +24,17 @@ public class Podgrupe extends Controller {
 		validation.clear();
 		clearSession();
 		
-		//session.put("idGrupe","null");
+		session.put("idGrupe","null");
 		session.put("mode","edit");
 		
 		String mode = session.get("mode");
 		
 		List<Podgrupa> podgrupe = checkCache();
 		List<Grupa> grupe = Grupe.checkCache();
+		List<String> povezaneForme = getForeignKeysFields();
 		List<String> nadredjeneForme = getForeignKeysFieldsManyToOne();
 		
-		render("Podgrupe/show.html",podgrupe,grupe,nadredjeneForme);
+		render("Podgrupe/show.html",podgrupe,grupe,povezaneForme,nadredjeneForme);
 	}
 	
 	
@@ -45,9 +47,10 @@ public class Podgrupe extends Controller {
 		
 		List<Grupa> grupe = Grupe.checkCache();
 		List<Podgrupa> podgrupe = fillList();
+		List<String> povezaneForme = getForeignKeysFields();
 		List<String> nadredjeneForme = getForeignKeysFieldsManyToOne();
 		
-		renderTemplate("Podgrupe/show.html",podgrupe,grupe,mode,nadredjeneForme);
+		renderTemplate("Podgrupe/show.html",podgrupe,grupe,mode,povezaneForme,nadredjeneForme);
 		
 	}
 	
@@ -62,6 +65,7 @@ public class Podgrupe extends Controller {
 		
 		List<Podgrupa> podgrupe = null;
 		List<Grupa> grupe = Grupe.checkCache();
+		List<String> povezaneForme = getForeignKeysFields();
 		List<String> nadredjeneForme = getForeignKeysFieldsManyToOne();
 		
 		if(!validation.hasErrors()){
@@ -96,7 +100,7 @@ public class Podgrupe extends Controller {
 			session.put("nazivPodgrupe",podgrupa.nazivPodgrupe);
 		}
 		
-		renderTemplate("Podgrupe/show.html",podgrupe,grupe,nadredjeneForme);
+		renderTemplate("Podgrupe/show.html",podgrupe,grupe,povezaneForme,nadredjeneForme);
 		
 	}
 	
@@ -105,6 +109,10 @@ public class Podgrupe extends Controller {
 		validation.clear();
 		clearSession();
 		
+		System.out.println("Podgrupa naziv: "+podgrupa.nazivPodgrupe);
+		System.out.println("Grupa: "+grupa);
+		String idG = session.get("idGrupe");
+		System.out.println(idG);
 		validation.valid(podgrupa);
 		
 		session.put("mode", "add");
@@ -112,6 +120,7 @@ public class Podgrupe extends Controller {
 		
 		List<Podgrupa> podgrupe = null;
 		List<Grupa> grupe = Grupe.checkCache();
+		List<String> povezaneForme = getForeignKeysFields();
 		List<String> nadredjeneForme = getForeignKeysFieldsManyToOne();
 		
 		if(!validation.hasErrors()){
@@ -136,9 +145,12 @@ public class Podgrupe extends Controller {
 			
 			podgrupe.clear();
 			podgrupe = fillList();
+			for(Podgrupa pg: podgrupe){
+				System.out.println(pg.nazivPodgrupe);
+			}
 			validation.clear();
 			
-			renderTemplate("Podgrupe/show.html", podgrupe,grupe, idd, mode,nadredjeneForme);
+			renderTemplate("Podgrupe/show.html", podgrupe,grupe, idd, mode,povezaneForme,nadredjeneForme);
 			
 		}
 		else {
@@ -147,7 +159,7 @@ public class Podgrupe extends Controller {
 			
 			session.put("idPodgrupe",podgrupa.id);
 			session.put("nazivPodgrupe",podgrupa.nazivPodgrupe);
-			renderTemplate("Podgrupe/show.html", podgrupe,grupe, mode,nadredjeneForme);
+			renderTemplate("Podgrupe/show.html", podgrupe,grupe, mode,povezaneForme,nadredjeneForme);
 		}
 		
 		
@@ -165,9 +177,10 @@ public class Podgrupe extends Controller {
 		List<Grupa> grupe = Grupe.checkCache();
 		session.put("mode", "edit");
 		String mode = session.get("mode");
+		List<String> povezaneForme = getForeignKeysFields();
 		List<String> nadredjeneForme = getForeignKeysFieldsManyToOne();
 		
-		renderTemplate("Podgrupe/show.html",podgrupe,grupe,mode,nadredjeneForme);
+		renderTemplate("Podgrupe/show.html",podgrupe,grupe,mode,povezaneForme,nadredjeneForme);
 	}
 	
 	public static List<Podgrupa> fillList() {
@@ -188,7 +201,7 @@ public class Podgrupe extends Controller {
 		
 		List<Grupa> grupe = Grupe.checkCache();
 		List<Podgrupa> podgrupe = checkCache();
-		
+		List<String> povezaneForme = getForeignKeysFields();
 		Podgrupa podgrupa = Podgrupa.findById(id);
 		Long idd = null;
 		
@@ -205,7 +218,7 @@ public class Podgrupe extends Controller {
 		Cache.set("podgrupe", podgrupe);
 		podgrupe.clear();
 		podgrupe = fillList();
-		renderTemplate("Podgrupe/show.html",podgrupe,grupe,idd,mode,nadredjeneForme);
+		renderTemplate("Podgrupe/show.html",podgrupe,grupe,idd,mode,povezaneForme,nadredjeneForme);
 	}
 	
 	public static void refresh(){
@@ -213,9 +226,10 @@ public class Podgrupe extends Controller {
 		
 		List<Grupa> grupe = Grupe.checkCache();
 		List<Podgrupa> podgrupe = checkCache();
+		List<String> povezaneForme = getForeignKeysFields();
 		List<String> nadredjeneForme = getForeignKeysFieldsManyToOne();
 		
-		renderTemplate("Podgrupe/show.html",podgrupe,grupe,mode,nadredjeneForme);
+		renderTemplate("Podgrupe/show.html",podgrupe,grupe,mode,povezaneForme,nadredjeneForme);
 	}
 	
 	
@@ -238,6 +252,31 @@ public class Podgrupe extends Controller {
 		}
 	}
 	
+	public static void nextForm(Long id, String forma){
+		if(forma.equals("kataloziRobeIUsloga")){
+			List<Podgrupa> podgrupe = checkCache();
+			List<KatalogRobeIUsluga> kataloziRobeIUsluga = findKatalog(id);
+			
+			List<String> povezaneForme = KataloziRobeIUsluga.getForeignKeysFields();
+			
+			
+			renderTemplate("KataloziRobeIUsluga/show.html", podgrupe, povezaneForme, kataloziRobeIUsluga);
+		}
+	}
+	
+	public static List<KatalogRobeIUsluga> findKatalog(Long id) {
+		List<KatalogRobeIUsluga> katalogAll = KatalogRobeIUsluga.findAll();
+		List<KatalogRobeIUsluga> katalog = new ArrayList<>();
+
+		for (KatalogRobeIUsluga k : katalogAll) {
+			if (k.id == id) {
+				katalog.add(k);
+			}
+		}
+
+		return katalog;
+	}
+	
 	public static List<String> getForeignKeysFieldsManyToOne() {
 		Class klasa = Podgrupa.class;
 		Field[] fields = klasa.getFields();
@@ -247,6 +286,22 @@ public class Podgrupe extends Controller {
 		for (int i = 0; i < fields.length; i++) {
 			Annotation annotation = fields[i].getAnnotation(ManyToOne.class);
 			if (annotation instanceof ManyToOne) {
+				povezaneForme.add(fields[i].getName());
+			}
+		}
+
+		return povezaneForme;
+	}
+	
+	public static List<String> getForeignKeysFields() {
+		Class PodgrupaClass = Podgrupa.class;
+		Field[] fields = PodgrupaClass.getFields();
+
+		List<String> povezaneForme = new ArrayList<String>();
+
+		for (int i = 0; i < fields.length; i++) {
+			Annotation annotation = fields[i].getAnnotation(OneToMany.class);
+			if (annotation instanceof OneToMany) {
 				povezaneForme.add(fields[i].getName());
 			}
 		}

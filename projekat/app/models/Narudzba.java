@@ -39,6 +39,9 @@ public class Narudzba extends Model {
 	@OneToMany(mappedBy = "narudzba")
 	public List<StavkaNarudzbe> stavkeNarudzbe;
 	
+	@OneToMany(mappedBy = "narudzba")
+	public List<Faktura> faktura;
+	
 	@ManyToOne
 	public PoslovniPartner poslovniPartner;
 	
@@ -47,6 +50,8 @@ public class Narudzba extends Model {
 	
 	@ManyToOne 
 	public Preduzece preduzece;
+	
+	
 	
 	public Narudzba(String datumNarudzbe, int brojNarudzbe, String datumValute, double ukupnoOsnovica, 
 			float ukupnoPDV,

@@ -51,6 +51,9 @@ public class Faktura extends Model {
 
 	@ManyToOne
 	public Preduzece preduzece;
+	
+	@ManyToOne 
+	public Narudzba narudzba;
 
 	public Faktura(String datumFakture, int brojFakture, String datumValute, float ukupnoOsnovica, float ukupnoPDV,
 			float ukupnoZaPlacanje) {

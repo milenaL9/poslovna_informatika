@@ -4,7 +4,6 @@ import java.io.File;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,11 +12,10 @@ import javax.persistence.OneToMany;
 
 import models.Faktura;
 import models.Grupa;
+import models.Narudzba;
 import models.PoslovnaGodina;
 import models.PoslovniPartner;
 import models.Preduzece;
-import models.StavkaCenovnika;
-import models.StopaPDVa;
 import models.VrstaPDVa;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -365,6 +363,33 @@ public class Preduzeca extends Controller {
 		}
 
 		return fakture;
+	}
+	
+	public static List<Grupa> findGrupe(Long idPreduzeca){
+		List<Grupa> grupeAll = Grupa.findAll();
+		List<Grupa> grupe = new ArrayList<>();
+		
+		for(Grupa grupa:grupeAll){
+			if(grupa.preduzece.id == idPreduzeca){
+				grupe.add(grupa);
+			}
+		}
+		
+		return grupe;
+	}
+	
+	public static List<Narudzba> findNarudzbe(Long idPreduzeca){
+		
+		List<Narudzba> narudzbeAll = Narudzba.findAll();
+		List<Narudzba> narudzbe = new ArrayList<>();
+		
+		for (Narudzba narudzba : narudzbeAll) {
+			if (narudzba.preduzece.id == idPreduzeca) {
+				narudzbe.add(narudzba);
+			}
+		}
+		
+		return narudzbe;
 	}
 
 }

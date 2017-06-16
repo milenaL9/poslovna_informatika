@@ -8,16 +8,11 @@ import java.util.List;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-import org.apache.ivy.plugins.resolver.util.FileURLLister;
-
 import models.Faktura;
-import models.KatalogRobeIUsluga;
+import models.Narudzba;
 import models.PoslovnaGodina;
 import models.PoslovniPartner;
 import models.Preduzece;
-
-import models.StopaPDVa;
-import models.VrstaPDVa;
 import play.cache.Cache;
 import play.mvc.Controller;
 
@@ -390,5 +385,19 @@ public class PoslovniPartneri extends Controller {
 		}
 
 		return kupci;
+	}
+	
+public static List<Narudzba> findNarudzbe(Long idPoslovnogPartnera){
+		
+		List<Narudzba> narudzbeAll = Narudzba.findAll();
+		List<Narudzba> narudzbe = new ArrayList<>();
+		
+		for (Narudzba narudzba : narudzbeAll) {
+			if (narudzba.poslovniPartner.id == idPoslovnogPartnera) {
+				narudzbe.add(narudzba);
+			}
+		}
+		
+		return narudzbe;
 	}
 }

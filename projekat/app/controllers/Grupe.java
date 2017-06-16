@@ -1,15 +1,13 @@
 package controllers;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
 import models.Grupa;
 import models.Podgrupa;
 import models.Preduzece;
@@ -127,8 +125,20 @@ public class Grupe extends Controller {
 
 	}
 
-	public static void filter() {
-
+	public static void filter(Grupa grupa) {
+		List<Grupa> grupe = Grupa.find("byNazivGrupeLike", "%" + grupa.nazivGrupe).fetch();
+		
+		session.put("mode", "edit");
+		String mode = session.get("mode");
+		
+		List<Preduzece> preduzeca = Preduzeca.checkCache();
+		List<VrstaPDVa> vrstePDVa = VrstePDVa.checkCache();
+		List<String> povezaneForme = getForeignKeysFields();
+		List<String> nadredjeneForme = getForeignKeysFieldsManyToOne();
+		
+		renderTemplate("Grupe/show.html", grupe, vrstePDVa, preduzeca, mode, povezaneForme, nadredjeneForme);
+		
+		
 	}
 
 	public static void edit(Grupa grupa, Long vrstaPDVa, Long preduzece) {
@@ -200,7 +210,7 @@ public class Grupe extends Controller {
 
 	public void delete(Long id) {
 		String mode = session.get("mode");
-
+		System.out.println("id"+id+"id");
 		List<Grupa> grupe = checkCache();
 		List<Preduzece> preduzeca = Preduzeca.checkCache();
 		List<VrstaPDVa> vrstePDVa = VrstePDVa.checkCache();
@@ -209,6 +219,12 @@ public class Grupe extends Controller {
 		List<String> nadredjeneForme = getForeignKeysFieldsManyToOne();
 
 		Grupa grupa = Grupa.findById(id);
+		for(Podgrupa pg:grupa.podgrupe){
+			pg.delete();
+		}
+		
+		System.out.println("++"+grupa.nazivGrupe);
+		
 		Long idd = null;
 
 		for (int i = 0; i < grupe.size(); i++) {
@@ -220,12 +236,12 @@ public class Grupe extends Controller {
 
 		grupa.delete();
 
-		Cache.set("grupa", grupa);
+		Cache.set("grupe", grupe);
 
 		grupe.clear();
 		grupe = fillList();
 
-		renderTemplate("Grupe/show.html", grupe, vrstePDVa, preduzeca, idd, mode, povezaneForme, nadredjeneForme);
+		renderTemplate("Grupe/show.html", grupe, vrstePDVa, preduzeca, mode, povezaneForme, nadredjeneForme);
 
 	}
 
@@ -264,15 +280,48 @@ public class Grupe extends Controller {
 	}
 
 	public static List<Grupa> fillList() {
-		List<Grupa> grupe = (List<Grupa>) Cache.get("grupe");
+		List<Grupa> grupe = null;
 
-		if ((grupe == null) || (grupe.size() == 0)) {
-			grupe = Grupa.findAll();
-			Cache.set("grupe", grupe);
-
+		
+		if(!session.get("idPreduzeca").equals("null")){
+			Long id = Long.parseLong(session.get("idPreduzeca"));
+			grupe = Preduzeca.findGrupe(id);
+		}else if(!session.get("idVrstePDVa").equals("null")){
+			Long id = Long.parseLong(session.get("idVrstePDVa"));
+			grupe = VrstePDVa.findGrupe(id);
+		}else{
+			grupe= checkCache();
 		}
 
 		return grupe;
+	}
+	
+	public static void nextForm(Long id, String forma) {
+		session.put("idGrupe", id);
+		System.out.println("OVO JE ");
+		System.out.println("ID JE: " + id + "dd");
+		String mode = "edit";
+		session.put("mode",mode);
+		if (forma.equals("podgrupe")) {
+			List<Grupa> grupe = checkCache();
+			List<Podgrupa> podgrupe = findPodgrupe(id);
+
+			List<String> nadredjeneForme = Podgrupe.getForeignKeysFieldsManyToOne();
+
+			renderTemplate("Podgrupe/show.html", podgrupe, grupe, nadredjeneForme,mode);
+
+		}
+	}
+	
+	public static void pickup(String forma){
+		
+		System.out.println("NAZIVFORME:  "+forma);
+		if(forma.equals("vrstaPDVa")){
+			VrstePDVa.show("edit");
+		}
+		else if(forma.equals("preduzece")){
+			Preduzeca.show("edit");
+		}
 	}
 
 	public static List<Podgrupa> findPodgrupe(Long id) {
@@ -280,7 +329,7 @@ public class Grupe extends Controller {
 		List<Podgrupa> podgrupe = new ArrayList<>();
 
 		for (Podgrupa pg : PodgrupeAll) {
-			if (pg.id == id) {
+			if (pg.grupa.id == id) {
 				podgrupe.add(pg);
 			}
 		}
@@ -289,8 +338,8 @@ public class Grupe extends Controller {
 	}
 
 	public static List<String> getForeignKeysFields() {
-		Class vrstaPDVaClass = Grupa.class;
-		Field[] fields = vrstaPDVaClass.getFields();
+		Class grupaClass = Grupa.class;
+		Field[] fields = grupaClass.getFields();
 
 		List<String> povezaneForme = new ArrayList<String>();
 
@@ -320,18 +369,4 @@ public class Grupe extends Controller {
 		return povezaneForme;
 	}
 
-	public static void nextForm(Long id, String forma) {
-		session.put("idGrupe", id);
-		System.out.println("OVO JE ");
-		System.out.println("ID JE: " + id + "dd");
-		if (forma.equals("podgrupe")) {
-			List<Grupa> grupe = checkCache();
-			List<Podgrupa> podgrupe = findPodgrupe(id);
-
-			List<String> nadredjeneForme = Podgrupe.getForeignKeysFieldsManyToOne();
-
-			renderTemplate("Podgrupe/show.html", podgrupe, grupe, nadredjeneForme);
-
-		}
-	}
 }
